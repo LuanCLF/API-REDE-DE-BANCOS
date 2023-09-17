@@ -1,13 +1,10 @@
 import express from 'express';
-import { pool } from '../conection/conectDb';
+import { getAllAccounts, registerBank } from '../controllers/bank/bank';
+import { midBankFields } from '../middlewares/banks/middlewareBanks';
 
 const routes = express();
 
-routes.get('/', async (req, res) => {
-  const ban = await pool.query('select * from banks');
-  console.log(ban.rows);
-
-  res.send('adsdsad');
-});
+routes.post('/banks', midBankFields, registerBank);
+routes.post('/accounts', getAllAccounts);
 
 export { routes };

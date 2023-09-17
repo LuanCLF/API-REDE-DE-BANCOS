@@ -3,7 +3,8 @@ CREATE TABLE banks (
 id SERIAL PRIMARY KEY,
 number TEXT NOT NULL,
 agency TEXT NOT NULL,
-password TEXT NOT NULL
+password TEXT NOT NULL,
+name TEXT NOT NULL
 )
 
 CREATE TABLE users (
