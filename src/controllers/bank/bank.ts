@@ -6,16 +6,16 @@ import { getBank } from '../utils/getBank';
 
 const registerBank = async (req: Request, res: Response) => {
   try {
-    const { number, agency, password, name } = req.body;
+    const { number, agency, password, name } = req.headers;
 
-    const rows = await getBank(number, agency);
+    const rows = await getBank(String(number), String(agency));
     if (rows.length > 0) {
       return res.status(404).json({
         mensagem: 'Já existe um banco com esse mesmo número e agência',
       });
     }
 
-    const passwordHashed = await hash(password, 10);
+    const passwordHashed = await hash(String(password), 10);
     const queryRegister =
       'insert into banks (number,agency, password, name) values ($1,$2,$3,$4) returning id, number, agency, name';
     const { rows: bank } = await pool.query(queryRegister, [
@@ -41,6 +41,7 @@ const getAllAccounts = async (req: Request, res: Response) => {
     if (bank.length < 1) {
       return res.status(404).json({ mensagem: 'Banco não encontrado' });
     }
+
     const comparePassword = await compare(`${password}`, bank[0].password);
     if (!comparePassword) {
       return res.status(401).json({ mensagem: 'Sem autorização' });

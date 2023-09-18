@@ -1,8 +1,8 @@
 -- Active: 1694651585786@@127.0.0.1@5432@banco@public
 CREATE TABLE banks (
 id SERIAL PRIMARY KEY,
-number TEXT NOT NULL,
-agency TEXT NOT NULL,
+number TEXT UNIQUE NOT NULL,
+agency TEXT UNIQUE NOT NULL,
 password TEXT NOT NULL,
 name TEXT NOT NULL
 )
@@ -10,12 +10,13 @@ name TEXT NOT NULL
 CREATE TABLE users (
 id SERIAL PRIMARY KEY,
 name TEXT NOT NULL,
-CPF TEXT NOT NULL,
-dateOfBirth DATE NOT NULL,
+CPF TEXT UNIQUE NOT NULL,
+dateOfBirth TEXT NOT NULL,
 phoneNumber TEXT,
-email TEXT NOT NULL,
+email TEXT UNIQUE NOT NULL,
 password TEXT NOT NULL
 )
+
 
 CREATE TABLE accounts (
 number SERIAL PRIMARY KEY,
@@ -23,6 +24,7 @@ bank_id INTEGER REFERENCES banks(id),
 balance INTEGER NOT NULL,
 user_id INTEGER REFERENCES users(id)
 )
+
 
 CREATE TABLE deposit (
 id SERIAL PRIMARY KEY,

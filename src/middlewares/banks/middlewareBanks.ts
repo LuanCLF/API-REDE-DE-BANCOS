@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { field } from '../utils/validateFields';
+import { callValidate } from '../utils/validateFields';
 import { message } from '../../messages/messagerError';
+import { Register } from '../../interfaces/BankRegister';
+import { fieldsResponse } from '../utils/generateFieldsResponse';
 
 export const midBankFields = async (
   req: Request,
@@ -8,19 +10,21 @@ export const midBankFields = async (
   next: NextFunction
 ) => {
   try {
-    const { number, agency, name, password } = req.body;
-
-    const empty = field(number, 'number');
-    const empty2 = field(agency, 'agency');
-    const empty3 = field(name, 'name');
-    const empty4 = field(password, 'password');
-
-    if (empty || empty2 || empty3 || empty4) {
+    const register: Register = {
+      number: String(req.body.number),
+      agency: String(req.body.agency),
+      name: String(req.body.name),
+      password: String(req.body.password),
+    };
+    const invalid = callValidate(register);
+    if (!invalid) {
+      const responseInvalidFields = fieldsResponse(Object.keys(register));
       return res.status(404).json({
-        mensagem:
-          'É necessário que preencha os campos de name, agency, number e password. A agency e number devem ser compostos somente por números',
+        mensagem: responseInvalidFields,
       });
     }
+
+    req.headers = { ...register };
 
     next();
   } catch (error) {
