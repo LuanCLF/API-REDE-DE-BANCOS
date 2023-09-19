@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { callValidate } from '../utils/validateFields';
-import { message } from '../../messages/messagerError';
+import { genericErrorMessages } from '../../messages/messages';
 import { Register } from '../../interfaces/BankRegister';
 import { fieldsResponse } from '../utils/generateFieldsResponse';
 
-export const midBankFields = async (
+export const midBankRegister = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -28,7 +28,6 @@ export const midBankFields = async (
 
     next();
   } catch (error) {
-    console.log(error);
-    res.status(500).json(message);
+    return res.status(500).json({ menssage: genericErrorMessages.intern });
   }
 };

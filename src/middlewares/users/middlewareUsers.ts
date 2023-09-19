@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { message } from '../../messages/messagerError';
+import {
+  genericErrorMessages,
+  midleErrorMessages,
+} from '../../messages/messages';
 import { CreateUser } from '../../interfaces/CreateUser';
 import { callValidate } from '../utils/validateFields';
 import { fieldsResponse } from '../utils/generateFieldsResponse';
@@ -12,10 +15,9 @@ export const midCreateUser = async (
   try {
     let phone = req.body.phoneNumber;
     if (phone) {
-      if (isNaN(req.body.phoneNumber) || phone.length !== 11) {
-        return res.status(404).json({
-          mensagem:
-            'O número de celular deve ser composto só por números e ter apenas os 11 digitos',
+      if (isNaN(phone) || phone.length !== 11) {
+        return res.status(400).json({
+          message: midleErrorMessages.phoneInvalid,
         });
       }
     } else {
@@ -34,18 +36,19 @@ export const midCreateUser = async (
       number: String(req.body.number),
       agency: String(req.body.agency),
     };
-    const invalidBank = callValidate(bank);
+
     const invalidCreate = callValidate(createUser);
     if (!invalidCreate) {
       const responseInvalidFields = fieldsResponse(Object.keys(createUser));
-      return res.status(404).json({
-        mensagem: responseInvalidFields,
+      return res.status(400).json({
+        message: responseInvalidFields,
       });
-    } else if (!invalidBank) {
-      const responseInvalidFields = fieldsResponse(
-        Object.keys(fieldsResponse(Object.keys(bank)))
-      );
-      return res.status(400).json({ mensagem: responseInvalidFields });
+    }
+
+    const invalidBank = callValidate(bank);
+    if (!invalidBank) {
+      const responseInvalidFields = fieldsResponse(Object.keys(bank));
+      return res.status(400).json({ message: responseInvalidFields });
     }
 
     req.headers = {
@@ -54,6 +57,6 @@ export const midCreateUser = async (
     };
     next();
   } catch (error) {
-    res.status(500).json(message);
+    return res.status(500).json({ menssage: genericErrorMessages.intern });
   }
 };
