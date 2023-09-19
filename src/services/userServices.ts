@@ -1,7 +1,10 @@
 import { Request } from 'express';
 import { compare, hash } from 'bcrypt';
-import { pool } from '../conection/conectDb';
+
+import { passwordJWT, pool } from '../conection/conectDb';
 import { getBank } from './utils/getBank';
+
+import jwt from 'jsonwebtoken';
 
 const createAccountUserService = async (req: Request) => {
   try {
@@ -47,21 +50,26 @@ const createAccountUserService = async (req: Request) => {
 
 const loginUserService = async (req: Request) => {
   try {
-    {
-      const { CPF, email, password } = req.body;
+    const { CPF, email, password } = req.body;
 
-      const query = 'select * from users where CPF = $1 and email = $2';
-      const { rows: user, rowCount } = await pool.query(query, [CPF, email]);
-      if (rowCount < 1) {
-        return 404;
-      }
-      const correctPassword = await compare(password, user[0].password);
-      if (!correctPassword) {
-        return 401;
-      }
-      return 'nada';
+    const query = 'select * from users where CPF = $1 and email = $2';
+    const { rows: user, rowCount } = await pool.query(query, [CPF, email]);
+    if (rowCount < 1) {
+      return 404;
     }
+
+    const correctPassword = await compare(password, user[0].password);
+    if (!correctPassword) {
+      return 401;
+    }
+
+    const token = jwt.sign({ id: user[0].id }, passwordJWT, {
+      expiresIn: '1h',
+    });
+
+    return token;
   } catch (error) {
+    console.log(error);
     return 500;
   }
 };

@@ -36,7 +36,7 @@ const createAccountUser = async (req: Request, res: Response) => {
 const loginUser = async (req: Request, res: Response) => {
   try {
     {
-      const result = await loginUserService(req);
+      const result: number | string = await loginUserService(req);
 
       if (result === 404) {
         return res
@@ -53,7 +53,7 @@ const loginUser = async (req: Request, res: Response) => {
       if (result === 500) {
         return res.status(500).json({ menssage: genericErrorMessages.intern });
       }
-      res.send('adsd');
+      res.redirect('/home-page');
     }
   } catch (error) {
     return res.status(500).json({ menssage: genericErrorMessages.intern });
