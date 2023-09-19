@@ -1,8 +1,15 @@
 import express from 'express';
-import { routes } from './router';
+import { routesBank } from './routes/routerBank';
+import { routesUser } from './routes/routerUser';
 
-const app = express();
-app.use(express.json());
-app.use(routes);
+const appBank = express();
+const appUser = express();
 
-app.listen(3000);
+appBank.use(express.json());
+appBank.use(routesBank);
+
+appUser.use(express.json());
+appUser.use(routesUser);
+
+appBank.listen(4000);
+appUser.listen(3000);

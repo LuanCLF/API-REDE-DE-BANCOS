@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import {
   createAccountUserService,
   loginUserService,
-} from '../../services/userServices';
+} from '../../services/user/userServices';
 import {
   bankErrorMessages,
   genericErrorMessages,
@@ -53,7 +53,7 @@ const loginUser = async (req: Request, res: Response) => {
       if (result === 500) {
         return res.status(500).json({ menssage: genericErrorMessages.intern });
       }
-      res.redirect('/home-page');
+      res.status(200).json({ message: 'Usuário logado' });
     }
   } catch (error) {
     return res.status(500).json({ menssage: genericErrorMessages.intern });

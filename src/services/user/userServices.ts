@@ -1,8 +1,8 @@
 import { Request } from 'express';
 import { compare, hash } from 'bcrypt';
 
-import { passwordJWT, pool } from '../conection/conectDb';
-import { getBank } from './utils/getBank';
+import { passwordUserJWT, pool } from '../../connection/conectDb';
+import { getBank } from '../utils/getBank';
 
 import jwt from 'jsonwebtoken';
 
@@ -63,11 +63,11 @@ const loginUserService = async (req: Request) => {
       return 401;
     }
 
-    const token = jwt.sign({ id: user[0].id }, passwordJWT, {
+    const tokenUser = jwt.sign({ id: user[0].id }, passwordUserJWT, {
       expiresIn: '1h',
     });
 
-    return token;
+    return tokenUser;
   } catch (error) {
     console.log(error);
     return 500;

@@ -9,4 +9,5 @@ export const pool = new Pool({
   database: process.env.DB_DATABASE,
 });
 
-export const passwordJWT = String(process.env.DB_PASSWORD_JWT);
+export const passwordUserJWT = String(process.env.DB_PASSWORD_USER_JWT);
+export const passwordBankJWT = String(process.env.DB_PASSWORD_BANK_JWT);

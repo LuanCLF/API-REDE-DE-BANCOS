@@ -6,8 +6,10 @@ import {
 import { CreateUser } from '../../interfaces/CreateUser';
 import { callValidate } from '../utils/validateFields';
 import { fieldsResponse } from '../utils/generateFieldsResponse';
+import { passwordUserJWT } from '../../connection/conectDb';
+import jwt from 'jsonwebtoken';
 
-export const midCreateUser = async (
+const midCreateUser = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -60,3 +62,33 @@ export const midCreateUser = async (
     return res.status(500).json({ menssage: genericErrorMessages.intern });
   }
 };
+
+const midUserLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { authorization } = req.headers;
+    if (!authorization) {
+      return res
+        .status(401)
+        .json({ message: genericErrorMessages.unauthorized });
+    }
+
+    const token = authorization.split(' ')[1];
+    const auth = jwt.verify(token, passwordUserJWT);
+
+    const user = JSON.parse(JSON.stringify(auth));
+    req.body = {
+      userID: user.id,
+    };
+    next();
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ menssage: genericErrorMessages.unauthorized });
+  }
+};
+
+export { midCreateUser, midUserLogin };

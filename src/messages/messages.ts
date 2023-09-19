@@ -15,9 +15,19 @@ const midleErrorMessages = {
   phoneInvalid: 'O número de celular deve ser composto só por números',
 };
 
+const bankSucessMessage = {
+  logged: 'Admin logado',
+};
+
+const userSucessMessage = {
+  logged: 'Usuário logado',
+};
+
 export {
   bankErrorMessages,
   userErrorMessages,
   genericErrorMessages,
   midleErrorMessages,
+  bankSucessMessage,
+  userSucessMessage,
 };

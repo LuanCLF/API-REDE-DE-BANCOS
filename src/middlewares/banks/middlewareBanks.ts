@@ -3,8 +3,10 @@ import { callValidate } from '../utils/validateFields';
 import { genericErrorMessages } from '../../messages/messages';
 import { Register } from '../../interfaces/BankRegister';
 import { fieldsResponse } from '../utils/generateFieldsResponse';
+import jwt from 'jsonwebtoken';
+import { passwordBankJWT } from '../../connection/conectDb';
 
-export const midBankRegister = async (
+const midBankRegister = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -31,3 +33,35 @@ export const midBankRegister = async (
     return res.status(500).json({ menssage: genericErrorMessages.intern });
   }
 };
+
+const midBankLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { authorization } = req.headers;
+    if (!authorization) {
+      return res
+        .status(401)
+        .json({ message: genericErrorMessages.unauthorized });
+    }
+
+    const token = authorization.split(' ')[1];
+    const auth = jwt.verify(token, passwordBankJWT);
+
+    const bank = JSON.parse(JSON.stringify(auth));
+    req.body = {
+      bankID: bank.id,
+      number: bank.number,
+      agency: bank.agency,
+    };
+    next();
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ menssage: genericErrorMessages.unauthorized });
+  }
+};
+
+export { midBankRegister, midBankLogin };
