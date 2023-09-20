@@ -27,9 +27,9 @@ const registerBankService = async (req: Request) => {
 const loginBankService = async (req: Request) => {
   try {
     const { number, agency, password } = req.body;
-    const query = 'select * from banks where number = $1 and agency = $2';
-    const { rows: bank, rowCount } = await pool.query(query, [number, agency]);
-    if (rowCount < 1) {
+    const bank = await getBank(number, agency);
+
+    if (bank.length < 1) {
       return 404;
     }
 
