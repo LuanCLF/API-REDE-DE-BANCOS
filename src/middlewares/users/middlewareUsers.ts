@@ -53,7 +53,7 @@ const midCreateUser = async (
       return res.status(400).json({ message: responseInvalidFields });
     }
 
-    req.headers = {
+    req.body = {
       ...bank,
       ...createUser,
     };

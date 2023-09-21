@@ -19,9 +19,6 @@ email VARCHAR(200) UNIQUE NOT NULL,
 password VARCHAR(200) NOT NULL,
 )
 
-YYYY-MM-DD HH:MI:SS
-
-
 CREATE TABLE accounts (
 number SERIAL PRIMARY KEY,
 bank_id INTEGER REFERENCES banks(id),
