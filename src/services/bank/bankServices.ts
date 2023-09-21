@@ -1,19 +1,24 @@
-import { compare, hash } from 'bcrypt';
-import { getAccounstsWithBankID, getBank } from '../utils/getBank';
+import {
+  getAccounstsWithBankID,
+  getBank,
+  getPasswordFrom,
+} from '../../utils/getDB';
 import { passwordBankJWT, pool } from '../../connection/conectDb';
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
-import { hasher } from '../utils/hasher';
+import { compareHashed, hasher } from '../../utils/hasher';
+import { dateFormat } from '../../utils/dateFormat';
+
 const registerBankService = async (req: Request) => {
   try {
-    const { number, agency, password, name } = req.headers;
+    const { number, agency, password, name } = req.body;
 
     const rows: Array<object> = await getBank(String(number), String(agency));
     if (rows.length > 0) {
       return 400;
     }
 
-    const passwordHashed = await hash(String(password), 10);
+    const passwordHashed = await hasher(password);
     const queryRegister =
       'insert into banks (number,agency, password, name) values ($1,$2,$3,$4)';
     await pool.query(queryRegister, [number, agency, passwordHashed, name]);
@@ -33,7 +38,10 @@ const loginBankService = async (req: Request) => {
       return 404;
     }
 
-    const correctPassword = await compare(password, bank[0].password);
+    const correctPassword: boolean = await compareHashed(
+      password,
+      bank[0].password
+    );
     if (!correctPassword) {
       return 401;
     }
@@ -48,7 +56,6 @@ const loginBankService = async (req: Request) => {
 
     return tokenBank;
   } catch (error) {
-    console.log(error);
     return 500;
   }
 };
@@ -58,6 +65,12 @@ const getAllAccountsService = async (req: Request) => {
     const { bankID, number, agency } = req.headers;
 
     const accounts = await getAccounstsWithBankID(Number(bankID));
+    if (accounts.length > 0) {
+      accounts.map((object) => {
+        object.created_at = dateFormat(object.created_at);
+        object.updated_at = dateFormat(object.updated_at);
+      });
+    }
 
     const bankAccounts = {
       id: bankID,
@@ -108,9 +121,34 @@ const updateDataBankService = async (req: Request) => {
   }
 };
 
+const deleteBankService = async (req: Request) => {
+  const { bankID } = req.headers;
+  const { password } = req.body;
+  try {
+    const accounts = await getAccounstsWithBankID(Number(bankID));
+    if (accounts.length > 0) {
+      return 409;
+    }
+    const passwordHashed = await getPasswordFrom('banks', Number(bankID));
+
+    const correctPassword = compareHashed(password, passwordHashed[0].password);
+    if (!correctPassword) {
+      return 401;
+    }
+
+    const query = 'delete from banks where id = $1';
+    await pool.query(query, [bankID]);
+
+    return 204;
+  } catch (error) {
+    return 500;
+  }
+};
+
 export {
   registerBankService,
   getAllAccountsService,
   updateDataBankService,
   loginBankService,
+  deleteBankService,
 };

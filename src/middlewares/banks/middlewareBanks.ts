@@ -26,7 +26,7 @@ const midBankRegister = async (
       });
     }
 
-    req.headers = { ...register };
+    req.body = { ...register };
 
     next();
   } catch (error) {
@@ -41,6 +41,7 @@ const midBankLogin = async (
 ) => {
   try {
     const { authorization } = req.headers;
+
     if (!authorization) {
       return res
         .status(401)
@@ -56,6 +57,7 @@ const midBankLogin = async (
       number: bank.number,
       agency: bank.agency,
     };
+
     next();
   } catch (error) {
     return res

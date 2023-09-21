@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  deleteBank,
   getAllAccounts,
   loginBank,
   updateDataBank,
@@ -14,12 +15,12 @@ import { registerBank } from '../controllers/bank/bankController';
 import { midBankLogin } from '../middlewares/banks/middlewareBanks';
 
 const routesBank = express();
-routesBank.post('/banks', midBankRegister, registerBank);
+routesBank.post('/bank', midBankRegister, registerBank);
 routesBank.post('/login/bank', loginBank);
 
 routesBank.use(midBankLogin);
-
-routesBank.get('/bankAccounts', getAllAccounts);
+routesBank.get('/bank/accounts', getAllAccounts);
 routesBank.patch('/bank', midUpdateBank, updateDataBank);
+routesBank.delete('/bank', deleteBank);
 
 export { routesBank };

@@ -6,7 +6,7 @@ import { loginUser } from '../controllers/users/userController';
 
 const routesUser = express();
 
-routesUser.post('/accounts', midCreateUser, createAccountUser);
+routesUser.post('/user', midCreateUser, createAccountUser);
 routesUser.post('/login/user', loginUser);
 
 export { routesUser };
