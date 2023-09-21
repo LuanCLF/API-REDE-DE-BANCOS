@@ -3,7 +3,7 @@ import {
   getAllAccountsService,
   loginBankService,
   registerBankService,
-  // updateDataBankService,
+  updateDataBankService,
 } from '../../services/bank/bankServices';
 import {
   bankErrorMessages,
@@ -24,7 +24,7 @@ const registerBank = async (req: Request, res: Response) => {
     if (result === 500) {
       return res.status(500).json({ message: genericErrorMessages.intern });
     }
-    res.status(200).json();
+    res.status(201).json();
   } catch (error) {
     return res.status(500).json({ message: genericErrorMessages.intern });
   }
@@ -84,13 +84,17 @@ const getAllAccounts = async (req: Request, res: Response) => {
   }
 };
 
-// const updateDataBank = async (req: Request, res: Response) => {
-//   try {
-//     const result = await updateDataBankService(req);
-//     return res.send(result);
-//   } catch (error) {
-//     return res.status(500).json({ message: genericErrorMessages.intern });
-//   }
-// };
+const updateDataBank = async (req: Request, res: Response) => {
+  try {
+    const result = await updateDataBankService(req);
+    if (result === 500) {
+      return res.status(500).json({ message: genericErrorMessages.intern });
+    }
 
-export { registerBank, loginBank, getAllAccounts };
+    return res.status(204).json();
+  } catch (error) {
+    return res.status(500).json({ message: genericErrorMessages.intern });
+  }
+};
+
+export { registerBank, loginBank, getAllAccounts, updateDataBank };

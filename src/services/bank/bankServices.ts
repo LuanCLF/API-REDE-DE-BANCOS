@@ -3,7 +3,7 @@ import { getAccounstsWithBankID, getBank } from '../utils/getBank';
 import { passwordBankJWT, pool } from '../../connection/conectDb';
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
-
+import { hasher } from '../utils/hasher';
 const registerBankService = async (req: Request) => {
   try {
     const { number, agency, password, name } = req.headers;
@@ -55,9 +55,9 @@ const loginBankService = async (req: Request) => {
 
 const getAllAccountsService = async (req: Request) => {
   try {
-    const { bankID, number, agency } = req.body;
+    const { bankID, number, agency } = req.headers;
 
-    const accounts = await getAccounstsWithBankID(bankID);
+    const accounts = await getAccounstsWithBankID(Number(bankID));
 
     const bankAccounts = {
       id: bankID,
@@ -72,23 +72,45 @@ const getAllAccountsService = async (req: Request) => {
   }
 };
 
-// const updateDataBankService = async (req: Request) => {
-//   try {
-//     const { number, agency, password, name } = req.body;
-//     const bank = await getBank(number, agency);
-//     if (bank.length < 1) {
-//       return 404;
-//     }
+const updateDataBankService = async (req: Request) => {
+  try {
+    const { bankID } = req.headers;
+    const values = req.body;
 
-//     return 'ds';
-//   } catch (error) {
-//     return 500;
-//   }
-// };
+    const insert = [];
+    let nameInsert = '';
+    let paramsCount = 0;
+    let fields = '';
+
+    if (values[0].name) {
+      nameInsert = Object.keys(values[0])[0];
+      fields += `${nameInsert} = $${(paramsCount += 1)}`;
+
+      insert.push(values[0].name);
+    }
+    if (values[1].password) {
+      nameInsert = Object.keys(values[1])[0];
+      paramsCount > 0 ? (fields += ', ') : '';
+      fields += `${nameInsert} = $${(paramsCount += 1)}`;
+
+      const passwordHashed = await hasher(values[1].password);
+      insert.push(passwordHashed);
+    }
+
+    insert.push(bankID);
+    const query = `update banks set ${fields}, updated_at = now() where id = $${(paramsCount += 1)} `;
+
+    await pool.query(query, insert);
+
+    return 204;
+  } catch (error) {
+    return 500;
+  }
+};
 
 export {
   registerBankService,
   getAllAccountsService,
-  // updateDataBankService,
+  updateDataBankService,
   loginBankService,
 };

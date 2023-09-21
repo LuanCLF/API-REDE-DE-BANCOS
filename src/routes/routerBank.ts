@@ -2,10 +2,14 @@ import express from 'express';
 import {
   getAllAccounts,
   loginBank,
+  updateDataBank,
 
   // updateDataBank,
 } from '../controllers/bank/bankController';
-import { midBankRegister } from '../middlewares/banks/middlewareBanks';
+import {
+  midBankRegister,
+  midUpdateBank,
+} from '../middlewares/banks/middlewareBanks';
 import { registerBank } from '../controllers/bank/bankController';
 import { midBankLogin } from '../middlewares/banks/middlewareBanks';
 
@@ -16,6 +20,6 @@ routesBank.post('/login/bank', loginBank);
 routesBank.use(midBankLogin);
 
 routesBank.get('/bankAccounts', getAllAccounts);
-// routes.patch('bank', updateDataBank);
+routesBank.patch('/bank', midUpdateBank, updateDataBank);
 
 export { routesBank };
