@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import {
+  deleteBankService,
   getAllAccountsService,
   loginBankService,
   registerBankService,
@@ -97,4 +98,24 @@ const updateDataBank = async (req: Request, res: Response) => {
   }
 };
 
-export { registerBank, loginBank, getAllAccounts, updateDataBank };
+const deleteBank = async (req: Request, res: Response) => {
+  try {
+    const result = await deleteBankService(req);
+
+    if (result === 409 || result === 401) {
+      return res
+        .status(result)
+        .json({ message: genericErrorMessages.unauthorized });
+    }
+
+    if (result === 500) {
+      return res.status(result).json({ message: genericErrorMessages.intern });
+    }
+
+    res.status(204).json();
+  } catch (error) {
+    return res.status(500).json({ message: genericErrorMessages.intern });
+  }
+};
+
+export { registerBank, loginBank, getAllAccounts, updateDataBank, deleteBank };

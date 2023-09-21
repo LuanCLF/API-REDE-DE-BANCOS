@@ -1,14 +1,14 @@
 import { Request } from 'express';
-import { compare, hash } from 'bcrypt';
 
 import { passwordUserJWT, pool } from '../../connection/conectDb';
-import { getBank } from '../utils/getBank';
+import { getBank } from '../../utils/getDB';
 
 import jwt from 'jsonwebtoken';
+import { compareHashed, hasher } from '../../utils/hasher';
 
 const createAccountUserService = async (req: Request) => {
   try {
-    const { number, agency, ...rest } = req.headers;
+    const { number, agency, ...rest } = req.body;
 
     const bank = await getBank(String(number), String(agency));
     if (bank.length < 1) {
@@ -25,7 +25,7 @@ const createAccountUserService = async (req: Request) => {
     }
 
     const { password } = rest;
-    const passwordHashed = await hash(String(password), 10);
+    const passwordHashed = await hasher(password);
     rest.password = passwordHashed;
 
     const insert = Object.values(rest);
@@ -58,7 +58,7 @@ const loginUserService = async (req: Request) => {
       return 404;
     }
 
-    const correctPassword = await compare(password, user[0].password);
+    const correctPassword = await compareHashed(password, user[0].password);
     if (!correctPassword) {
       return 401;
     }
@@ -69,7 +69,6 @@ const loginUserService = async (req: Request) => {
 
     return tokenUser;
   } catch (error) {
-    console.log(error);
     return 500;
   }
 };
