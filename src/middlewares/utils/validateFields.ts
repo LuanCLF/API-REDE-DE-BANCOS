@@ -10,7 +10,7 @@ const field = (field: string, nameField: string) => {
   return true;
 };
 
-export const callValidate = (obj: object) => {
+export const callValidateRegister = (obj: object) => {
   const keys = Object.keys(obj),
     values = Object.values(obj);
 

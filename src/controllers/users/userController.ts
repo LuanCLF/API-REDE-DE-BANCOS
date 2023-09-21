@@ -27,7 +27,7 @@ const createAccountUser = async (req: Request, res: Response) => {
       return res.status(500).json({ menssage: genericErrorMessages.intern });
     }
 
-    res.status(200).json(result);
+    res.status(201).json();
   } catch (error) {
     return res.status(500).json({ menssage: genericErrorMessages.intern });
   }
