@@ -4,7 +4,7 @@ import {
   midleErrorMessages,
 } from '../../messages/messages';
 import { CreateUser } from '../../interfaces/CreateUser';
-import { callValidate } from '../utils/validateFields';
+import { callValidateRegister } from '../utils/validateFields';
 import { fieldsResponse } from '../utils/generateFieldsResponse';
 import { passwordUserJWT } from '../../connection/conectDb';
 import jwt from 'jsonwebtoken';
@@ -39,7 +39,7 @@ const midCreateUser = async (
       agency: String(req.body.agency),
     };
 
-    const invalidCreate = callValidate(createUser);
+    const invalidCreate = callValidateRegister(createUser);
     if (!invalidCreate) {
       const responseInvalidFields = fieldsResponse(Object.keys(createUser));
       return res.status(400).json({
@@ -47,7 +47,7 @@ const midCreateUser = async (
       });
     }
 
-    const invalidBank = callValidate(bank);
+    const invalidBank = callValidateRegister(bank);
     if (!invalidBank) {
       const responseInvalidFields = fieldsResponse(Object.keys(bank));
       return res.status(400).json({ message: responseInvalidFields });
