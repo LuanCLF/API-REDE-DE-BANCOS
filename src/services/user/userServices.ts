@@ -16,7 +16,7 @@ const createAccountUserService = async (req: Request) => {
     }
 
     const { rowCount: user } = await pool.query(
-      'select * from users where CPF = $1 or email = $2',
+      'select id from users where CPF = $1 or email = $2',
       [rest.CPF, rest.email]
     );
 
