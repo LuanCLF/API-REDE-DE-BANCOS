@@ -4,6 +4,7 @@ import {
   getAllAccountsService,
   loginBankService,
   registerBankService,
+  searchBankService,
   updateDataBankService,
 } from '../../services/bank/bankServices';
 import {
@@ -56,6 +57,15 @@ const loginBank = async (req: Request, res: Response) => {
         .status(200)
         .json({ message: `${bankSucessMessage.logged} Token:'${result}'` });
     }
+  } catch (error) {
+    return res.status(500).json({ menssage: genericErrorMessages.intern });
+  }
+};
+
+const searchBank = async (req: Request, res: Response) => {
+  try {
+    const result = await searchBankService(req);
+    res.send(result);
   } catch (error) {
     return res.status(500).json({ menssage: genericErrorMessages.intern });
   }
@@ -118,4 +128,11 @@ const deleteBank = async (req: Request, res: Response) => {
   }
 };
 
-export { registerBank, loginBank, getAllAccounts, updateDataBank, deleteBank };
+export {
+  registerBank,
+  loginBank,
+  searchBank,
+  getAllAccounts,
+  updateDataBank,
+  deleteBank,
+};

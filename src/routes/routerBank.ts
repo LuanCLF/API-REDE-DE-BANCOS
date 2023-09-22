@@ -3,9 +3,8 @@ import {
   deleteBank,
   getAllAccounts,
   loginBank,
+  searchBank,
   updateDataBank,
-
-  // updateDataBank,
 } from '../controllers/bank/bankController';
 import {
   midBankRegister,
@@ -19,6 +18,7 @@ routesBank.post('/bank', midBankRegister, registerBank);
 routesBank.post('/login/bank', loginBank);
 
 routesBank.use(midBankLogin);
+routesBank.get('/bank', searchBank);
 routesBank.get('/bank/accounts', getAllAccounts);
 routesBank.patch('/bank', midUpdateBank, updateDataBank);
 routesBank.delete('/bank', deleteBank);

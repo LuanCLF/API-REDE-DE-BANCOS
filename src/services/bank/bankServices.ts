@@ -1,6 +1,7 @@
 import {
   getAccounstsWithBankID,
   getBank,
+  getBankWithID,
   getPasswordFrom,
 } from '../../utils/getDB';
 import { passwordBankJWT, pool } from '../../connection/conectDb';
@@ -46,13 +47,9 @@ const loginBankService = async (req: Request) => {
       return 401;
     }
 
-    const tokenBank = jwt.sign(
-      { id: bank[0].id, number, agency },
-      passwordBankJWT,
-      {
-        expiresIn: '1h',
-      }
-    );
+    const tokenBank = jwt.sign({ id: bank[0].id }, passwordBankJWT, {
+      expiresIn: '1h',
+    });
 
     return tokenBank;
   } catch (error) {
@@ -60,11 +57,26 @@ const loginBankService = async (req: Request) => {
   }
 };
 
+const searchBankService = async (req: Request) => {
+  try {
+    const { bankID } = req.headers;
+    const bank = await getBankWithID(Number(bankID));
+
+    bank.created_at = dateFormat(bank.created_at);
+    bank.updated_at = dateFormat(bank.updated_at);
+
+    return bank;
+  } catch (error) {
+    throw new Error();
+  }
+};
+
 const getAllAccountsService = async (req: Request) => {
   try {
-    const { bankID, number, agency } = req.headers;
-
+    const { bankID } = req.headers;
+    const bank = await getBankWithID(Number(bankID));
     const accounts = await getAccounstsWithBankID(Number(bankID));
+
     if (accounts.length > 0) {
       accounts.map((object) => {
         object.created_at = dateFormat(object.created_at);
@@ -74,8 +86,8 @@ const getAllAccountsService = async (req: Request) => {
 
     const bankAccounts = {
       id: bankID,
-      number,
-      agency,
+      number: bank.number,
+      agency: bank.agency,
       accounts,
     };
 
@@ -147,6 +159,7 @@ const deleteBankService = async (req: Request) => {
 
 export {
   registerBankService,
+  searchBankService,
   getAllAccountsService,
   updateDataBankService,
   loginBankService,
