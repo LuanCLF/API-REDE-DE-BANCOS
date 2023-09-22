@@ -15,13 +15,18 @@ const createAccountUserService = async (req: Request) => {
       return 404;
     }
 
-    const { rowCount: user } = await pool.query(
-      'select id from users where CPF = $1 or email = $2',
+    const { rows: bank_ids, rowCount } = await pool.query(
+      'select bank_id from accounts as a join users as u on a.user_id = u.id where u.CPF = $1 or u.email = $2',
       [rest.CPF, rest.email]
     );
 
-    if (user > 0) {
-      return 400;
+    if (rowCount > 0) {
+      const exist = bank_ids.some((element) => {
+        return element.bank_id === bank[0].id;
+      });
+      if (exist) {
+        return 409;
+      }
     }
 
     const { password } = rest;
@@ -44,16 +49,28 @@ const createAccountUserService = async (req: Request) => {
 
     return account[0];
   } catch (error) {
-    return 500;
+    throw new Error();
   }
 };
 
 const loginUserService = async (req: Request) => {
   try {
-    const { CPF, email, password } = req.body;
+    const { number, agency, CPF, email, password } = req.body;
 
-    const query = 'select * from users where CPF = $1 and email = $2';
-    const { rows: user, rowCount } = await pool.query(query, [CPF, email]);
+    const bank = await getBank(number, agency);
+    if (bank.length < 1) {
+      return 404;
+    }
+
+    const query =
+      'select u.* from users as u join accounts as a on a.user_id = u.id and bank_id = $1 where u.CPF = $2 and u.email = $3';
+
+    const { rows: user, rowCount } = await pool.query(query, [
+      bank[0].id,
+      CPF,
+      email,
+    ]);
+
     if (rowCount < 1) {
       return 404;
     }
@@ -69,7 +86,7 @@ const loginUserService = async (req: Request) => {
 
     return tokenUser;
   } catch (error) {
-    return 500;
+    throw new Error();
   }
 };
 

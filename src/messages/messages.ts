@@ -8,8 +8,9 @@ const genericErrorMessages = {
   unauthorized: 'Sem autorização',
 };
 const userErrorMessages = {
-  userNotFound: 'Usuário não encontrado',
+  userNotFound: 'Cadastro não encontrado',
   userAlreadyExist: 'Usuário já está cadastrado',
+  userLoginInvalid: 'Email ou senha incorretos',
 };
 const midleErrorMessages = {
   phoneInvalid: 'O número de celular deve ser composto só por números',

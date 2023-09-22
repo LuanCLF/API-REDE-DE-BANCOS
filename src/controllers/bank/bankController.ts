@@ -50,44 +50,30 @@ const loginBank = async (req: Request, res: Response) => {
       }
 
       if (result === 500) {
-        return res.status(500).json({ menssage: genericErrorMessages.intern });
+        return res.status(500).json({ message: genericErrorMessages.intern });
       }
 
       res
         .status(200)
-        .json({ message: `${bankSucessMessage.logged} Token:'${result}'` });
+        .json({ message: `${bankSucessMessage.logged}, token: ${result}` });
     }
   } catch (error) {
-    return res.status(500).json({ menssage: genericErrorMessages.intern });
+    return res.status(500).json({ message: genericErrorMessages.intern });
   }
 };
 
 const searchBank = async (req: Request, res: Response) => {
   try {
     const result = await searchBankService(req);
-    res.send(result);
+    res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ menssage: genericErrorMessages.intern });
+    return res.status(500).json({ message: genericErrorMessages.intern });
   }
 };
 
 const getAllAccounts = async (req: Request, res: Response) => {
   try {
-    const result: number | object = await getAllAccountsService(req);
-
-    if (result === 404) {
-      return res.status(404).json({ message: bankErrorMessages.bankNotFound });
-    }
-
-    if (result === 401) {
-      return res
-        .status(401)
-        .json({ message: genericErrorMessages.unauthorized });
-    }
-
-    if (result === 500) {
-      return res.status(500).json({ message: genericErrorMessages.intern });
-    }
+    const result: object | string = await getAllAccountsService(req);
 
     return res.status(200).json(result);
   } catch (error) {
@@ -116,10 +102,6 @@ const deleteBank = async (req: Request, res: Response) => {
       return res
         .status(result)
         .json({ message: genericErrorMessages.unauthorized });
-    }
-
-    if (result === 500) {
-      return res.status(result).json({ message: genericErrorMessages.intern });
     }
 
     res.status(204).json();
