@@ -7,6 +7,7 @@ import {
   bankErrorMessages,
   genericErrorMessages,
   userErrorMessages,
+  userSucessMessage,
 } from '../../messages/messages';
 
 const createAccountUser = async (req: Request, res: Response) => {
@@ -17,14 +18,10 @@ const createAccountUser = async (req: Request, res: Response) => {
       return res.status(404).json({ message: bankErrorMessages.bankNotFound });
     }
 
-    if (result === 400) {
+    if (result === 409) {
       return res
-        .status(404)
-        .json({ mensagem: userErrorMessages.userAlreadyExist });
-    }
-
-    if (result === 500) {
-      return res.status(500).json({ menssage: genericErrorMessages.intern });
+        .status(409)
+        .json({ message: userErrorMessages.userAlreadyExist });
     }
 
     res.status(201).json();
@@ -47,13 +44,12 @@ const loginUser = async (req: Request, res: Response) => {
       if (result === 401) {
         return res
           .status(401)
-          .json({ message: genericErrorMessages.unauthorized });
+          .json({ message: userErrorMessages.userLoginInvalid });
       }
 
-      if (result === 500) {
-        return res.status(500).json({ menssage: genericErrorMessages.intern });
-      }
-      res.status(200).json({ message: 'Usuário logado' });
+      res
+        .status(200)
+        .json({ message: `${userSucessMessage.logged}, token: ${result}` });
     }
   } catch (error) {
     return res.status(500).json({ menssage: genericErrorMessages.intern });
