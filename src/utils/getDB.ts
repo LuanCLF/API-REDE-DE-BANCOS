@@ -6,6 +6,14 @@ export const getBank = async (number: string, agency: string) => {
 
   return rows;
 };
+export const getBankWithID = async (id: number) => {
+  const { rows } = await pool.query(
+    'select number, agency, name, created_at, updated_at from banks where id = $1',
+    [id]
+  );
+  return rows[0];
+};
+
 export const getAccounstsWithBankID = async (id: number) => {
   const query =
     'select number, bank_id, user_id, created_at, updated_at from accounts where bank_id = $1';

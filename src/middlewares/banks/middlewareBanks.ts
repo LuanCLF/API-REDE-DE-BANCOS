@@ -1,10 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import { callValidateRegister } from '../utils/validateFields';
-import { genericErrorMessages } from '../../messages/messages';
+import {
+  bankErrorMessages,
+  genericErrorMessages,
+} from '../../messages/messages';
 import { Register } from '../../interfaces/BankRegister';
 import { fieldsResponse } from '../utils/generateFieldsResponse';
 import jwt from 'jsonwebtoken';
 import { passwordBankJWT } from '../../connection/conectDb';
+import { getBankWithID } from '../../utils/getDB';
 
 const midBankRegister = async (
   req: Request,
@@ -52,10 +56,13 @@ const midBankLogin = async (
     const auth = jwt.verify(token, passwordBankJWT);
 
     const bank = JSON.parse(JSON.stringify(auth));
+
+    const exist = await getBankWithID(bank.id);
+    if (!exist) {
+      return res.status(404).json({ message: bankErrorMessages.bankNotFound });
+    }
     req.headers = {
       bankID: bank.id,
-      number: bank.number,
-      agency: bank.agency,
     };
 
     next();
