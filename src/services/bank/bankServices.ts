@@ -26,7 +26,7 @@ const registerBankService = async (req: Request) => {
 
     return 200;
   } catch (error) {
-    return 500;
+    throw new Error();
   }
 };
 
@@ -53,7 +53,7 @@ const loginBankService = async (req: Request) => {
 
     return tokenBank;
   } catch (error) {
-    return 500;
+    throw new Error();
   }
 };
 
@@ -93,7 +93,7 @@ const getAllAccountsService = async (req: Request) => {
 
     return bankAccounts;
   } catch (error) {
-    return 500;
+    throw new Error();
   }
 };
 
@@ -129,7 +129,7 @@ const updateDataBankService = async (req: Request) => {
 
     return 204;
   } catch (error) {
-    return 500;
+    throw new Error();
   }
 };
 
@@ -153,7 +153,7 @@ const deleteBankService = async (req: Request) => {
 
     return 204;
   } catch (error) {
-    return 500;
+    throw new Error();
   }
 };
 
