@@ -4,10 +4,9 @@ export interface IBank {
   number: string;
   agency: string;
   password: string;
-  zipcode: string;
   created_at: string;
   updated_at: string;
-  cep: string;
+  zipcode: string;
 }
 
 export interface IBankValidate {
