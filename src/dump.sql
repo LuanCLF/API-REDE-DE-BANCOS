@@ -6,7 +6,8 @@ agency VARCHAR(200) UNIQUE NOT NULL,
 password VARCHAR(200) NOT NULL,
 name VARCHAR(200) NOT NULL,
 created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+zipcode VARCHAR(16) REFERENCES addresses(zipcode)
 )
 
 CREATE TABLE users (
@@ -25,7 +26,8 @@ bank_id INTEGER REFERENCES banks(id),
 balance INTEGER NOT NULL,
 user_id INTEGER REFERENCES users(id),
 created_at TIMESTAMP NOT NULl DEFAULT NOW(),
-updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+zipcode VARCHAR(16) REFERENCES addresses(zipcode)
 )
 
 
@@ -51,3 +53,11 @@ account_destiny_id INTEGER REFERENCES accounts(number),
 value BIGINT NOT NULL
 )
 
+CREATE TABLE addresses (
+zipcode VARCHAR(10) UNIQUE NOT NULL,
+patio VARCHAR(150) ,
+complement VARCHAR(150) ,
+neighborhood VARCHAR(50) ,
+locality VARCHAR(50),
+uf CHAR(2) NOT NULL
+)

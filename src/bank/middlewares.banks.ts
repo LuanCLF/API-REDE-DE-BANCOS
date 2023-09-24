@@ -1,14 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { callValidateRegister } from '../utils/validateFields';
-import {
-  bankErrorMessages,
-  genericErrorMessages,
-} from '../../messages/messages';
-import { Register } from '../../interfaces/BankRegister';
+import { bankErrorMessages, genericErrorMessages } from '../messages/messages';
 import { fieldsResponse } from '../utils/generateFieldsResponse';
 import jwt from 'jsonwebtoken';
-import { passwordBankJWT } from '../../connection/conectDb';
-import { getBankWithID } from '../../utils/getDB';
+import { passwordBankJWT } from '../connection/conectDb';
+import { getBankWithID } from '../utils/getFromDB';
+import { RegisterBankDto } from '../dtos/bank/banks.dtos';
+import { IBank } from '../entitys/bank/bank.entity';
+import { getZipCode } from '../utils/getZipCode';
 
 const midBankRegister = async (
   req: Request,
@@ -16,20 +15,28 @@ const midBankRegister = async (
   next: NextFunction
 ) => {
   try {
-    const register: Register = {
+    const register: RegisterBankDto = {
       number: String(req.body.number),
       agency: String(req.body.agency),
       name: String(req.body.name),
       password: String(req.body.password),
+      zipcode: String(req.body.zipcode),
     };
+
     const invalid = callValidateRegister(register);
     if (!invalid) {
       const responseInvalidFields = fieldsResponse(Object.keys(register));
       return res.status(404).json({
-        mensagem: responseInvalidFields,
+        messagem: responseInvalidFields,
       });
     }
 
+    let zip: string | undefined = await getZipCode(register.zipcode);
+    if (!zip) {
+      return res.status(400).json({ message: genericErrorMessages.zipCode });
+    }
+
+    register.zipcode = zip;
     req.body = { ...register };
 
     next();
@@ -45,7 +52,6 @@ const midBankLogin = async (
 ) => {
   try {
     const { authorization } = req.headers;
-
     if (!authorization) {
       return res
         .status(401)
@@ -56,8 +62,7 @@ const midBankLogin = async (
     const auth = jwt.verify(token, passwordBankJWT);
 
     const bank = JSON.parse(JSON.stringify(auth));
-
-    const exist = await getBankWithID(bank.id);
+    const exist: IBank = await getBankWithID(bank.id);
     if (!exist) {
       return res.status(404).json({ message: bankErrorMessages.bankNotFound });
     }
@@ -67,9 +72,7 @@ const midBankLogin = async (
 
     next();
   } catch (error) {
-    return res
-      .status(500)
-      .json({ menssage: genericErrorMessages.unauthorized });
+    return res.status(500).json({ message: genericErrorMessages.unauthorized });
   }
 };
 

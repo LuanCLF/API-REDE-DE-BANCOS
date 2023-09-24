@@ -1,12 +1,15 @@
 import express from 'express';
-
-import { midCreateUser } from '../middlewares/users/middlewareUsers';
-import { createAccountUser } from '../controllers/users/userController';
-import { loginUser } from '../controllers/users/userController';
+import { userControllers } from '../user/index';
 
 const routesUser = express();
 
-routesUser.post('/user', midCreateUser, createAccountUser);
-routesUser.post('/login/user', loginUser);
+routesUser.post(
+  '/user',
+  userControllers.midCreateUser,
+  userControllers.createAccountUser
+);
+routesUser.post('/login/user', userControllers.loginUser);
+
+routesUser.use(userControllers.midUserLogin);
 
 export { routesUser };

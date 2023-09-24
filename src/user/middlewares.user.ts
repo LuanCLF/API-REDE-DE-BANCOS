@@ -1,15 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
-import {
-  genericErrorMessages,
-  midleErrorMessages,
-} from '../../messages/messages';
-import { CreateUser } from '../../interfaces/CreateUser';
+import { genericErrorMessages, midleErrorMessages } from '../messages/messages';
 import { callValidateRegister } from '../utils/validateFields';
 import { fieldsResponse } from '../utils/generateFieldsResponse';
-import { passwordUserJWT } from '../../connection/conectDb';
+import { passwordUserJWT } from '../connection/conectDb';
 import jwt from 'jsonwebtoken';
+import { CreateUserDto } from '../dtos/user/user.dtos';
 
-const midCreateUser = async (
+export const midCreateUser = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -26,22 +23,23 @@ const midCreateUser = async (
       phone = 'Não informado';
     }
 
-    const createUser: CreateUser = {
+    const CreateUserDto: CreateUserDto = {
       name: String(req.body.name),
       CPF: String(req.body.CPF),
       dateOfBirth: String(req.body.dateOfBirth),
       phoneNumber: phone,
       email: String(req.body.email),
       password: String(req.body.password),
+      zipcode: String(req.body.zipcode),
     };
     const bank = {
       number: String(req.body.number),
       agency: String(req.body.agency),
     };
 
-    const invalidCreate = callValidateRegister(createUser);
+    const invalidCreate = callValidateRegister(CreateUserDto);
     if (!invalidCreate) {
-      const responseInvalidFields = fieldsResponse(Object.keys(createUser));
+      const responseInvalidFields = fieldsResponse(Object.keys(CreateUserDto));
       return res.status(400).json({
         message: responseInvalidFields,
       });
@@ -55,7 +53,7 @@ const midCreateUser = async (
 
     req.body = {
       ...bank,
-      ...createUser,
+      ...CreateUserDto,
     };
     next();
   } catch (error) {
@@ -63,7 +61,7 @@ const midCreateUser = async (
   }
 };
 
-const midUserLogin = async (
+export const midUserLogin = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -90,5 +88,3 @@ const midUserLogin = async (
       .json({ menssage: genericErrorMessages.unauthorized });
   }
 };
-
-export { midCreateUser, midUserLogin };
