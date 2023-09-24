@@ -1,1 +1,1 @@
-- API de banco feita com typescript, estou treinando nela por conta de já ter feito uma inicial e mais simples em Nodejs, no meu curso da cubos, então aqui decidi que ia aprimorar essa API para permitir logins, realizar transações mais elaboradas, conectar ao banco de dados (no curso fizemos com leitura e escrita de arquivos)
+- API de banco em Nodejs utilizando Typescript, para treinar minha minha habilidade na stack

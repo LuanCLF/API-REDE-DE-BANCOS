@@ -1,16 +1,13 @@
 import { Request, Response } from 'express';
-import {
-  createAccountUserService,
-  loginUserService,
-} from '../../services/user/userServices';
+import { createAccountUserService, loginUserService } from './services.user';
 import {
   bankErrorMessages,
   genericErrorMessages,
   userErrorMessages,
   userSucessMessage,
-} from '../../messages/messages';
+} from '../messages/messages';
 
-const createAccountUser = async (req: Request, res: Response) => {
+export const createAccountUser = async (req: Request, res: Response) => {
   try {
     const result: number | Array<object> = await createAccountUserService(req);
 
@@ -30,7 +27,7 @@ const createAccountUser = async (req: Request, res: Response) => {
   }
 };
 
-const loginUser = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response) => {
   try {
     {
       const result: number | string = await loginUserService(req);
@@ -55,5 +52,3 @@ const loginUser = async (req: Request, res: Response) => {
     return res.status(500).json({ menssage: genericErrorMessages.intern });
   }
 };
-
-export { createAccountUser, loginUser };

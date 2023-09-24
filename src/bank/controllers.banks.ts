@@ -6,12 +6,12 @@ import {
   registerBankService,
   searchBankService,
   updateDataBankService,
-} from '../../services/bank/bankServices';
+} from './services.banks';
 import {
   bankErrorMessages,
   bankSucessMessage,
   genericErrorMessages,
-} from '../../messages/messages';
+} from '../messages/messages';
 
 const registerBank = async (req: Request, res: Response) => {
   try {
