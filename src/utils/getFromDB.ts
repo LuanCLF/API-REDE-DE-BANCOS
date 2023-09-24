@@ -15,12 +15,12 @@ export const getBank = async (
   return rows[0];
 };
 
-export const getBankWithID = async (id: number): Promise<IBank> => {
-  const { rows } = await pool.query(
-    'select id, number, agency, name, created_at, updated_at, zipcode from banks where id = $1',
+export const getBankWithID = async (id: number): Promise<IBank | undefined> => {
+  const { rows, rowCount } = await pool.query(
+    'select * from banks where id = $1',
     [id]
   );
-
+  if (rowCount < 1) return undefined;
   return rows[0];
 };
 

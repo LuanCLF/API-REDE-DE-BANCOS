@@ -9,7 +9,7 @@ import { IBankValidate } from '../entitys/bank/bank.entity';
 
 const createAccountUserService = async (req: Request) => {
   try {
-    const { number, agency, ...rest } = req.body;
+    const { number, agency, zipcode, ...rest } = req.body;
 
     const bank: IBankValidate | undefined = await getBank(number, agency);
     if (bank === undefined) {
@@ -38,13 +38,13 @@ const createAccountUserService = async (req: Request) => {
     const queryUser =
       'insert into users (name, CPF, dateOfBirth, phoneNumber, email, password) values ($1,$2,$3,$4,$5,$6) returning id';
     const queryAccount =
-      'insert into accounts (bank_id, balance, user_id) values ($1, 0, $2) returning *';
-
+      'insert into accounts (bank_id, balance, user_id, created_at, updated_at,zipcode) values ($1, 0, $2,now(),now(), $3) returning *';
     const { rows: id } = await pool.query(queryUser, insert);
 
     const { rows: account } = await pool.query(queryAccount, [
       bank.id,
       id[0].id,
+      zipcode,
     ]);
 
     return account[0];

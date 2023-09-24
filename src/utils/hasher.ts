@@ -10,5 +10,6 @@ export const compareHashed = async (
   passwordHashed: string
 ): Promise<boolean> => {
   const correct = await compare(password, passwordHashed);
+
   return correct;
 };
