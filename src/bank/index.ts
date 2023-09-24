@@ -1,25 +1,25 @@
 import {
   registerBank,
   loginBank,
-  searchBank,
-  getAllAccounts,
+  searchMyBank,
+  getAllAccountsOfMyBank,
   deleteBank,
   updateDataBank,
-} from './controllers.banks';
+} from './controllers/controllers.banks';
 import {
   midBankRegister,
   midBankLogin,
   midUpdateBank,
-} from './middlewares.banks';
+} from './middlewares/middlewares.banks';
 
-export const bankControllers = {
+export const bank = {
   midBankRegister,
   midBankLogin,
   midUpdateBank,
   registerBank,
   loginBank,
-  searchBank,
-  getAllAccounts,
+  searchMyBank,
+  getAllAccountsOfMyBank,
   deleteBank,
   updateDataBank,
 };

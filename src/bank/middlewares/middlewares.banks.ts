@@ -1,13 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
-import { callValidateRegister } from '../utils/validateFields';
-import { bankErrorMessages, genericErrorMessages } from '../messages/messages';
-import { fieldsResponse } from '../utils/generateFieldsResponse';
+import { callValidateRegister } from '../../utils/validateFields';
+import {
+  bankErrorMessages,
+  genericErrorMessages,
+} from '../../messages/messages';
+import { fieldsResponse } from '../../utils/generateFieldsResponse';
 import jwt from 'jsonwebtoken';
-import { passwordBankJWT } from '../connection/conectDb';
-import { getBankWithID } from '../utils/getFromDB';
-import { RegisterBankDto } from '../dtos/bank/banks.dtos';
-import { IBank } from '../entitys/bank/bank.entity';
-import { getZipCode } from '../utils/getZipCode';
+import { passwordBankJWT } from '../../connection/conectDb';
+import { getBankWithID } from '../../utils/getFromDB';
+import { CreateBankDto } from '../../dtos/bank/banks.dtos';
+import { IBank } from '../../entitys/bank/bank.entity';
+import { getZipCode } from '../../utils/getZipCode';
 
 const midBankRegister = async (
   req: Request,
@@ -15,7 +18,7 @@ const midBankRegister = async (
   next: NextFunction
 ) => {
   try {
-    const register: RegisterBankDto = {
+    const register: CreateBankDto = {
       number: String(req.body.number),
       agency: String(req.body.agency),
       name: String(req.body.name),
@@ -62,7 +65,7 @@ const midBankLogin = async (
     const auth = jwt.verify(token, passwordBankJWT);
 
     const bank = JSON.parse(JSON.stringify(auth));
-    const exist: IBank = await getBankWithID(bank.id);
+    const exist: IBank | undefined = await getBankWithID(bank.id);
     if (!exist) {
       return res.status(404).json({ message: bankErrorMessages.bankNotFound });
     }
@@ -86,8 +89,14 @@ const midUpdateBank = async (
     const password = String(req.body.password);
     const insert = [];
 
-    if (name === 'undefined' && password === 'undefined') {
-      const str = fieldsResponse(['name', 'password']);
+    let zip: string | undefined = await getZipCode(req.body.zipcode);
+    if (zip) {
+      insert.push({ zipcode: zip });
+    } else {
+      insert.push({ zipcode: false });
+    }
+    if (name === 'undefined' && password === 'undefined' && !zip) {
+      const str = fieldsResponse(['name', 'password', 'zipcode']);
       const message = str.replace(' e ', ' ou ');
       return res.status(400).json({ message: message });
     }

@@ -5,6 +5,7 @@ import { fieldsResponse } from '../utils/generateFieldsResponse';
 import { passwordUserJWT } from '../connection/conectDb';
 import jwt from 'jsonwebtoken';
 import { CreateUserDto } from '../dtos/user/user.dtos';
+import { getZipCode } from '../utils/getZipCode';
 
 export const midCreateUser = async (
   req: Request,
@@ -23,7 +24,7 @@ export const midCreateUser = async (
       phone = 'Não informado';
     }
 
-    const CreateUserDto: CreateUserDto = {
+    const createUserDto: CreateUserDto = {
       name: String(req.body.name),
       CPF: String(req.body.CPF),
       dateOfBirth: String(req.body.dateOfBirth),
@@ -37,13 +38,19 @@ export const midCreateUser = async (
       agency: String(req.body.agency),
     };
 
-    const invalidCreate = callValidateRegister(CreateUserDto);
+    const invalidCreate = callValidateRegister(createUserDto);
     if (!invalidCreate) {
-      const responseInvalidFields = fieldsResponse(Object.keys(CreateUserDto));
+      const responseInvalidFields = fieldsResponse(Object.keys(createUserDto));
       return res.status(400).json({
         message: responseInvalidFields,
       });
     }
+
+    let zip: string | undefined = await getZipCode(createUserDto.zipcode);
+    if (!zip) {
+      return res.status(400).json({ message: genericErrorMessages.zipCode });
+    }
+    createUserDto.zipcode = zip;
 
     const invalidBank = callValidateRegister(bank);
     if (!invalidBank) {
@@ -53,7 +60,7 @@ export const midCreateUser = async (
 
     req.body = {
       ...bank,
-      ...CreateUserDto,
+      ...createUserDto,
     };
     next();
   } catch (error) {

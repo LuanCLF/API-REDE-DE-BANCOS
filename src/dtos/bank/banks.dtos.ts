@@ -1,4 +1,4 @@
-export interface RegisterBankDto {
+export interface CreateBankDto {
   name: string;
   number: string;
   agency: string;
@@ -10,4 +10,10 @@ export interface LoginBankDto {
   number: string;
   agency: string;
   password: string;
+}
+
+export interface UpdateBankDto {
+  name?: string;
+  password?: string;
+  zipcode?: string;
 }
