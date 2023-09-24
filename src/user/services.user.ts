@@ -1,20 +1,20 @@
 import { Request } from 'express';
 
-import { passwordUserJWT, pool } from '../../connection/conectDb';
-import { getBank } from '../../utils/getDB';
+import { passwordUserJWT, pool } from '../connection/conectDb';
+import { getBank } from '../utils/getFromDB';
 
 import jwt from 'jsonwebtoken';
-import { compareHashed, hasher } from '../../utils/hasher';
+import { compareHashed, hasher } from '../utils/hasher';
+import { IBankValidate } from '../entitys/bank/bank.entity';
 
 const createAccountUserService = async (req: Request) => {
   try {
     const { number, agency, ...rest } = req.body;
 
-    const bank = await getBank(String(number), String(agency));
-    if (bank.length < 1) {
+    const bank: IBankValidate | undefined = await getBank(number, agency);
+    if (bank === undefined) {
       return 404;
     }
-
     const { rows: bank_ids, rowCount } = await pool.query(
       'select bank_id from accounts as a join users as u on a.user_id = u.id where u.CPF = $1 or u.email = $2',
       [rest.CPF, rest.email]
@@ -22,7 +22,7 @@ const createAccountUserService = async (req: Request) => {
 
     if (rowCount > 0) {
       const exist = bank_ids.some((element) => {
-        return element.bank_id === bank[0].id;
+        return element.bank_id === bank.id;
       });
       if (exist) {
         return 409;
@@ -43,7 +43,7 @@ const createAccountUserService = async (req: Request) => {
     const { rows: id } = await pool.query(queryUser, insert);
 
     const { rows: account } = await pool.query(queryAccount, [
-      bank[0].id,
+      bank.id,
       id[0].id,
     ]);
 
@@ -57,8 +57,8 @@ const loginUserService = async (req: Request) => {
   try {
     const { number, agency, CPF, email, password } = req.body;
 
-    const bank = await getBank(number, agency);
-    if (bank.length < 1) {
+    const bank: IBankValidate | undefined = await getBank(number, agency);
+    if (bank === undefined) {
       return 404;
     }
 
@@ -66,7 +66,7 @@ const loginUserService = async (req: Request) => {
       'select u.* from users as u join accounts as a on a.user_id = u.id and bank_id = $1 where u.CPF = $2 and u.email = $3';
 
     const { rows: user, rowCount } = await pool.query(query, [
-      bank[0].id,
+      bank.id,
       CPF,
       email,
     ]);

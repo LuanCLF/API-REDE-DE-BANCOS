@@ -15,5 +15,7 @@
     "linebreak-style": ["error", "windows"],
     "quotes": ["error", "single"],
     "semi": ["error", "always"]
-  }
+  },
+  "@typescript-eslint/ban-types": "off",
+  "@typescript-eslint/no-empty/interfaces": "off"
 }

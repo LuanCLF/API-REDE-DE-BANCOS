@@ -4,8 +4,8 @@ const bankErrorMessages = {
 };
 const genericErrorMessages = {
   intern: 'Erro inesperado no servidor',
-
-  unauthorized: 'Sem autorização',
+  zipCode: 'Endereço não encontrado',
+  unauthorized: 'Não autorizado',
 };
 const userErrorMessages = {
   userNotFound: 'Cadastro não encontrado',
