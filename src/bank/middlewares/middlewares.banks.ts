@@ -33,19 +33,20 @@ export const validation: TValidation =
         schema.validateSync(req[key as TField], {
           abortEarly: false,
         });
-        return next();
       } catch (err) {
         const yupErrors = err as ValidationError;
 
-        const recordErrors: Record<string, string> = {};
+        let recordErrors: Record<string, string> = {};
 
         yupErrors.inner.forEach((err) => {
           if (!err.path) return;
+
           recordErrors[err.path] = err.message;
         });
+        errorsResult[key] = recordErrors;
       }
-      errorsResult[key] = recordErrors;
     });
+
     if (Object.entries(errorsResult).length > 0) {
       return res.status(500).json(errorsResult);
     }
