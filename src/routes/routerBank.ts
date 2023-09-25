@@ -1,11 +1,12 @@
 import express from 'express';
 
 import { bank } from '../bank';
+import { midValidation } from '../bank/controllers/controllers.banks';
 
 const routesBank = express();
 
 routesBank.get('/banks');
-routesBank.post('/bank', bank.midBankRegister, bank.registerBank);
+routesBank.post('/bank', midValidation, bank.registerBank);
 
 routesBank.post('/login/bank', bank.loginBank);
 
