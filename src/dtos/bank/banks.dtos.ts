@@ -17,3 +17,7 @@ export interface UpdateBankDto {
   password?: string;
   zipcode?: string;
 }
+
+export interface DeleteBankDto {
+  password: string;
+}
