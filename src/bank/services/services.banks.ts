@@ -59,7 +59,6 @@ export class BankService {
     try {
       const bank: IBank | undefined = await getBankWithID(id);
       if (!bank) return undefined;
-
       bank.created_at = dateFormat(bank.created_at);
       bank.updated_at = dateFormat(bank.updated_at);
 

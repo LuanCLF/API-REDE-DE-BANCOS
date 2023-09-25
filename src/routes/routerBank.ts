@@ -1,18 +1,19 @@
 import express from 'express';
 
-import { bank } from '../bank';
+import { bank } from '../bank/index';
+import { midBankLogin } from '../bank/middlewares/middlewares.banks';
 
 const routesBank = express();
 
 routesBank.get('/banks');
-routesBank.post('/bank', bank.midBankRegister, bank.registerBank);
+routesBank.post('/bank', bank.registerValidation, bank.registerBank);
 
-routesBank.post('/login/bank', bank.loginBank);
+routesBank.post('/login/bank', bank.loginValidation, bank.loginBank);
 
-routesBank.use(bank.midBankLogin);
+routesBank.use(midBankLogin);
 routesBank.get('/bank', bank.searchMyBank);
 routesBank.get('/bank/accounts', bank.getAllAccountsOfMyBank);
-routesBank.patch('/bank', bank.midUpdateBank, bank.updateDataBank);
-routesBank.delete('/bank', bank.deleteBank);
+routesBank.patch('/bank', bank.updateValidation, bank.update);
+routesBank.delete('/bank', bank.deleteValidation, bank.deleteBank);
 
 export { routesBank };
