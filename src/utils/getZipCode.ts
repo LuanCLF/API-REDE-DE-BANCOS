@@ -1,4 +1,4 @@
-import { pool } from '../connection/conectDb';
+import { pool } from '../enviroment/env';
 
 export interface Izipcode {
   cep: string;

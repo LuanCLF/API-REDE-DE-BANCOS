@@ -34,22 +34,22 @@ zipcode VARCHAR(16) REFERENCES addresses(zipcode)
 CREATE TABLE deposit (
 id SERIAL PRIMARY KEY,
 date TIMESTAMP NOT NULL,
-account_id INTEGER REFERENCES accounts(number),
+account_number INTEGER REFERENCES accounts(number),
 value BIGINT NOT NULL
 )
 
 CREATE TABLE withdrawal (
 id SERIAL PRIMARY KEY,
 date TIMESTAMP NOT NULL,
-account_id INTEGER REFERENCES accounts(number),
+account_number INTEGER REFERENCES accounts(number),
 value BIGINT NOT NULL
 )
 
 CREATE TABLE transfers (
 id SERIAL PRIMARY KEY,
 date TIMESTAMP NOT NULL,
-account_origin_id INTEGER REFERENCES accounts(number),
-account_destiny_id INTEGER REFERENCES accounts(number),
+account_origin_number INTEGER REFERENCES accounts(number),
+account_destiny_number INTEGER REFERENCES accounts(number),
 value BIGINT NOT NULL
 )
 

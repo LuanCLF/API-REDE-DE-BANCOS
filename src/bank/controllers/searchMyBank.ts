@@ -1,4 +1,4 @@
-import { pool } from '../../connection/conectDb';
+import { pool } from '../../enviroment/env';
 import { IBank } from '../../entitys/bank/bank.entity';
 import {
   bankErrorMessages,
