@@ -5,7 +5,7 @@ import {
 } from '../../messages/messages';
 import { fieldsResponse } from '../../utils/generateFieldsResponse';
 import jwt from 'jsonwebtoken';
-import { passwordBankJWT } from '../../connection/conectDb';
+import { passwordBankJWT } from '../../enviroment/env';
 import { getBankWithID } from '../../utils/getFromDB';
 import { IBank } from '../../entitys/bank/bank.entity';
 import { getZipCode } from '../../utils/getZipCode';

@@ -1,6 +1,6 @@
 import { Request } from 'express';
 
-import { passwordUserJWT, pool } from '../connection/conectDb';
+import { passwordUserJWT, pool } from '../enviroment/env';
 import { getBank } from '../utils/getFromDB';
 
 import jwt from 'jsonwebtoken';

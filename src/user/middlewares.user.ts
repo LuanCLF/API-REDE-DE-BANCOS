@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { genericErrorMessages, midleErrorMessages } from '../messages/messages';
 import { callValidateRegister } from '../utils/validateFields';
 import { fieldsResponse } from '../utils/generateFieldsResponse';
-import { passwordUserJWT } from '../connection/conectDb';
+import { passwordUserJWT } from '../enviroment/env';
 import jwt from 'jsonwebtoken';
 import { CreateUserDto } from '../dtos/user/user.dtos';
 import { getZipCode } from '../utils/getZipCode';

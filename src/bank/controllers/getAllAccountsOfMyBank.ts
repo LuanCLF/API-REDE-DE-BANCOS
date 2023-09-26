@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { BankService } from '../services/services.banks';
-import { pool } from '../../connection/conectDb';
+import { pool } from '../../enviroment/env';
 import {
   bankErrorMessages,
   genericErrorMessages,
