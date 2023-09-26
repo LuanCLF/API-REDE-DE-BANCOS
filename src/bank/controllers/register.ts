@@ -10,7 +10,7 @@ import {
   genericErrorMessages,
 } from '../../messages/messages';
 import { BankService } from '../services/services.banks';
-import { pool } from '../../connection/conectDb';
+import { pool } from '../../enviroment/env';
 
 import * as yup from 'yup';
 

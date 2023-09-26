@@ -5,10 +5,8 @@ import { midBankLogin } from '../bank/middlewares/middlewares.banks';
 
 const routesBank = express();
 
-routesBank.get('/banks');
 routesBank.post('/bank', bank.registerValidation, bank.registerBank);
-
-routesBank.post('/login/bank', bank.loginValidation, bank.loginBank);
+routesBank.post('/bank/login', bank.loginValidation, bank.loginBank);
 
 routesBank.use(midBankLogin);
 routesBank.get('/bank', bank.searchMyBank);
