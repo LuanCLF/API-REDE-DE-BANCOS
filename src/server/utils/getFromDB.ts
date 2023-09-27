@@ -1,5 +1,5 @@
 import { IBank, IBankValidate } from '../entitys/bank/bank.entity';
-import { pool } from '../connection/conectDb';
+import { pool } from '../enviroment/env';
 import { IAccount } from '../entitys/user/user.entity';
 
 export const getBank = async (

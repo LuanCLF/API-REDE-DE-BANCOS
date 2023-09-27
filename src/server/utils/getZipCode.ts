@@ -1,4 +1,5 @@
-import { pool } from '../connection/conectDb';
+import axios from 'axios';
+import { pool } from '../../enviroment/env';
 
 export interface Izipcode {
   cep: string;
@@ -12,25 +13,20 @@ export interface Izipcode {
 export const getZipCode = async (
   zipcode: string
 ): Promise<string | undefined> => {
-  const response = await fetch(`https://viacep.com.br/ws/${zipcode}/json/`);
-  const { status } = response;
-  if (status !== 200) {
-    return undefined;
-  }
-  const result = await response.json();
+  const { data } = await axios.get(`https://viacep.com.br/ws/${zipcode}/json/`);
+  const result: Izipcode = data;
 
-  if (!result.cep) {
+  if (data.erro) {
     return undefined;
   }
+  console.log(data);
   const { rowCount: addressArray } = await pool.query(
     `select zipcode from addresses where zipcode = $1`,
     [result.cep]
   );
-
   let finalZipCode = result.cep;
   if (addressArray < 1) {
     const zip = await registerZipCode(result);
-
     finalZipCode = zip;
   }
   return finalZipCode;

@@ -3,12 +3,10 @@ import {
   bankErrorMessages,
   genericErrorMessages,
 } from '../../messages/messages';
-import { fieldsResponse } from '../../utils/generateFieldsResponse';
 import jwt from 'jsonwebtoken';
-import { passwordBankJWT } from '../../connection/conectDb';
+import { passwordBankJWT } from '../../enviroment/env';
 import { getBankWithID } from '../../utils/getFromDB';
 import { IBank } from '../../entitys/bank/bank.entity';
-import { getZipCode } from '../../utils/getZipCode';
 import { AnyObject, Maybe, ObjectSchema, ValidationError } from 'yup';
 
 type TField = 'body' | 'header' | 'query' | 'params';
@@ -27,8 +25,6 @@ export const validation: TValidation =
     const errorsResult: Record<string, Record<string, string>> = {};
 
     Object.entries(schemas).forEach(([key, schema]) => {
-      const recordErrors: Record<string, string> = {};
-
       try {
         schema.validateSync(req[key as TField], {
           abortEarly: false,
@@ -48,7 +44,7 @@ export const validation: TValidation =
     });
 
     if (Object.entries(errorsResult).length > 0) {
-      return res.status(500).json(errorsResult);
+      return res.status(400).json(errorsResult);
     }
 
     next();
