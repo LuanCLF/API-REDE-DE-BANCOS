@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { BankService } from '../services/services.banks';
-import { pool } from '../../connection/conectDb';
+import { pool } from '../../enviroment/env';
 import { genericErrorMessages } from '../../messages/messages';
 import * as yup from 'yup';
 import { validation } from '../middlewares/middlewares.banks';

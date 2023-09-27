@@ -1,4 +1,4 @@
-import { passwordBankJWT } from '../../connection/conectDb';
+import { passwordBankJWT } from '../../enviroment/env';
 import { CreateBankDto, UpdateBankDto } from '../../dtos/bank/banks.dtos';
 import { IBank, IBankValidate } from '../../entitys/bank/bank.entity';
 import { getBankWithID } from '../../utils/getFromDB';
@@ -29,6 +29,7 @@ export class BankService {
         zipcode,
       ]);
     } catch (error) {
+      console.log(error);
       throw new Error();
     }
   }

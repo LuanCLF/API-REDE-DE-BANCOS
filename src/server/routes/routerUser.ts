@@ -8,8 +8,8 @@ routesUser.post(
   userControllers.midCreateUser,
   userControllers.createAccountUser
 );
-routesUser.post('/login/user', userControllers.loginUser);
+routesUser.post('/user/login', userControllers.loginUser);
 
-routesUser.use(userControllers.midUserLogin);
+routesUser.use('/user', userControllers.midUserLogin);
 
 export { routesUser };
