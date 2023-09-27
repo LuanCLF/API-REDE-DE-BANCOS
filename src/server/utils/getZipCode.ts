@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { pool } from '../enviroment/env';
 
 export interface Izipcode {
@@ -8,33 +9,6 @@ export interface Izipcode {
   localidade: string;
   uf: string;
 }
-
-export const getZipCode = async (
-  zipcode: string
-): Promise<string | undefined> => {
-  const response = await fetch(`https://viacep.com.br/ws/${zipcode}/json/`);
-  const { status } = response;
-  if (status !== 200) {
-    return undefined;
-  }
-  const result = await response.json();
-
-  if (!result.cep) {
-    return undefined;
-  }
-  const { rowCount: addressArray } = await pool.query(
-    `select zipcode from addresses where zipcode = $1`,
-    [result.cep]
-  );
-
-  let finalZipCode = result.cep;
-  if (addressArray < 1) {
-    const zip = await registerZipCode(result);
-
-    finalZipCode = zip;
-  }
-  return finalZipCode;
-};
 
 const registerZipCode = async (zipcode: Izipcode): Promise<string> => {
   const { cep: zip, logradouro, complemento, bairro, localidade, uf } = zipcode;
@@ -50,4 +24,29 @@ const registerZipCode = async (zipcode: Izipcode): Promise<string> => {
     uf,
   ]);
   return rows[0].zipcode;
+};
+
+export const getZipCode = async (
+  zipcode: string
+): Promise<string | undefined> => {
+  const { data } = await axios.get(`https://viacep.com.br/ws/${zipcode}/json/`);
+  const result: Izipcode = data;
+
+  if (data.erro) {
+    if (data.erro) {
+      return undefined;
+    }
+    console.log(data);
+    console.log(data);
+    const { rowCount: addressArray } = await pool.query(
+      `select zipcode from addresses where zipcode = $1`,
+      [result.cep]
+    );
+    let finalZipCode = result.cep;
+    if (addressArray < 1) {
+      const zip = await registerZipCode(result);
+      finalZipCode = zip;
+    }
+    return finalZipCode;
+  }
 };

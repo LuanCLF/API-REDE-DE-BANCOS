@@ -33,9 +33,7 @@ export const loginBank = async (
     const bank: IBankValidate | undefined = await getBank(number, agency);
 
     if (!bank) {
-      return res
-        .status(404)
-        .json({ message: bankErrorMessages.bankAlreadyExist });
+      return res.status(404).json({ message: bankErrorMessages.bankNotFound });
     }
 
     const bankService = new BankService(pool);
