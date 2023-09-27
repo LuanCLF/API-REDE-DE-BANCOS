@@ -29,6 +29,7 @@ export class BankService {
         zipcode,
       ]);
     } catch (error) {
+      console.log(error);
       throw new Error();
     }
   }

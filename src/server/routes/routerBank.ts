@@ -5,10 +5,12 @@ import { midBankLogin } from '../bank/middlewares/middlewares.banks';
 
 const routesBank = express();
 
+routesBank.get('/banks');
 routesBank.post('/bank', bank.registerValidation, bank.registerBank);
+
 routesBank.post('/bank/login', bank.loginValidation, bank.loginBank);
 
-routesBank.use(midBankLogin);
+routesBank.use('/bank', midBankLogin);
 routesBank.get('/bank', bank.searchMyBank);
 routesBank.get('/bank/accounts', bank.getAllAccountsOfMyBank);
 routesBank.patch('/bank', bank.updateValidation, bank.update);
