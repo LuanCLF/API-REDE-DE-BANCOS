@@ -118,24 +118,24 @@ export class BankService {
   public async delete(id: number, password: string) {
     try {
       const bank = await this.searchMyBank(id);
-      if (!bank) return 404;
+      if (!bank) throw 404;
 
       const accounts = await this.getAllAccounts(id);
       if (accounts.length > 0) {
-        return 409;
+        throw 409;
       }
 
-      const correctPassword = compareHashed(password, bank.password);
+      const correctPassword = await compareHashed(password, bank.password);
       if (!correctPassword) {
-        return 401;
+        throw 401;
       }
 
       const query = 'delete from banks where id = $1';
       await this.pool.query(query, [id]);
 
-      return 204;
+      return;
     } catch (error) {
-      throw new Error();
+      throw error;
     }
   }
 }

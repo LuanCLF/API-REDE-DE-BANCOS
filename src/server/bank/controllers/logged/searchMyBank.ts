@@ -1,10 +1,10 @@
-import { pool } from '../../enviroment/env';
-import { IBank } from '../../entitys/bank/bank.entity';
+import { pool } from '../../../enviroment/env';
+import { IBank } from '../../../entitys/bank/bank.entity';
 import {
   bankErrorMessages,
   genericErrorMessages,
-} from '../../messages/messages';
-import { BankService } from '../services/services.banks';
+} from '../../../messages/messages';
+import { BankService } from '../../services/services.banks';
 import { Request, Response } from 'express';
 
 export const searchMyBank = async (req: Request, res: Response) => {

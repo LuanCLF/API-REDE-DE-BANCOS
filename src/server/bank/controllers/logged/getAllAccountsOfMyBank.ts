@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { BankService } from '../services/services.banks';
-import { pool } from '../../enviroment/env';
+import { BankService } from '../../services/services.banks';
+import { pool } from '../../../enviroment/env';
 import {
   bankErrorMessages,
   genericErrorMessages,
-} from '../../messages/messages';
-import { IBank } from '../../entitys/bank/bank.entity';
+} from '../../../messages/messages';
+import { IBank } from '../../../entitys/bank/bank.entity';
 
 export const getAllAccountsOfMyBank = async (req: Request, res: Response) => {
   try {
