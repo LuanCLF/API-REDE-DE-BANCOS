@@ -29,7 +29,6 @@ export class BankService {
         zipcode,
       ]);
     } catch (error) {
-      console.log(error);
       throw new Error();
     }
   }
@@ -88,7 +87,7 @@ export class BankService {
     }
   }
 
-  public async update(id: number, values: Array<UpdateBankDto>): Promise<void> {
+  public async update(id: number, values: Array<Array<string>>): Promise<void> {
     try {
       const insert = [];
 
@@ -96,15 +95,14 @@ export class BankService {
       let paramsCount = 0;
       let fields = '';
 
-      values.filter((item, index) => {
-        const value = Object.values(item)[0];
-        if (value) {
-          nameInsert = Object.keys(values[index])[0];
-          paramsCount > 0 ? (fields += ', ') : '';
-          fields += `${nameInsert} = $${(paramsCount += 1)}`;
+      values.map((item, index) => {
+        nameInsert = item[0];
 
-          return insert.push(value);
-        }
+        index > 0 ? (fields += ', ') : '';
+        fields += `${nameInsert} = $${(paramsCount += 1)}`;
+
+        const value = item[1];
+        return insert.push(value);
       });
 
       insert.push(id);
