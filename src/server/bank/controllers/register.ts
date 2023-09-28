@@ -60,20 +60,17 @@ export const registerBank = async (
         .json({ message: bankErrorMessages.bankAlreadyExist });
     }
 
-    const zipCodeValidation: string | undefined = await getZipCode(
-      req.body.zipcode
-    );
-    if (!zipCodeValidation) {
-      return res.status(404).json({ message: genericErrorMessages.zipCode });
-    }
+    const zipCodeValidation: string = await getZipCode(req.body.zipcode);
     createBankDto.zipcode = zipCodeValidation;
 
-    // const bankService = new BankService(pool);
-    // await bankService.create(createBankDto);
+    const bankService = new BankService(pool);
+    await bankService.create(createBankDto);
 
     return res.status(201).json();
   } catch (error) {
-    console.log(error);
+    if (error === 'ZIPCODE') {
+      return res.status(404).json({ message: genericErrorMessages.zipCode });
+    }
     return res.status(500).json({ message: genericErrorMessages.intern });
   }
 };

@@ -6,6 +6,7 @@ const genericErrorMessages = {
   intern: 'Erro inesperado no servidor',
   zipCode: 'Endereço não encontrado',
   unauthorized: 'Não autorizado',
+  requestEmpty: 'Não há nada no corpo da requisição',
 };
 const userErrorMessages = {
   userNotFound: 'Cadastro não encontrado',

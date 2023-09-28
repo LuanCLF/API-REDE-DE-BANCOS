@@ -5,6 +5,8 @@ import { genericErrorMessages } from '../../messages/messages';
 import * as yup from 'yup';
 import { validation } from '../middlewares/middlewares.banks';
 import { UpdateBankDto } from '../../dtos/bank/banks.dtos';
+import { getZipCode } from '../../utils/getZipCode';
+import { hasher } from '../../utils/hasher';
 
 export const updateValidation = validation((getSchema) => ({
   body: getSchema<UpdateBankDto>(
@@ -24,12 +26,33 @@ export const updateValidation = validation((getSchema) => ({
 export const update: RequestHandler = async (req, res) => {
   try {
     const { bankID } = req.headers;
-    const values = req.body;
+    const { zipcode, password } = req.body;
+    if (zipcode) {
+      const zipCodeValidation: string = await getZipCode(zipcode);
+      req.body.zipcode = zipCodeValidation;
+    }
+    if (password) {
+      const passwordHashed: string = await hasher(password);
+      req.body.password = passwordHashed;
+    }
+
+    const values: Array<Array<string>> = Object.entries(req.body);
+    if (values.length < 1) throw 'EMPTY';
+
     const bankService = new BankService(pool);
     await bankService.update(Number(bankID), values);
 
     return res.status(204).json();
   } catch (error) {
+    if (error === 'ZIPCODE') {
+      return res.status(404).json({ message: genericErrorMessages.zipCode });
+    }
+    if (error === 'EMPTY') {
+      return res
+        .status(400)
+        .json({ message: genericErrorMessages.requestEmpty });
+    }
+
     return res.status(500).json({ message: genericErrorMessages.intern });
   }
 };

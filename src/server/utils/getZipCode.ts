@@ -26,27 +26,23 @@ const registerZipCode = async (zipcode: Izipcode): Promise<string> => {
   return rows[0].zipcode;
 };
 
-export const getZipCode = async (
-  zipcode: string
-): Promise<string | undefined> => {
+export const getZipCode = async (zipcode: string): Promise<string> => {
   const { data } = await axios.get(`https://viacep.com.br/ws/${zipcode}/json/`);
   const result: Izipcode = data;
 
   if (data.erro) {
-    if (data.erro) {
-      return undefined;
-    }
-    console.log(data);
-    console.log(data);
-    const { rowCount: addressArray } = await pool.query(
-      `select zipcode from addresses where zipcode = $1`,
-      [result.cep]
-    );
-    let finalZipCode = result.cep;
-    if (addressArray < 1) {
-      const zip = await registerZipCode(result);
-      finalZipCode = zip;
-    }
-    return finalZipCode;
+    throw 'ZIPCODE';
   }
+
+  const { rowCount: addressArray } = await pool.query(
+    `select zipcode from addresses where zipcode = $1`,
+    [result.cep]
+  );
+
+  let finalZipCode = result.cep;
+  if (addressArray < 1) {
+    const zip = await registerZipCode(result);
+    finalZipCode = zip;
+  }
+  return finalZipCode;
 };
