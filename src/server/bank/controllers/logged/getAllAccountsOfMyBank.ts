@@ -1,25 +1,14 @@
 import { Request, Response } from 'express';
-import { BankService } from '../../services/services.banks';
-import { pool } from '../../../enviroment/env';
-import {
-  bankErrorMessages,
-  genericErrorMessages,
-} from '../../../messages/messages';
-import { IBank } from '../../../entitys/bank/bank.entity';
+import { genericErrorMessages } from '../../../messages/messages';
+import { bankLogged } from '../../services/service.bank.logged';
 
 export const getAllAccountsOfMyBank = async (req: Request, res: Response) => {
   try {
     const { bankID } = req.headers;
-    const bankService = new BankService(pool);
+    const logged = new bankLogged(Number(bankID));
 
-    const bank: IBank | undefined = await bankService.searchMyBank(
-      Number(bankID)
-    );
-    if (!bank) {
-      return res.status(404).json({ message: bankErrorMessages.bankNotFound });
-    }
-
-    const accounts = await bankService.getAllAccounts(Number(bankID));
+    const bank = await logged.getMyBank();
+    const accounts = await logged.getAllAccounts();
 
     const { number, agency, name, zipcode } = bank;
     const bankAccounts = {

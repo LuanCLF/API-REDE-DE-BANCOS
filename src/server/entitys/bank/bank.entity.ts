@@ -1,11 +1,11 @@
 export interface IBank {
-  id: number;
+  id?: number;
   name: string;
   number: string;
   agency: string;
-  password: string;
-  created_at: string;
-  updated_at: string;
+  password?: string;
+  created_at?: string;
+  updated_at?: string;
   zipcode: string;
 }
 

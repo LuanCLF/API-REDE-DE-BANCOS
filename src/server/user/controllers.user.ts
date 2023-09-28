@@ -23,7 +23,6 @@ export const createAccountUser = async (req: Request, res: Response) => {
 
     res.status(201).json();
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: genericErrorMessages.intern });
   }
 };

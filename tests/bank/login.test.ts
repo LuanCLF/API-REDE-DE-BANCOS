@@ -14,11 +14,9 @@ describe('login bank', () => {
       .post('/bank/login')
       .set('Content-Type', 'application/json')
       .send({
-        name: 'itau',
         number: '1232',
         agency: '123a',
-        password: 'senha',
-        zipcode: '59800000',
+        password: 'senhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
       });
 
     expect(login.statusCode).toEqual(404);
@@ -28,11 +26,9 @@ describe('login bank', () => {
       .post('/bank/login')
       .set('Content-Type', 'application/json')
       .send({
-        name: 'itau',
         number: '123',
         agency: '123',
         password: 'senhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-        zipcode: '59800000',
       });
 
     expect(login.statusCode).toEqual(401);

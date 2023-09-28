@@ -10,6 +10,6 @@ import { routesUser } from './routes/routerUser';
 const allRoutes = express();
 
 allRoutes.use(express.json());
-allRoutes.use(routesBank, routesUser);
+allRoutes.use(routesBank);
 
 export { allRoutes };

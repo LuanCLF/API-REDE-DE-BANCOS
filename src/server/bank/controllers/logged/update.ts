@@ -1,12 +1,11 @@
 import { RequestHandler } from 'express';
-import { BankService } from '../../services/services.banks';
-import { pool } from '../../../enviroment/env';
 import { genericErrorMessages } from '../../../messages/messages';
 import * as yup from 'yup';
 import { validation } from '../../middlewares/middlewares.banks';
 import { UpdateBankDto } from '../../../dtos/bank/banks.dtos';
 import { getZipCode } from '../../../utils/getZipCode';
 import { hasher } from '../../../utils/hasher';
+import { bankLogged } from '../../services/service.bank.logged';
 
 export const updateValidation = validation((getSchema) => ({
   body: getSchema<UpdateBankDto>(
@@ -37,22 +36,23 @@ export const update: RequestHandler = async (req, res) => {
     }
 
     const values: Array<Array<string>> = Object.entries(req.body);
-    if (values.length < 1) throw 'EMPTY';
+    if (values.length < 1) throw 400;
 
-    const bankService = new BankService(pool);
-    await bankService.update(Number(bankID), values);
+    const logged = new bankLogged(Number(bankID));
+    await logged.update(values);
 
     return res.status(204).json();
   } catch (error) {
-    if (error === 'ZIPCODE') {
-      return res.status(404).json({ message: genericErrorMessages.zipCode });
-    }
-    if (error === 'EMPTY') {
-      return res
-        .status(400)
-        .json({ message: genericErrorMessages.requestEmpty });
-    }
+    switch (error) {
+      case 404:
+        return res.status(404).json({ message: genericErrorMessages.zipCode });
+      case 400:
+        return res
+          .status(400)
+          .json({ message: genericErrorMessages.requestEmpty });
 
-    return res.status(500).json({ message: genericErrorMessages.intern });
+      default:
+        return res.status(500).json({ message: genericErrorMessages.intern });
+    }
   }
 };

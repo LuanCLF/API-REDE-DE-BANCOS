@@ -1,27 +1,49 @@
-import { passwordBankJWT } from '../../enviroment/env';
-import { CreateBankDto, UpdateBankDto } from '../../dtos/bank/banks.dtos';
-import { IBank, IBankValidate } from '../../entitys/bank/bank.entity';
-import { getBankWithID } from '../../utils/getFromDB';
+import { passwordBankJWT, pool } from '../../enviroment/env';
+import { CreateBankDto } from '../../dtos/bank/banks.dtos';
 import { compareHashed, hasher } from '../../utils/hasher';
-import { Pool } from 'pg';
 import jwt from 'jsonwebtoken';
 import { dateFormat } from '../../utils/dateFormat';
 
 export class BankService {
-  private pool: Pool;
+  private async searchBank(number: string, agency: string) {
+    try {
+      const { rows: bank, rowCount } = await pool.query(
+        'select id, password from banks where number = $1 and agency = $2',
+        [number, agency]
+      );
+      if (rowCount < 1) return undefined;
 
-  constructor(pool: Pool) {
-    this.pool = pool;
+      return bank[0];
+    } catch (error) {
+      throw new Error();
+    }
+  }
+
+  public async getBanks() {
+    try {
+      const { rows: banks } = await pool.query(
+        'select name, number, agency, zipcode, created_at from banks'
+      );
+      banks.map((bank) => {
+        bank.created_at = dateFormat(bank.created_at);
+      });
+    } catch (error) {
+      throw new Error();
+    }
   }
 
   public async create(createBankDto: CreateBankDto): Promise<void> {
     try {
       const { number, agency, password, name, zipcode } = createBankDto;
+
+      const exist = await this.searchBank(number, agency);
+      if (exist) throw 409;
+
       const passwordHashed = await hasher(password);
       const queryRegister =
-        'INSERT INTO banks (number, agency, password, name, created_at, updated_at, zipcode) VALUES ($1, $2, $3, $4, NOW(), NOW(), $5)';
+        'insert into banks (number, agency, password, name, created_at, updated_at, zipcode) VALUES ($1, $2, $3, $4, now(), now(), $5)';
 
-      await this.pool.query(queryRegister, [
+      await pool.query(queryRegister, [
         number,
         agency,
         passwordHashed,
@@ -29,111 +51,33 @@ export class BankService {
         zipcode,
       ]);
     } catch (error) {
-      throw new Error();
+      throw error;
     }
   }
+
   public async login(
-    password: string,
-    bank: IBankValidate
-  ): Promise<string | undefined> {
+    passwordToCompare: string,
+    number: string,
+    agency: string
+  ): Promise<string> {
     try {
+      const bank = await this.searchBank(number, agency);
+      if (!bank) throw 404;
+
+      const { password, id } = bank;
+
       const correctPassword: boolean = await compareHashed(
-        password,
-        bank.password
+        passwordToCompare,
+        password
       );
 
-      if (!correctPassword) {
-        return undefined;
-      }
-      const tokenBank = jwt.sign({ id: bank.id }, passwordBankJWT, {
+      if (!correctPassword) throw 401;
+
+      const tokenBank = jwt.sign({ id }, passwordBankJWT, {
         expiresIn: '1h',
       });
 
       return tokenBank;
-    } catch (error) {
-      throw new Error();
-    }
-  }
-
-  public async searchMyBank(id: number): Promise<IBank | undefined> {
-    try {
-      const bank: IBank | undefined = await getBankWithID(id);
-      if (!bank) return undefined;
-      bank.created_at = dateFormat(bank.created_at);
-      bank.updated_at = dateFormat(bank.updated_at);
-
-      return bank;
-    } catch (error) {
-      throw new Error();
-    }
-  }
-
-  public async getAllAccounts(id: number) {
-    try {
-      const query =
-        'select number, user_id, created_at, updated_at from accounts where bank_id = $1';
-      const { rows: accounts } = await this.pool.query(query, [id]);
-
-      if (accounts.length > 0) {
-        accounts.map((object) => {
-          object.created_at = dateFormat(object.created_at);
-          object.updated_at = dateFormat(object.updated_at);
-        });
-      }
-
-      return accounts;
-    } catch (error) {
-      throw new Error();
-    }
-  }
-
-  public async update(id: number, values: Array<Array<string>>): Promise<void> {
-    try {
-      const insert = [];
-
-      let nameInsert = '';
-      let paramsCount = 0;
-      let fields = '';
-
-      values.map((item, index) => {
-        nameInsert = item[0];
-
-        index > 0 ? (fields += ', ') : '';
-        fields += `${nameInsert} = $${(paramsCount += 1)}`;
-
-        const value = item[1];
-        return insert.push(value);
-      });
-
-      insert.push(id);
-      paramsCount += 1;
-      const query = `update banks set ${fields}, updated_at = now() where id = $${paramsCount} `;
-
-      await this.pool.query(query, insert);
-    } catch (error) {
-      throw new Error();
-    }
-  }
-
-  public async delete(id: number, password: string) {
-    try {
-      const bank = await this.searchMyBank(id);
-      if (!bank) throw 404;
-
-      const accounts = await this.getAllAccounts(id);
-      if (accounts.length > 0) {
-        throw 409;
-      }
-
-      const correctPassword = await compareHashed(password, bank.password);
-      if (!correctPassword) {
-        throw 401;
-      }
-
-      const query = 'delete from banks where id = $1';
-      await this.pool.query(query, [id]);
-
-      return;
     } catch (error) {
       throw error;
     }
