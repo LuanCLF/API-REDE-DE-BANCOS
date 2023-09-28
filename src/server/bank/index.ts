@@ -1,16 +1,17 @@
-import { deleteValidation, deleteBank } from './controllers/delete';
+import { getAllBanks } from './controllers/getAllBanks';
+import { deleteValidation, deleteBank } from './controllers/logged/delete';
 import { registerValidation, registerBank } from './controllers/register';
 import { loginValidation, loginBank } from './controllers/login';
-import { searchMyBank } from './controllers/searchMyBank';
-import { getAllAccountsOfMyBank } from './controllers/getAllAccountsOfMyBank';
-import { updateValidation, update } from './controllers/update';
-
+import { getAllAccountsOfMyBank } from './controllers/logged/getAllAccountsOfMyBank';
+import { updateValidation, update } from './controllers/logged/update';
+import { getMyBank } from './controllers/logged/getMyBank';
 export const bank = {
+  getAllBanks,
   registerValidation,
   registerBank,
   loginValidation,
   loginBank,
-  searchMyBank,
+  getMyBank,
   getAllAccountsOfMyBank,
   updateValidation,
   update,

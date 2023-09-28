@@ -64,7 +64,7 @@ export const midCreateUser = async (
     };
     next();
   } catch (error) {
-    return res.status(500).json({ menssage: genericErrorMessages.intern });
+    return res.status(500).json({ message: genericErrorMessages.intern });
   }
 };
 

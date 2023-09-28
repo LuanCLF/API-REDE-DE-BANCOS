@@ -23,7 +23,7 @@ export const createAccountUser = async (req: Request, res: Response) => {
 
     res.status(201).json();
   } catch (error) {
-    return res.status(500).json({ menssage: genericErrorMessages.intern });
+    return res.status(500).json({ message: genericErrorMessages.intern });
   }
 };
 
@@ -49,6 +49,6 @@ export const loginUser = async (req: Request, res: Response) => {
         .json({ message: `${userSucessMessage.logged}, token: ${result}` });
     }
   } catch (error) {
-    return res.status(500).json({ menssage: genericErrorMessages.intern });
+    return res.status(500).json({ message: genericErrorMessages.intern });
   }
 };
