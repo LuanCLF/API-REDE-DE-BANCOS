@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { genericErrorMessages } from '../../../messages/messages';
-import { validation } from '../../middlewares/middlewares.banks';
+import { validation } from '../../middlewares/validation';
 import * as yup from 'yup';
 import { DeleteBankDto } from '../../../dtos/bank/banks.dtos';
 import { bankLogged } from '../../services/service.bank.logged';

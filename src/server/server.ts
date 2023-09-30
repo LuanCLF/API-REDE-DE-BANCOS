@@ -5,7 +5,6 @@ config();
 
 import express from 'express';
 import { routesBank } from './routes/routerBank';
-import { routesUser } from './routes/routerUser';
 
 const allRoutes = express();
 

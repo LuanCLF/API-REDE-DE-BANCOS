@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { bank } from '../bank/index';
-import { midBankLogin } from '../bank/middlewares/middlewares.banks';
+import { midBankLogin } from '../bank/middlewares/authentication';
 
 const routesBank = express();
 

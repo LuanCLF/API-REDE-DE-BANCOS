@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { genericErrorMessages } from '../../../messages/messages';
 import * as yup from 'yup';
-import { validation } from '../../middlewares/middlewares.banks';
+import { validation } from '../../middlewares/validation';
 import { UpdateBankDto } from '../../../dtos/bank/banks.dtos';
 import { getZipCode } from '../../../utils/getZipCode';
 import { hasher } from '../../../utils/hasher';

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 import { CreateBankDto } from '../../dtos/bank/banks.dtos';
-import { validation } from '../middlewares/middlewares.banks';
+import { validation } from '../middlewares/validation';
 
 import {
   bankErrorMessages,

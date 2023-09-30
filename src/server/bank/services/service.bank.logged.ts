@@ -1,6 +1,7 @@
 import { pool } from '../../enviroment/env';
 import { dateFormat } from '../../utils/dateFormat';
 import { compareHashed } from '../../utils/hasher';
+import { IAccounts, IBank } from '../entitys/bank.entity';
 
 export class bankLogged {
   id: number;
@@ -9,7 +10,19 @@ export class bankLogged {
     this.id = id;
   }
 
-  public async getAllAccounts() {
+  private async getMyPassword(): Promise<string> {
+    try {
+      const { rows: bank } = await pool.query(
+        'select password from banks where id = $1',
+        [this.id]
+      );
+
+      return bank[0].password;
+    } catch (error) {
+      throw new Error();
+    }
+  }
+  public async getAllAccounts(): Promise<Array<Partial<IAccounts>>> {
     try {
       const query =
         'select number, user_id, created_at, updated_at from accounts where bank_id = $1';
@@ -28,20 +41,7 @@ export class bankLogged {
     }
   }
 
-  private async getMyPassword(): Promise<string> {
-    try {
-      const { rows: bank } = await pool.query(
-        'select password from banks where id = $1',
-        [this.id]
-      );
-
-      return bank[0].password;
-    } catch (error) {
-      throw new Error();
-    }
-  }
-
-  public async getMyBank() {
+  public async getMyBank(): Promise<IBank> {
     try {
       const { rows } = await pool.query('select * from banks where id = $1', [
         this.id,

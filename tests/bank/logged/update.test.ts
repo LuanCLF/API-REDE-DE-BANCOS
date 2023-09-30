@@ -1,4 +1,4 @@
-import { routesServer } from '../jest.setup';
+import { routesServer } from '../../jest.setup';
 
 describe('update bank', () => {
   it('tried to update my data but failed because Im unauthorized', async () => {

@@ -6,7 +6,7 @@ import {
   genericErrorMessages,
 } from '../../messages/messages';
 import { BankService } from '../services/services.banks';
-import { validation } from '../middlewares/middlewares.banks';
+import { validation } from '../middlewares/validation';
 
 import * as yup from 'yup';
 
