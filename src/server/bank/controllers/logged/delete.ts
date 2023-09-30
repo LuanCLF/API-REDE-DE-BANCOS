@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { genericErrorMessages } from '../../../messages/messages';
 import { validation } from '../../middlewares/validation';
 import * as yup from 'yup';
 import { DeleteBankDto } from '../../../dtos/bank/banks.dtos';
@@ -16,27 +15,11 @@ export const deleteValidation = validation((getSchema) => ({
 const deleteBank = async (req: Request, res: Response) => {
   const { bankID } = req.headers;
   const { password } = req.body;
-  try {
-    const logged = new bankLogged(Number(bankID));
-    await logged.delete(password);
 
-    return res.status(204).json();
-  } catch (error) {
-    switch (error) {
-      case 409:
-        return res
-          .status(error)
-          .json({ message: genericErrorMessages.unauthorized });
+  const logged = new bankLogged(Number(bankID));
+  await logged.delete(password);
 
-      case 401:
-        return res
-          .status(error)
-          .json({ message: genericErrorMessages.unauthorized });
-
-      default:
-        return res.status(500).json({ message: genericErrorMessages.intern });
-    }
-  }
+  return res.status(204).json();
 };
 
 export { deleteBank };

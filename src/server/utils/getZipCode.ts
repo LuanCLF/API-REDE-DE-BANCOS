@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { pool } from '../enviroment/env';
+import { ApiError } from '../bank/middlewares/error';
+import { genericErrorMessages } from '../messages/messages';
 
 export interface Izipcode {
   cep: string;
@@ -38,28 +40,22 @@ const registerZipCode = async (zipcode: Izipcode): Promise<string> => {
 };
 
 export const getZipCode = async (zipcode: string): Promise<string> => {
-  try {
-    const { data } = await axios.get(
-      `https://viacep.com.br/ws/${zipcode}/json/`
-    );
-    const result: Izipcode = data;
+  const { data } = await axios.get(`https://viacep.com.br/ws/${zipcode}/json/`);
+  const result: Izipcode = data;
 
-    if (data.erro) {
-      throw 404;
-    }
-
-    const { rowCount: addressArray } = await pool.query(
-      `select zipcode from addresses where zipcode = $1`,
-      [result.cep]
-    );
-
-    let finalZipCode = result.cep;
-    if (addressArray < 1) {
-      const zip = await registerZipCode(result);
-      finalZipCode = zip;
-    }
-    return finalZipCode;
-  } catch (error) {
-    throw error;
+  if (data.erro) {
+    throw new ApiError(genericErrorMessages.zipCode, 404);
   }
+
+  const { rowCount: addressArray } = await pool.query(
+    `select zipcode from addresses where zipcode = $1`,
+    [result.cep]
+  );
+
+  let finalZipCode = result.cep;
+  if (addressArray < 1) {
+    const zip = await registerZipCode(result);
+    finalZipCode = zip;
+  }
+  return finalZipCode;
 };
