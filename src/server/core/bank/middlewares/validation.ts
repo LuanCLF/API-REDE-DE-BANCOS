@@ -1,12 +1,5 @@
-import { Request, Response, NextFunction, RequestHandler } from 'express';
-import {
-  bankErrorMessages,
-  genericErrorMessages,
-} from '../../messages/messages';
-import jwt from 'jsonwebtoken';
-import { passwordBankJWT } from '../../enviroment/env';
-import { getBankWithID } from '../../utils/getFromDB';
-import { IBank } from '../../entitys/bank/bank.entity';
+import { RequestHandler } from 'express';
+
 import { AnyObject, Maybe, ObjectSchema, ValidationError } from 'yup';
 
 type TField = 'body' | 'header' | 'query' | 'params';
@@ -49,36 +42,3 @@ export const validation: TValidation =
 
     next();
   };
-
-const midBankLogin = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { authorization } = req.headers;
-    if (!authorization) {
-      return res
-        .status(401)
-        .json({ message: genericErrorMessages.unauthorized });
-    }
-
-    const token = authorization.split(' ')[1];
-    const auth = jwt.verify(token, passwordBankJWT);
-
-    const bank = JSON.parse(JSON.stringify(auth));
-    const exist: IBank | undefined = await getBankWithID(bank.id);
-    if (!exist) {
-      return res.status(404).json({ message: bankErrorMessages.bankNotFound });
-    }
-    req.headers = {
-      bankID: bank.id,
-    };
-
-    next();
-  } catch (error) {
-    return res.status(500).json({ message: genericErrorMessages.unauthorized });
-  }
-};
-
-export { midBankLogin };
