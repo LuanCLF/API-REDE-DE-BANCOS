@@ -2,8 +2,8 @@ import { RequestHandler } from 'express';
 import {
   bankErrorMessages,
   genericErrorMessages,
-} from '../../messages/messages';
-import { passwordBankJWT, pool } from '../../enviroment/env';
+} from '../../../messages/messages';
+import { passwordBankJWT, pool } from '../../../enviroment/env';
 import jwt from 'jsonwebtoken';
 import { ApiError } from './error';
 
@@ -19,7 +19,7 @@ const midBankLogin: RequestHandler = async (req, res, next) => {
 
   const bank = JSON.parse(JSON.stringify(auth));
 
-  const { rowCount } = await pool.query('select id from bank where id = $1', [
+  const { rowCount } = await pool.query('select id from banks where id = $1', [
     bank.id,
   ]);
   if (rowCount < 1) {

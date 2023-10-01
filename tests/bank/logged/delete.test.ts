@@ -1,9 +1,31 @@
 import { routesServer } from '../../jest.setup';
 
 describe('delete my bank', () => {
-  it('tried to delete my bank but failed because Im unauthorized', async () => {
-    const login = await routesServer.delete('/bank').send();
+  let token = '';
+  beforeAll(async () => {
+    const response = await routesServer.post('/bank/login').send({
+      number: '12345',
+      agency: '12345',
+      password: 'senha',
+    });
 
-    expect(login.statusCode).toEqual(401);
+    token = response.body.message;
+  });
+
+  it('tried to delete my bank but failed because Im unauthorized', async () => {
+    const deleteBank = await routesServer.delete('/bank').send();
+
+    expect(deleteBank.statusCode).toEqual(401);
+  });
+
+  it('tried to delete my bank but failed because my password is incorrect', async () => {
+    const deleteBank = await routesServer
+      .delete('/bank')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        password: 'joanzin',
+      });
+
+    expect(deleteBank.statusCode).toEqual(401);
   });
 });

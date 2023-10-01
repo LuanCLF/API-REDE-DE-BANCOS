@@ -1,5 +1,5 @@
-import { pool } from '../../enviroment/env';
-import { genericErrorMessages } from '../../messages/messages';
+import { pool } from '../../../enviroment/env';
+import { genericErrorMessages } from '../../../messages/messages';
 import { dateFormat } from '../../utils/dateFormat';
 import { compareHashed } from '../../utils/hasher';
 import { IAccounts, IBank } from '../entitys/bank.entity';

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { genericErrorMessages } from '../../messages/messages';
+import { genericErrorMessages } from '../../../messages/messages';
 
 export class ApiError extends Error {
   public readonly statusCode: number;
@@ -17,6 +17,7 @@ export const errorHandling = (
   next: NextFunction
 ) => {
   const code = error.statusCode || 500;
+
   const message = error.statusCode
     ? error.message
     : genericErrorMessages.intern;

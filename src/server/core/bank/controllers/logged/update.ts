@@ -1,12 +1,12 @@
 import { RequestHandler } from 'express';
-import { genericErrorMessages } from '../../../messages/messages';
+import { genericErrorMessages } from '../../../../messages/messages';
 import * as yup from 'yup';
 import { validation } from '../../middlewares/validation';
-import { UpdateBankDto } from '../../../dtos/bank/banks.dtos';
-import { getZipCode } from '../../../utils/getZipCode';
-import { hasher } from '../../../utils/hasher';
+import { UpdateBankDto } from '../../../../dtos/bank/banks.dtos';
 import { bankLogged } from '../../services/service.bank.logged';
 import { ApiError } from '../../middlewares/error';
+import { getZipCode } from '../../../utils/getZipCode';
+import { hasher } from '../../../utils/hasher';
 
 export const updateValidation = validation((getSchema) => ({
   body: getSchema<UpdateBankDto>(

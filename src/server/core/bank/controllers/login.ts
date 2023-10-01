@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { LoginBankDto } from '../../dtos/bank/banks.dtos';
-import { bankSucessMessage } from '../../messages/messages';
+import { LoginBankDto } from '../../../dtos/bank/banks.dtos';
+import { bankSucessMessage } from '../../../messages/messages';
 import { BankService } from '../services/services.banks';
 import { validation } from '../middlewares/validation';
 
@@ -25,7 +25,5 @@ export const loginBank = async (
   const bankService = new BankService();
   const tokenBank = await bankService.login(password, number, agency);
 
-  return res
-    .status(200)
-    .json({ message: `${bankSucessMessage.logged}, Token: ${tokenBank}` });
+  return res.status(200).json({ message: tokenBank });
 };

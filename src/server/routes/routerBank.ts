@@ -1,14 +1,8 @@
-import express, { Request, Response } from 'express';
-
-import { bank } from '../bank/index';
-import { midBankLogin } from '../bank/middlewares/authentication';
-import { ApiError } from '../bank/middlewares/error';
+import express from 'express';
+import { bank } from '../core/bank';
+import { midBankLogin } from '../core/bank/middlewares/authentication';
 
 const routesBank = express();
-
-routesBank.get('/luan', (req: Request, res: Response) => {
-  throw new ApiError('lançado de dentro da rota caraaaaaaaaaaaaaaaaaaai', 258);
-});
 
 routesBank.get('/banks', bank.getAllBanks);
 routesBank.post('/bank', bank.registerValidation, bank.registerBank);

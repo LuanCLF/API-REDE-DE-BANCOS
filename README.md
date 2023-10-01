@@ -2,7 +2,7 @@
 
 ### Optei por pegar essa idéia e transformar em um banco de verdade, aqui é possível ter o cadastro de vários bancos, e ter contas em diferentes bancos, todos os dados são separados por entidades no PostgreSQL, existe uma para o banco em si, para as contas, para os dados de cada usuário, de transações, depósitos e saques também, e ainda possui uma de endereços, aqui vai um diagrama do projeto no banco de dados:
 
-![diagrama do banco de dados](./databaseModelDiagram/svg-do-db-typebanco.svg)
+![diagrama do banco de dados](./images//svg-do-db-typebanco.svg)
 
 ### Escolhi esse formato para permitir que existam vários bancos, cada banco possui várias contas e cada conta possui um usuário, eu separo os dados pessoas do usuário em outra tabela, mas as duas em si representam o usuário, a tabela de accounts é usada para os dados mais técnicos da conta criada, e a de users para guardar cpf, email, etc..
 
@@ -23,7 +23,7 @@
 
 ### Até o momento tenho prontas as rotas do banco em si, logo mais farei as de contas/usuários e das operações bancárias
 
-![rotas](./databaseModelDiagram/rotasReadme.png)
+![rotas](./images//rotasReadme.png)
 
 ### Para rodar o programa é preciso que crie um arquivo ".env" com as variaveis de ambiente, eu criei um arquivo ".env.example" com o nome das váriaveis, só é necessário colocar os dados do seu banco e das senhas que o JWT irá usar para autenticação e portas do servidor, após configurar isso coloque os seguintes comandos no seu terminal:
 

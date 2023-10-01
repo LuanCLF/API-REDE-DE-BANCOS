@@ -1,14 +1,14 @@
-import { passwordBankJWT, pool } from '../../enviroment/env';
-import { CreateBankDto } from '../../dtos/bank/banks.dtos';
-import { compareHashed, hasher } from '../../utils/hasher';
-import jwt from 'jsonwebtoken';
-import { dateFormat } from '../../utils/dateFormat';
 import { IBank, IBankValidate } from '../entitys/bank.entity';
 import { ApiError } from '../middlewares/error';
 import {
   bankErrorMessages,
   genericErrorMessages,
-} from '../../messages/messages';
+} from '../../../messages/messages';
+import { passwordBankJWT, pool } from '../../../enviroment/env';
+import { dateFormat } from '../../utils/dateFormat';
+import { CreateBankDto } from '../../../dtos/bank/banks.dtos';
+import { compareHashed, hasher } from '../../utils/hasher';
+import jwt from 'jsonwebtoken';
 
 export class BankService {
   private async searchBank(

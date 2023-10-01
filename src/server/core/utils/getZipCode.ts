@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { pool } from '../enviroment/env';
+import { pool } from '../../enviroment/env';
 import { ApiError } from '../bank/middlewares/error';
-import { genericErrorMessages } from '../messages/messages';
+import { genericErrorMessages } from '../../messages/messages';
 
 export interface Izipcode {
   cep: string;
