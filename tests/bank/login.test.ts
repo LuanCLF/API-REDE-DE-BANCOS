@@ -1,7 +1,7 @@
 import { routesServer } from '../jest.setup';
 
 describe('login bank', () => {
-  it('tried to log but fail because data is invalid', async () => {
+  it('login failed due to invalid data', async () => {
     const login = await routesServer
       .post('/bank/login')
       .send({ nome: 'adssa' });
@@ -9,32 +9,41 @@ describe('login bank', () => {
     expect(login.statusCode).toEqual(400);
   });
 
-  it('tried to login but fail because bank not exist', async () => {
+  it('login failed due to nonexistent bank', async () => {
     const login = await routesServer
       .post('/bank/login')
       .set('Content-Type', 'application/json')
       .send({
-        name: 'itau',
         number: '1232',
         agency: '123a',
-        password: 'senha',
-        zipcode: '59800000',
+        password: 'senhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
       });
 
     expect(login.statusCode).toEqual(404);
   });
-  it('tried to login but fail because password incorret', async () => {
+  it('login failed due to incorrect password', async () => {
     const login = await routesServer
       .post('/bank/login')
       .set('Content-Type', 'application/json')
       .send({
-        name: 'itau',
         number: '123',
         agency: '123',
         password: 'senhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-        zipcode: '59800000',
       });
 
     expect(login.statusCode).toEqual(401);
+  });
+
+  it('login successful', async () => {
+    const login = await routesServer
+      .post('/bank/login')
+      .set('Content-Type', 'application/json')
+      .send({
+        number: '123',
+        agency: '123',
+        password: 'senha',
+      });
+
+    expect(login.statusCode).toEqual(200);
   });
 });
