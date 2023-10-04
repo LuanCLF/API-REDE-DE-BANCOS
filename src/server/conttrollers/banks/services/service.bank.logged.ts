@@ -68,7 +68,6 @@ export class bankLogged {
   }
 
   public async update(values: CreateBankDto): Promise<void> {
-    console.log(values.zipcode);
     await prisma.bank.update({
       where: {
         id: this.id,

@@ -1,7 +1,5 @@
 import './conttrollers/shared/others/yup/translationsYup';
 import 'express-async-errors';
-import { config } from 'dotenv';
-config();
 
 import express from 'express';
 import { routesBank } from './routes/routerBank';
