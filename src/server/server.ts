@@ -1,11 +1,11 @@
-import './core/utils/translationsYup';
+import './conttrollers/shared/others/yup/translationsYup';
 import 'express-async-errors';
 import { config } from 'dotenv';
 config();
 
 import express from 'express';
 import { routesBank } from './routes/routerBank';
-import { errorHandling } from './core/bank/middlewares/error';
+import { errorHandling } from './conttrollers/shared/middlewares/error';
 
 const allRoutes = express();
 

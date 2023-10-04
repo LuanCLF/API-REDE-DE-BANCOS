@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { BankService } from '../services/services.banks';
-import { dateFormat } from '../../utils/dateFormat';
+import { dateFormat } from '../../shared/others/code/dateFormat';
 
 export const getAllBanks: RequestHandler = async (req, res) => {
   const service = new BankService();

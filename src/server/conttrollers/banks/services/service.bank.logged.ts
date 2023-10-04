@@ -1,12 +1,12 @@
 import { prisma } from '../../../../database/prismaClient';
+import { CreateBankDto } from '../dtos/banks.dtos';
+import { IBank } from '../entities/bank.entities';
+import { ApiError } from '../../shared/middlewares/error';
 import {
   bankErrorMessages,
   genericErrorMessages,
-} from '../../../messages/messages';
-import { compareHashed } from '../../utils/hasher';
-import { CreateBankDto } from '../dtos/banks.dtos';
-import { IBank } from '../entities/bank.entities';
-import { ApiError } from '../middlewares/error';
+} from '../../shared/others/messages/messages';
+import { compareHashed } from '../../shared/others/code/hasher';
 
 export class bankLogged {
   id: number;

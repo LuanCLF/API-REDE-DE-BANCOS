@@ -1,14 +1,14 @@
-import { ApiError } from '../middlewares/error';
-import {
-  bankErrorMessages,
-  genericErrorMessages,
-} from '../../../messages/messages';
-import { passwordBankJWT } from '../../../enviroment/env';
+import { ApiError } from '../../shared/middlewares/error';
+import { passwordBankJWT } from '../../shared/jwt/passwords';
 import { CreateBankDto } from '../dtos/banks.dtos';
-import { compareHashed, hasher } from '../../utils/hasher';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../../../../database/prismaClient';
 import { IBank, IBankValidate } from '../entities/bank.entities';
+import {
+  bankErrorMessages,
+  genericErrorMessages,
+} from '../../shared/others/messages/messages';
+import { compareHashed, hasher } from '../../shared/others/code/hasher';
 
 export class BankService {
   private async getBank(
