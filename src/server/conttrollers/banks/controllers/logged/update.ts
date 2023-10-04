@@ -1,13 +1,13 @@
 import { RequestHandler } from 'express';
-import { genericErrorMessages } from '../../../../messages/messages';
 import * as yup from 'yup';
-import { validation } from '../../middlewares/validation';
+import { validation } from '../../../shared/middlewares/validation';
 import { UpdateBankDto } from '../../dtos/banks.dtos';
 import { bankLogged } from '../../services/service.bank.logged';
-import { ApiError } from '../../middlewares/error';
-import { hasher } from '../../../utils/hasher';
+import { ApiError } from '../../../shared/middlewares/error';
 import { prisma } from '../../../../../database/prismaClient';
-import { validZipCode } from '../../../utils/validZipCode';
+import { validZipCode } from '../../../shared/others/code/validZipCode';
+import { genericErrorMessages } from '../../../shared/others/messages/messages';
+import { hasher } from '../../../shared/others/code/hasher';
 
 export const updateAllValidation = validation((getSchema) => ({
   body: getSchema<UpdateBankDto>(

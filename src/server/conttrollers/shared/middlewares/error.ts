@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { genericErrorMessages } from '../../../messages/messages';
+import { genericErrorMessages } from '../others/messages/messages';
 
 export class ApiError extends Error {
   public readonly statusCode: number;

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { bankLogged } from '../../services/service.bank.logged';
-import { dateFormat } from '../../../utils/dateFormat';
+import { dateFormat } from '../../../shared/others/code/dateFormat';
 
 export const getAllAccountsOfMyBank = async (req: Request, res: Response) => {
   const { bankID } = req.headers;

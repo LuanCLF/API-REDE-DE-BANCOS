@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 
 import { CreateBankDto } from '../dtos/banks.dtos';
-import { validation } from '../middlewares/validation';
+import { validation } from '../../shared/middlewares/validation';
 
 import { BankService } from '../services/services.banks';
 
 import * as yup from 'yup';
-import { validZipCode } from '../../utils/validZipCode';
+import { validZipCode } from '../../shared/others/code/validZipCode';
 
 export const registerValidation = validation((getSchema) => ({
   body: getSchema<CreateBankDto>(

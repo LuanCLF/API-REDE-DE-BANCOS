@@ -1,6 +1,6 @@
 import express from 'express';
-import { bank } from '../core/bank';
-import { midBankLogin } from '../core/bank/middlewares/authentication';
+import { midBankLogin } from '../conttrollers/shared/middlewares/authentication';
+import { bank } from '../conttrollers/banks';
 
 const routesBank = express();
 

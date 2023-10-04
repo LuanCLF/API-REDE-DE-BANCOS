@@ -1,12 +1,12 @@
 import { RequestHandler } from 'express';
-import {
-  bankErrorMessages,
-  genericErrorMessages,
-} from '../../../messages/messages';
-import { passwordBankJWT } from '../../../enviroment/env';
+import { passwordBankJWT } from '../jwt/passwords';
 import jwt from 'jsonwebtoken';
 import { ApiError } from './error';
 import { prisma } from '../../../../database/prismaClient';
+import {
+  bankErrorMessages,
+  genericErrorMessages,
+} from '../others/messages/messages';
 
 const midBankLogin: RequestHandler = async (req, res, next) => {
   const { authorization } = req.headers;
