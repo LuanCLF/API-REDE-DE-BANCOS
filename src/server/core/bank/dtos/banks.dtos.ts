@@ -14,6 +14,8 @@ export interface LoginBankDto {
 
 export interface UpdateBankDto {
   name?: string;
+  number?: string;
+  agency?: string;
   password?: string;
   zipcode?: string;
 }

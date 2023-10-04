@@ -1,35 +1,48 @@
-import { IBank, IBankValidate } from '../entitys/bank.entity';
 import { ApiError } from '../middlewares/error';
 import {
   bankErrorMessages,
   genericErrorMessages,
 } from '../../../messages/messages';
-import { passwordBankJWT, pool } from '../../../enviroment/env';
-import { dateFormat } from '../../utils/dateFormat';
-import { CreateBankDto } from '../../../dtos/bank/banks.dtos';
+import { passwordBankJWT } from '../../../enviroment/env';
+import { CreateBankDto } from '../dtos/banks.dtos';
 import { compareHashed, hasher } from '../../utils/hasher';
 import jwt from 'jsonwebtoken';
+import { prisma } from '../../../../database/prismaClient';
+import { IBank, IBankValidate } from '../entities/bank.entities';
 
 export class BankService {
-  private async searchBank(
+  private async getBank(
     number: string,
     agency: string
-  ): Promise<IBankValidate | undefined> {
-    const { rows: bank, rowCount } = await pool.query(
-      'select id, password from banks where number = $1 and agency = $2',
-      [number, agency]
-    );
-    if (rowCount < 1) return undefined;
+  ): Promise<IBankValidate | null> {
+    const exist = await prisma.bank.findFirst({
+      select: {
+        id: true,
+        password: true,
+      },
 
-    return bank[0];
+      where: {
+        OR: [
+          {
+            number,
+          },
+          { agency },
+        ],
+      },
+    });
+
+    return exist;
   }
 
-  public async getBanks(): Promise<Array<Partial<IBank>>> {
-    const { rows: banks } = await pool.query(
-      'select name, number, agency, zipcode, created_at from banks'
-    );
-    banks.map((bank) => {
-      bank.created_at = dateFormat(bank.created_at);
+  public async getBanks(): Promise<Array<IBank>> {
+    const banks = await prisma.bank.findMany({
+      select: {
+        number: true,
+        agency: true,
+        name: true,
+        created_at: true,
+        zipcode: true,
+      },
     });
 
     return banks;
@@ -38,23 +51,23 @@ export class BankService {
   public async create(createBankDto: CreateBankDto): Promise<void> {
     const { number, agency, password, name, zipcode } = createBankDto;
 
-    const exist: IBankValidate | undefined = await this.searchBank(
-      number,
-      agency
-    );
-    if (exist) throw new ApiError(genericErrorMessages.unauthorized, 409);
+    const exist = await this.getBank(number, agency);
+
+    if (exist) {
+      throw new ApiError(genericErrorMessages.unauthorized, 409);
+    }
 
     const passwordHashed = await hasher(password);
-    const queryRegister =
-      'insert into banks (number, agency, password, name, created_at, updated_at, zipcode) VALUES ($1, $2, $3, $4, now(), now(), $5)';
 
-    await pool.query(queryRegister, [
-      number,
-      agency,
-      passwordHashed,
-      name,
-      zipcode,
-    ]);
+    await prisma.bank.create({
+      data: {
+        number,
+        agency,
+        name,
+        password: String(passwordHashed),
+        zipcode,
+      },
+    });
   }
 
   public async login(
@@ -62,12 +75,9 @@ export class BankService {
     number: string,
     agency: string
   ): Promise<string> {
-    const bank: IBankValidate | undefined = await this.searchBank(
-      number,
-      agency
-    );
+    const bank = await this.getBank(number, agency);
     if (!bank) {
-      throw new ApiError(bankErrorMessages.bankAlreadyExist, 404);
+      throw new ApiError(bankErrorMessages.bankNotFound, 404);
     }
 
     const { password, id } = bank;

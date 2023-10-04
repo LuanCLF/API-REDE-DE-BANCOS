@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { LoginBankDto } from '../../../dtos/bank/banks.dtos';
-import { bankSucessMessage } from '../../../messages/messages';
+import { LoginBankDto } from '../dtos/banks.dtos';
 import { BankService } from '../services/services.banks';
 import { validation } from '../middlewares/validation';
 
