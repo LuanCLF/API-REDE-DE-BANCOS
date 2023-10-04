@@ -12,6 +12,12 @@ describe('update bank', () => {
     token = response.body.message;
   });
 
+  it('get my bank but Im not authenticate', async () => {
+    const bank = await routesServer.get('/bank');
+
+    expect(bank.statusCode).toEqual(401);
+  });
+
   it('get my bank information', async () => {
     const bank = await routesServer
       .get('/bank')

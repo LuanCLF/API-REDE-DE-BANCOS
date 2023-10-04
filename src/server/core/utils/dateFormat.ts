@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 
-export const dateFormat = (data: string): string => {
-  data = format(+data, 'dd-MM-yyy HH:mm:ss');
+export const dateFormat = (data: Date): string => {
+  const result = format(+data, 'dd-MM-yyyy HH:mm:ss');
 
-  return data;
+  return result;
 };

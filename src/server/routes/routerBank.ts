@@ -12,7 +12,8 @@ routesBank.post('/bank/login', bank.loginValidation, bank.loginBank);
 routesBank.use('/bank', midBankLogin);
 routesBank.get('/bank', bank.getMyBank);
 routesBank.get('/bank/accounts', bank.getAllAccountsOfMyBank);
-routesBank.patch('/bank', bank.updateValidation, bank.update);
+routesBank.put('/bank', bank.updateAllValidation, bank.update);
+routesBank.patch('/bank', bank.updateSomeValidation, bank.update);
 routesBank.delete('/bank', bank.deleteValidation, bank.deleteBank);
 
 export { routesBank };
