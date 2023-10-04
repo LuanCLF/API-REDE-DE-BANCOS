@@ -3,9 +3,10 @@ import {
   bankErrorMessages,
   genericErrorMessages,
 } from '../../../messages/messages';
-import { passwordBankJWT, pool } from '../../../enviroment/env';
+import { passwordBankJWT } from '../../../enviroment/env';
 import jwt from 'jsonwebtoken';
 import { ApiError } from './error';
+import { prisma } from '../../../../database/prismaClient';
 
 const midBankLogin: RequestHandler = async (req, res, next) => {
   const { authorization } = req.headers;
@@ -15,14 +16,25 @@ const midBankLogin: RequestHandler = async (req, res, next) => {
   }
 
   const token = authorization.split(' ')[1];
-  const auth = jwt.verify(token, passwordBankJWT);
+
+  let auth: string | jwt.JwtPayload = '';
+  try {
+    auth = jwt.verify(token, passwordBankJWT);
+  } catch (error) {
+    throw new ApiError(genericErrorMessages.unauthorized, 401);
+  }
 
   const bank = JSON.parse(JSON.stringify(auth));
 
-  const { rowCount } = await pool.query('select id from banks where id = $1', [
-    bank.id,
-  ]);
-  if (rowCount < 1) {
+  const bankID = await prisma.bank.findUnique({
+    select: {
+      id: true,
+    },
+    where: {
+      id: bank.id,
+    },
+  });
+  if (!bankID) {
     throw new ApiError(bankErrorMessages.bankNotFound, 404);
   }
 

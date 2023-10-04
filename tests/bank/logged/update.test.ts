@@ -13,23 +13,27 @@ describe('update bank', () => {
   });
 
   it('tried to update my data but failed because Im unauthorized', async () => {
-    const update = await routesServer.patch('/bank').send();
+    const update = await routesServer.put('/bank').send();
 
     expect(update.statusCode).toEqual(401);
   });
 
   it('tried to update my data but failed because Im not send anything', async () => {
     const update = await routesServer
-      .patch('/bank')
+      .put('/bank')
       .set({ authorization: `Bearer ${token}` });
 
     expect(update.statusCode).toEqual(400);
   });
   it('tried to update my data but failed because zipcode is invalid', async () => {
     const update = await routesServer
-      .patch('/bank')
+      .put('/bank')
       .set({ authorization: `Bearer ${token}` })
       .send({
+        password: 'senha',
+        number: '12344444444444444444',
+        agency: '1231515155',
+        name: 'santander',
         zipcode: '11111111',
       });
 

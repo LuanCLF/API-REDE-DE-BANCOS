@@ -1,17 +1,17 @@
 import { Request, Response } from 'express';
 
-import { CreateBankDto } from '../../../dtos/bank/banks.dtos';
+import { CreateBankDto } from '../dtos/banks.dtos';
 import { validation } from '../middlewares/validation';
 
 import { BankService } from '../services/services.banks';
 
 import * as yup from 'yup';
-import { getZipCode } from '../../utils/getZipCode';
+import { validZipCode } from '../../utils/validZipCode';
 
 export const registerValidation = validation((getSchema) => ({
   body: getSchema<CreateBankDto>(
     yup.object().shape({
-      name: yup.string().required().min(3),
+      name: yup.string().required().min(5),
       number: yup
         .string()
         .required()
@@ -40,12 +40,13 @@ export const registerBank = async (
   const createBankDto: CreateBankDto = {
     ...req.body,
   };
-  const bankService = new BankService();
 
-  const zipCodeValidation: string = await getZipCode(req.body.zipcode);
-  createBankDto.zipcode = zipCodeValidation;
+  const zip = await validZipCode(createBankDto.zipcode);
+  createBankDto.zipcode = zip;
 
-  await bankService.create(createBankDto);
+  const service = new BankService();
 
-  return res.status(201).json();
+  const bank = await service.create(createBankDto);
+
+  return res.status(201).json(bank);
 };

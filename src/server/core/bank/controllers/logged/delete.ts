@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { validation } from '../../middlewares/validation';
 import * as yup from 'yup';
 import { bankLogged } from '../../services/service.bank.logged';
-import { DeleteBankDto } from '../../../../dtos/bank/banks.dtos';
+import { DeleteBankDto } from '../../dtos/banks.dtos';
 
 export const deleteValidation = validation((getSchema) => ({
   body: getSchema<DeleteBankDto>(

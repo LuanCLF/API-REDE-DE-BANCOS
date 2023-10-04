@@ -1,8 +1,11 @@
-import { pool } from '../../../enviroment/env';
-import { genericErrorMessages } from '../../../messages/messages';
-import { dateFormat } from '../../utils/dateFormat';
+import { prisma } from '../../../../database/prismaClient';
+import {
+  bankErrorMessages,
+  genericErrorMessages,
+} from '../../../messages/messages';
 import { compareHashed } from '../../utils/hasher';
-import { IAccounts, IBank } from '../entitys/bank.entity';
+import { CreateBankDto } from '../dtos/banks.dtos';
+import { IBank } from '../entities/bank.entities';
 import { ApiError } from '../middlewares/error';
 
 export class bankLogged {
@@ -13,59 +16,68 @@ export class bankLogged {
   }
 
   private async getMyPassword(): Promise<string> {
-    const { rows: bank } = await pool.query(
-      'select password from banks where id = $1',
-      [this.id]
-    );
-
-    return bank[0].password;
-  }
-
-  public async getAllAccounts(): Promise<Array<Partial<IAccounts>>> {
-    const query =
-      'select number, user_id, created_at, updated_at from accounts where bank_id = $1';
-    const { rows: accounts } = await pool.query(query, [this.id]);
-
-    if (accounts.length > 0) {
-      accounts.map((object) => {
-        object.created_at = dateFormat(object.created_at);
-        object.updated_at = dateFormat(object.updated_at);
-      });
+    const bank = await prisma.bank.findUnique({
+      where: {
+        id: this.id,
+      },
+      select: {
+        password: true,
+      },
+    });
+    if (!bank) {
+      throw new ApiError(bankErrorMessages.bankNotFound, 404);
     }
 
-    return accounts;
+    return bank.password;
   }
 
-  public async getMyBank(): Promise<IBank> {
-    const { rows } = await pool.query('select * from banks where id = $1', [
-      this.id,
-    ]);
-
-    const { password, ...bank } = rows[0];
-
-    bank.created_at = dateFormat(bank.created_at);
-    bank.updated_at = dateFormat(bank.updated_at);
+  public async getAllAccounts() {
+    const bank = await prisma.bank.findUnique({
+      where: { id: this.id },
+      select: {
+        name: true,
+        number: true,
+        agency: true,
+        created_at: true,
+        accounts: true,
+      },
+    });
+    if (!bank) {
+      throw new ApiError(bankErrorMessages.bankNotFound, 404);
+    }
 
     return bank;
   }
 
-  public async update(values: Array<Array<string>>): Promise<void> {
-    let nameInsert = '';
-    let fields = '';
-
-    const insert: Array<string> = values.map((item, index) => {
-      nameInsert = item[0];
-
-      index > 0 ? (fields += ', ') : '';
-      fields += `${nameInsert} = $${(index += 1)}`;
-
-      const value = item[1];
-      return value;
+  public async getMyBank(): Promise<IBank> {
+    const bank = await prisma.bank.findUnique({
+      where: { id: this.id },
+      select: {
+        name: true,
+        number: true,
+        agency: true,
+        zipcode: true,
+        created_at: true,
+      },
     });
+    if (!bank) {
+      throw new ApiError(bankErrorMessages.bankNotFound, 404);
+    }
 
-    const query = `update banks set ${fields}, updated_at = now() where id = ${this.id}`;
+    return bank;
+  }
 
-    await pool.query(query, insert);
+  public async update(values: CreateBankDto): Promise<void> {
+    console.log(values.zipcode);
+    await prisma.bank.update({
+      where: {
+        id: this.id,
+      },
+      data: {
+        ...values,
+        updated_at: new Date(),
+      },
+    });
   }
 
   public async delete(passwordToCompare: string): Promise<void> {
@@ -79,12 +91,15 @@ export class bankLogged {
       throw new ApiError(genericErrorMessages.unauthorized, 401);
     }
 
-    const accounts = await this.getAllAccounts();
-    if (accounts.length > 0) {
+    const bank = await this.getAllAccounts();
+    if (bank.accounts.length > 0) {
       throw new ApiError(genericErrorMessages.unauthorized, 409);
     }
 
-    const query = 'delete from banks where id = $1';
-    await pool.query(query, [this.id]);
+    await prisma.bank.delete({
+      where: {
+        id: this.id,
+      },
+    });
   }
 }

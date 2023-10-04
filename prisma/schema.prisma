@@ -1,0 +1,101 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Address {
+  zipcode     String   @id @unique
+  patio       String?
+  complement  String?
+  neighborhood String?
+  locality    String?
+  uf          String   @db.Char(2)
+  banks Bank[]
+  accounts Account[]
+
+  @@map("addresses")
+}
+
+model Bank {
+  id         Int      @id @default(autoincrement())
+  number     String   @unique
+  agency     String   @unique
+  password   String   
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  zipcode    String
+  address    Address @relation(fields: [zipcode], references: [zipcode])
+  accounts Account[]
+
+  @@map("banks")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  CPF          String
+  phoneNumber  String?
+  email        String   @unique
+  password     String
+  balance      BigInt
+  accounts Account[]
+  
+
+  @@map("users")
+}
+
+model Account {
+  number      Int      @id @default(autoincrement())
+  bank_id     Int
+  user_id     Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+  zipcode     String
+  bank        Bank     @relation(fields: [bank_id], references: [id])
+  user        User     @relation(fields: [user_id], references: [id])
+  address    Address @relation(fields: [zipcode], references: [zipcode])
+  deposits Deposit[]
+  withdrawals Withdrawal[]
+  transfersFrom Transfer[] @relation("origin")
+  transfersTo Transfer[] @relation("destiny")
+
+  @@map("accounts")
+} 
+
+model Deposit {
+  id              Int      @id @default(autoincrement())
+  date            DateTime @default(now())
+  account_number  Int
+  value           BigInt
+  account         Account  @relation(fields: [account_number], references: [number])
+
+  @@map("deposits")
+}
+
+model Withdrawal {
+  id              Int      @id @default(autoincrement())
+  date            DateTime @default(now())
+  account_number  Int
+  value           BigInt
+  account         Account  @relation(fields: [account_number], references: [number])
+
+  @@map("withdrawals")
+}
+
+model Transfer {
+  id                    Int      @id @default(autoincrement())
+  date                  DateTime @default(now())
+  account_origin_number Int
+  account_destiny_number Int
+  value                 BigInt
+  origin               Account  @relation("origin", fields: [account_origin_number], references: [number])
+  destiny              Account  @relation("destiny", fields: [account_destiny_number], references: [number])
+
+  @@map("transfers")
+}

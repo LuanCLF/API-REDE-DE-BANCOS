@@ -33,7 +33,6 @@ password VARCHAR(200) NOT NULL
 CREATE TABLE accounts (
 number SERIAL PRIMARY KEY,
 bank_id INTEGER REFERENCES banks(id),
-balance INTEGER NOT NULL,
 user_id INTEGER REFERENCES users(id),
 created_at TIMESTAMP NOT NULl DEFAULT NOW(),
 updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
