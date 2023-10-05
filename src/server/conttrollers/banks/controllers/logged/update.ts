@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../../shared/middlewares/validation';
 import { UpdateBankDto } from '../../dtos/banks.dtos';
-import { bankLogged } from '../../services/service.bank.logged';
+import { bankLogged } from '../../services/banks.services.logged';
 import { ApiError } from '../../../shared/middlewares/error';
 import { prisma } from '../../../../../database/prismaClient';
 import { validZipCode } from '../../../shared/others/code/validZipCode';
@@ -12,7 +12,12 @@ import { hasher } from '../../../shared/others/code/hasher';
 export const updateAllValidation = validation((getSchema) => ({
   body: getSchema<UpdateBankDto>(
     yup.object().shape({
-      name: yup.string().required().min(3).max(20),
+      name: yup
+        .string()
+        .required()
+        .min(3)
+        .max(20)
+        .matches(/^[a-zA-Z]+$/i),
       number: yup
         .string()
         .required()

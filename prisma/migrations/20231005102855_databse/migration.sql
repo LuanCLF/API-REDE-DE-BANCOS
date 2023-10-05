@@ -28,8 +28,8 @@ CREATE TABLE "banks" (
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "CPF" TEXT NOT NULL,
-    "phoneNumber" TEXT,
+    "cpf" TEXT NOT NULL,
+    "phone_number" TEXT,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "balance" BIGINT NOT NULL,
@@ -88,9 +88,6 @@ CREATE UNIQUE INDEX "banks_number_key" ON "banks"("number");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "banks_agency_key" ON "banks"("agency");
-
--- CreateIndex
-CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- AddForeignKey
 ALTER TABLE "banks" ADD CONSTRAINT "banks_zipcode_fkey" FOREIGN KEY ("zipcode") REFERENCES "addresses"("zipcode") ON DELETE RESTRICT ON UPDATE CASCADE;

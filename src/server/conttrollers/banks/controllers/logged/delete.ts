@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { validation } from '../../../shared/middlewares/validation';
 import * as yup from 'yup';
-import { bankLogged } from '../../services/service.bank.logged';
+import { bankLogged } from '../../services/banks.services.logged';
 import { DeleteBankDto } from '../../dtos/banks.dtos';
 
 export const deleteValidation = validation((getSchema) => ({

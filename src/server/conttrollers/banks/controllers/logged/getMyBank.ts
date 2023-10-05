@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { bankLogged } from '../../services/service.bank.logged';
+import { bankLogged } from '../../services/banks.services.logged';
 import { dateFormat } from '../../../shared/others/code/dateFormat';
 
 export const getMyBank = async (req: Request, res: Response) => {

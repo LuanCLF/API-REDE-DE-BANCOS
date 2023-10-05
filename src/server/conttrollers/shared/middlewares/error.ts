@@ -21,6 +21,6 @@ export const errorHandling = (
   const message = error.statusCode
     ? error.message
     : genericErrorMessages.intern;
-
+  console.log(error);
   return res.status(code).json({ message });
 };

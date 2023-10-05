@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { CreateBankDto } from '../dtos/banks.dtos';
 import { validation } from '../../shared/middlewares/validation';
 
-import { BankService } from '../services/services.banks';
+import { BankService } from '../services/banks.services';
 
 import * as yup from 'yup';
 import { validZipCode } from '../../shared/others/code/validZipCode';
@@ -11,7 +11,12 @@ import { validZipCode } from '../../shared/others/code/validZipCode';
 export const registerValidation = validation((getSchema) => ({
   body: getSchema<CreateBankDto>(
     yup.object().shape({
-      name: yup.string().required().min(5),
+      name: yup
+        .string()
+        .required()
+        .min(5)
+        .max(20)
+        .matches(/^[a-zA-Z]+$/i),
       number: yup
         .string()
         .required()

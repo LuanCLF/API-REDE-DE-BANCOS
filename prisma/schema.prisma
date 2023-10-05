@@ -39,16 +39,17 @@ model Bank {
 model User {
   id           Int      @id @default(autoincrement())
   name         String
-  CPF          String
-  phoneNumber  String?
-  email        String   @unique
+  cpf          String
+  phone_number  String?
+  email        String   
   password     String
-  balance      BigInt
+  balance      BigInt   
   accounts Account[]
   
 
   @@map("users")
 }
+
 
 model Account {
   number      Int      @id @default(autoincrement())

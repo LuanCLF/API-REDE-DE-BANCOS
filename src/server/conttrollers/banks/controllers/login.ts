@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { LoginBankDto } from '../dtos/banks.dtos';
-import { BankService } from '../services/services.banks';
+import { BankService } from '../services/banks.services';
 import { validation } from '../../shared/middlewares/validation';
 
 import * as yup from 'yup';
