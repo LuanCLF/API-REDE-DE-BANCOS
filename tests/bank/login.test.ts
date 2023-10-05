@@ -9,13 +9,14 @@ describe('login bank', () => {
     expect(login.statusCode).toEqual(400);
   });
 
-  it('login failed due to nonexistent bank', async () => {
+  it('login failed because bank not found', async () => {
     const login = await routesServer
       .post('/bank/login')
       .set('Content-Type', 'application/json')
       .send({
         number: '1232',
-        agency: '123a',
+        agency:
+          '1234544444444444444444444444444444444444444444444444444444444444',
         password: 'senhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
       });
 

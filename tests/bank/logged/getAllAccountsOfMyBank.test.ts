@@ -4,8 +4,8 @@ describe('update bank', () => {
   let token = '';
   beforeAll(async () => {
     const response = await routesServer.post('/bank/login').send({
-      number: '12345',
-      agency: '12345',
+      number: '123',
+      agency: '123',
       password: 'senha',
     });
 
