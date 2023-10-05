@@ -12,7 +12,7 @@ routesBank.post('/bank/login', bank.loginValidation, bank.loginBank);
 routesBank.use('/bank', midBankLogin);
 
 routesBank.get('/bank', bank.getMyBank);
-routesBank.get('/bank/accounts', bank.getAllAccountsOfMyBank);
+routesBank.get('/bank/accounts', bank.getAccounts);
 
 routesBank.put('/bank', bank.updateAllValidation, bank.update);
 

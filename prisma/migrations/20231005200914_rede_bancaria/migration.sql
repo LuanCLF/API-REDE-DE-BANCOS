@@ -28,11 +28,12 @@ CREATE TABLE "banks" (
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "CPF" TEXT NOT NULL,
-    "phoneNumber" TEXT,
+    "cpf" TEXT NOT NULL,
+    "phone_number" TEXT,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "balance" BIGINT NOT NULL,
+    "zipcode" TEXT NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -44,7 +45,6 @@ CREATE TABLE "accounts" (
     "user_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "zipcode" TEXT NOT NULL,
 
     CONSTRAINT "accounts_pkey" PRIMARY KEY ("number")
 );
@@ -89,20 +89,17 @@ CREATE UNIQUE INDEX "banks_number_key" ON "banks"("number");
 -- CreateIndex
 CREATE UNIQUE INDEX "banks_agency_key" ON "banks"("agency");
 
--- CreateIndex
-CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
-
 -- AddForeignKey
 ALTER TABLE "banks" ADD CONSTRAINT "banks_zipcode_fkey" FOREIGN KEY ("zipcode") REFERENCES "addresses"("zipcode") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "users" ADD CONSTRAINT "users_zipcode_fkey" FOREIGN KEY ("zipcode") REFERENCES "addresses"("zipcode") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_bank_id_fkey" FOREIGN KEY ("bank_id") REFERENCES "banks"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "accounts" ADD CONSTRAINT "accounts_zipcode_fkey" FOREIGN KEY ("zipcode") REFERENCES "addresses"("zipcode") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "deposits" ADD CONSTRAINT "deposits_account_number_fkey" FOREIGN KEY ("account_number") REFERENCES "accounts"("number") ON DELETE RESTRICT ON UPDATE CASCADE;

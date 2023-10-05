@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { validation } from '../../../shared/middlewares/validation';
 import * as yup from 'yup';
-import { bankLogged } from '../../services/service.bank.logged';
+
 import { DeleteBankDto } from '../../dtos/banks.dtos';
+import { Delete } from '../../services/logged/delete.services';
 
 export const deleteValidation = validation((getSchema) => ({
   body: getSchema<DeleteBankDto>(
@@ -16,8 +17,7 @@ const deleteBank = async (req: Request, res: Response) => {
   const { bankID } = req.headers;
   const { password } = req.body;
 
-  const logged = new bankLogged(Number(bankID));
-  await logged.delete(password);
+  await Delete(Number(bankID), password);
 
   return res.status(204).json();
 };

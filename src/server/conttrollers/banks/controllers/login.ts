@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { LoginBankDto } from '../dtos/banks.dtos';
-import { BankService } from '../services/services.banks';
 import { validation } from '../../shared/middlewares/validation';
 
 import * as yup from 'yup';
+import { login } from '../services/login.services';
 
 export const loginValidation = validation((getSchema) => ({
   body: getSchema<LoginBankDto>(
@@ -21,8 +21,7 @@ export const loginBank = async (
 ) => {
   const { number, agency, password } = req.body;
 
-  const bankService = new BankService();
-  const tokenBank = await bankService.login(password, number, agency);
+  const token = await login(password, number, agency);
 
-  return res.status(200).json({ message: tokenBank });
+  return res.status(200).json({ token });
 };

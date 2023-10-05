@@ -2,17 +2,22 @@ import { RequestHandler } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../../shared/middlewares/validation';
 import { UpdateBankDto } from '../../dtos/banks.dtos';
-import { bankLogged } from '../../services/service.bank.logged';
 import { ApiError } from '../../../shared/middlewares/error';
 import { prisma } from '../../../../../database/prismaClient';
 import { validZipCode } from '../../../shared/others/code/validZipCode';
 import { genericErrorMessages } from '../../../shared/others/messages/messages';
 import { hasher } from '../../../shared/others/code/hasher';
+import { Update } from '../../services/logged/update.services';
 
 export const updateAllValidation = validation((getSchema) => ({
   body: getSchema<UpdateBankDto>(
     yup.object().shape({
-      name: yup.string().required().min(3).max(20),
+      name: yup
+        .string()
+        .required()
+        .min(3)
+        .max(20)
+        .matches(/^[a-zA-Z]+$/i),
       number: yup
         .string()
         .required()
@@ -90,8 +95,7 @@ export const update: RequestHandler = async (req, res) => {
 
   const values = { number, agency, name, zipcode, password };
 
-  const logged = new bankLogged(Number(bankID));
-  await logged.update(values);
+  await Update(Number(bankID), values);
 
   return res.status(204).json();
 };

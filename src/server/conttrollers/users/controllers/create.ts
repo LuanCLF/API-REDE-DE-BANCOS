@@ -1,33 +1,36 @@
 import { Request, Response } from 'express';
-
-import { CreateBankDto } from '../dtos/banks.dtos';
 import { validation } from '../../shared/middlewares/validation';
-
+import { CreateUser } from '../dtos/users.dtos';
 import * as yup from 'yup';
+import { createAccount } from '../services/create.services';
 import { validZipCode } from '../../shared/others/code/validZipCode';
-import { Register } from '../services/register.services';
 import { hasher } from '../../shared/others/code/hasher';
 
-export const registerValidation = validation((getSchema) => ({
-  body: getSchema<CreateBankDto>(
+export const createValidation = validation((getSchema) => ({
+  body: getSchema<CreateUser>(
     yup.object().shape({
-      name: yup
-        .string()
-        .required()
-        .min(5)
-        .max(20)
-        .matches(/^[a-zA-Z]+$/i),
       number: yup
         .string()
         .required()
-        .min(3)
         .matches(/^[0-9]+$/),
       agency: yup
         .string()
         .required()
-        .min(3)
         .matches(/^[0-9]+$/),
-      password: yup.string().required().min(5),
+      name: yup
+        .string()
+        .required()
+        .matches(/^[a-zA-Z]+$/i),
+      cpf: yup
+        .string()
+        .required()
+        .matches(/^[0-9 ]+$/),
+      phone_number: yup
+        .string()
+        .optional()
+        .matches(/^[0-9]+$/),
+      email: yup.string().required(),
+      password: yup.string().required(),
       zipcode: yup
         .string()
         .required()
@@ -38,18 +41,14 @@ export const registerValidation = validation((getSchema) => ({
   ),
 }));
 
-export const registerBank = async (
-  req: Request<{}, {}, CreateBankDto>,
+export const create = async (
+  req: Request<{}, {}, CreateUser>,
   res: Response
 ) => {
   req.body.zipcode = await validZipCode(req.body.zipcode);
-
   req.body.password = await hasher(req.body.password);
 
-  const createBankDto: CreateBankDto = {
-    ...req.body,
-  };
-  await Register(createBankDto);
+  await createAccount(req.body);
 
-  return res.status(201).json();
+  res.status(201).json();
 };
