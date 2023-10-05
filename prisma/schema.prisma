@@ -15,8 +15,8 @@ model Address {
   neighborhood String?
   locality    String?
   uf          String   @db.Char(2)
-  banks Bank[]
-  accounts Account[]
+  banks  Bank[]
+  users User[]
 
   @@map("addresses")
 }
@@ -44,6 +44,8 @@ model User {
   email        String   
   password     String
   balance      BigInt   
+  zipcode    String
+  address    Address @relation(fields: [zipcode], references: [zipcode])
   accounts Account[]
   
 
@@ -57,10 +59,10 @@ model Account {
   user_id     Int
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now())
-  zipcode     String
+ 
   bank        Bank     @relation(fields: [bank_id], references: [id])
   user        User     @relation(fields: [user_id], references: [id])
-  address    Address @relation(fields: [zipcode], references: [zipcode])
+
   deposits Deposit[]
   withdrawals Withdrawal[]
   transfersFrom Transfer[] @relation("origin")

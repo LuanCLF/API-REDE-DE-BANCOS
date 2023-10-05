@@ -15,7 +15,7 @@ describe('register an account', () => {
       .post('/bank')
       .set('Content-Type', 'application/json')
       .send({
-        name: 'itau unibanco',
+        name: 'itauunibanco',
         number: '123',
         agency: '123',
         password: 'senha',
@@ -30,7 +30,7 @@ describe('register an account', () => {
       .post('/bank')
       .set('Content-Type', 'application/json')
       .send({
-        name: 'itau unibanco',
+        name: 'itauunibanco',
         number: '123',
         agency: '123a',
         password: 'senha',
@@ -44,7 +44,7 @@ describe('register an account', () => {
       .post('/bank')
       .set('Content-Type', 'application/json')
       .send({
-        name: 'itau unibanco',
+        name: 'itauunibanco',
         number: '123a',
         agency: '123',
         password: 'senha',
@@ -73,7 +73,7 @@ describe('register an account', () => {
       .post('/bank')
       .set('Content-Type', 'application/json')
       .send({
-        name: 'itau unibanco',
+        name: 'itauunibanco',
         number: '040404040404040404040404',
         agency: '12040404040404040404043',
         password: 'senha',

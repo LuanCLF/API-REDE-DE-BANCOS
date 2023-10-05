@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import { validation } from '../../shared/middlewares/validation';
 import { CreateUser } from '../dtos/users.dtos';
 import * as yup from 'yup';
-import { userService } from '../services/users.services';
+import { createAccount } from '../services/create.services';
 import { validZipCode } from '../../shared/others/code/validZipCode';
-import { prisma } from '../../../../database/prismaClient';
+import { hasher } from '../../shared/others/code/hasher';
 
 export const createValidation = validation((getSchema) => ({
   body: getSchema<CreateUser>(
@@ -45,11 +45,10 @@ export const create = async (
   req: Request<{}, {}, CreateUser>,
   res: Response
 ) => {
-  const zip = await validZipCode(req.body.zipcode);
-  req.body.zipcode = zip;
+  req.body.zipcode = await validZipCode(req.body.zipcode);
+  req.body.password = await hasher(req.body.password);
 
-  const service = new userService();
+  await createAccount(req.body);
 
-  await service.create(req.body);
   res.status(201).json();
 };

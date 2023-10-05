@@ -4,8 +4,8 @@ describe('update bank', () => {
   let token = '';
   beforeAll(async () => {
     const response = await routesServer.post('/bank/login').send({
-      number: '12345',
-      agency: '12345',
+      number: '123',
+      agency: '123',
       password: 'senha',
     });
 
@@ -31,8 +31,8 @@ describe('update bank', () => {
       .set({ authorization: `Bearer ${token}` })
       .send({
         password: 'senha',
-        number: '12344444444444444444',
-        agency: '1231515155',
+        number: '444444444444445454545',
+        agency: '5555555555555555554',
         name: 'santander',
         zipcode: '11111111',
       });

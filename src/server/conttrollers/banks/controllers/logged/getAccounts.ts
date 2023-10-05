@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
-import { bankLogged } from '../../services/banks.services.logged';
 import { dateFormat } from '../../../shared/others/code/dateFormat';
+import { GetAllAccounts } from '../../services/logged/getAccounts.services';
 
-export const getAllAccountsOfMyBank = async (req: Request, res: Response) => {
+export const getAccounts = async (req: Request, res: Response) => {
   const { bankID } = req.headers;
-  const logged = new bankLogged(Number(bankID));
 
-  const bank = await logged.getAllAccounts();
+  const bank = await GetAllAccounts(Number(bankID));
 
   if (bank.accounts.length > 0) {
     bank.accounts.map((object) => {

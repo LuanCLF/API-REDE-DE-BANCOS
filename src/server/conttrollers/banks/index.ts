@@ -2,7 +2,7 @@ import { getAllBanks } from './controllers/getAllBanks';
 import { deleteValidation, deleteBank } from './controllers/logged/delete';
 import { registerValidation, registerBank } from './controllers/register';
 import { loginValidation, loginBank } from './controllers/login';
-import { getAllAccountsOfMyBank } from './controllers/logged/getAllAccountsOfMyBank';
+import { getAccounts } from './controllers/logged/getAccounts';
 import {
   updateAllValidation,
   updateSomeValidation,
@@ -16,7 +16,7 @@ export const bank = {
   loginValidation,
   loginBank,
   getMyBank,
-  getAllAccountsOfMyBank,
+  getAccounts,
   updateAllValidation,
   updateSomeValidation,
   update,
