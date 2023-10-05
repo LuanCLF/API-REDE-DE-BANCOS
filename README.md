@@ -4,7 +4,7 @@
 
 ![diagrama do banco de dados](./images//svg-do-db-typebanco.svg)
 
-### Escolhi esse formato para permitir que existam vários bancos, cada banco possui várias contas e cada conta possui um usuário, eu separo os dados pessoas do usuário em outra tabela, mas as duas em si representam o usuário, a tabela de accounts é usada para os dados mais técnicos da conta criada, e a de users para guardar cpf, email, etc..
+### Escolhi esse formato para permitir que existam vários bancos, cada banco possui várias contas e cada conta possui um usuário, na tabela de accounts ficam os dados mais "técnicos" do usuário e na tabela de "users" ficam os dados mais sensiveis
 
 ### Todo banco e toda conta de usuário possui um endereço próprio, que eu busco pelo CEP informado no body da requisição, usando a API ViaCEP, as tabelas de transações conversam com a accounts por meio do número dela
 
@@ -13,17 +13,19 @@
 ## Essa API é feita principalmente com as seguintes tecnlogias:
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Express.js](https://img.shields.io/badge/Express%20js-d9c008?style=for-the-badge&logo=express&logoColor=000000)
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
-![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
+![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
 
 ### Como menção honrosa também tem o [yup](https://www.npmjs.com/package/yup) que eu uso para validar campos, também o [bcrypt](https://www.npmjs.com/package/bcrypt) para criptografar dados
 
 ### Até o momento tenho prontas as rotas do banco em si, logo mais farei as de contas/usuários e das operações bancárias
 
-![rotas](./images//rotasReadme.png)
+![rotas](./images/todas_as_rotas_de_banco.png)
 
 ### Para rodar o programa é preciso que crie um arquivo ".env" com as variaveis de ambiente, eu criei um arquivo ".env.example" com o nome das váriaveis, só é necessário colocar os dados do seu banco e das senhas que o JWT irá usar para autenticação e portas do servidor, após configurar isso coloque os seguintes comandos no seu terminal:
 
