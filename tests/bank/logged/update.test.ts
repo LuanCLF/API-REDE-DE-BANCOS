@@ -9,7 +9,7 @@ describe('update bank', () => {
       password: 'senha',
     });
 
-    token = response.body.message;
+    token = response.body.token;
   });
 
   it('tried to update my data but failed because Im unauthorized', async () => {
