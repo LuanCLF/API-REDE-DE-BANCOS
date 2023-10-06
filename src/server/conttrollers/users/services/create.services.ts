@@ -5,7 +5,7 @@ import {
   bankErrorMessages,
   userErrorMessages,
 } from '../../shared/others/messages/messages';
-import { CreateUser } from '../dtos/users.dtos';
+import { CreateUserDto } from '../dtos/users.dtos';
 
 const searchBank = async (number: string, agency: string): Promise<number> => {
   const bank = await prisma.bank.findUnique({
@@ -25,7 +25,9 @@ const searchBank = async (number: string, agency: string): Promise<number> => {
   return bank.id;
 };
 
-export const createAccount = async (createUser: CreateUser): Promise<void> => {
+export const createAccount = async (
+  createUser: CreateUserDto
+): Promise<void> => {
   const { number, agency, cpf, email, name, password, zipcode } = createUser;
   const bank_id = await searchBank(number, agency);
 
@@ -34,7 +36,7 @@ export const createAccount = async (createUser: CreateUser): Promise<void> => {
       accounts: true,
     },
     where: {
-      email,
+      OR: [{ email }, { cpf }],
     },
   });
   const exist = result.some((obj) => {

@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { validation } from '../../shared/middlewares/validation';
-import { CreateUser } from '../dtos/users.dtos';
+import { CreateUserDto } from '../dtos/users.dtos';
 import * as yup from 'yup';
 import { createAccount } from '../services/create.services';
 import { validZipCode } from '../../shared/others/code/validZipCode';
 import { hasher } from '../../shared/others/code/hasher';
 
 export const createValidation = validation((getSchema) => ({
-  body: getSchema<CreateUser>(
+  body: getSchema<CreateUserDto>(
     yup.object().shape({
       number: yup
         .string()
@@ -42,7 +42,7 @@ export const createValidation = validation((getSchema) => ({
 }));
 
 export const create = async (
-  req: Request<{}, {}, CreateUser>,
+  req: Request<{}, {}, CreateUserDto>,
   res: Response
 ) => {
   req.body.zipcode = await validZipCode(req.body.zipcode);
