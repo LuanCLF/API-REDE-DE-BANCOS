@@ -15,3 +15,12 @@ export interface LoginUserDto {
   cpf: string;
   password: string;
 }
+
+export interface UpdateUserDto {
+  name?: string;
+  cpf?: string;
+  phone_number?: string;
+  email?: string;
+  password?: string;
+  zipcode?: string;
+}

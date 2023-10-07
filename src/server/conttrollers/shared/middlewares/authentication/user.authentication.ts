@@ -18,6 +18,7 @@ export const midUserLogin: RequestHandler = async (req, res, next) => {
   const token = authorization.split(' ')[1];
 
   let auth: string | jwt.JwtPayload = '';
+
   try {
     auth = jwt.verify(token, passwordUserJWT);
   } catch (error) {
@@ -34,6 +35,7 @@ export const midUserLogin: RequestHandler = async (req, res, next) => {
       id: user.id,
     },
   });
+
   if (!userID) {
     throw new ApiError(userErrorMessages.userNotFound, 404);
   }

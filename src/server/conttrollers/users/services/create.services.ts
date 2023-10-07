@@ -1,13 +1,17 @@
 import { prisma } from '../../../../database/prismaClient';
 import { ApiError } from '../../shared/middlewares/error';
-
 import {
   bankErrorMessages,
   userErrorMessages,
 } from '../../shared/others/messages/messages';
+
 import { CreateUserDto } from '../dtos/users.dtos';
 
-const searchBank = async (number: string, agency: string): Promise<number> => {
+export const CreateAccount = async (
+  createUser: CreateUserDto
+): Promise<void> => {
+  const { number, agency, cpf, email, name, password, zipcode } = createUser;
+
   const bank = await prisma.bank.findUnique({
     select: {
       id: true,
@@ -21,29 +25,16 @@ const searchBank = async (number: string, agency: string): Promise<number> => {
   if (!bank) {
     throw new ApiError(bankErrorMessages.bankNotFound, 404);
   }
-
-  return bank.id;
-};
-
-export const createAccount = async (
-  createUser: CreateUserDto
-): Promise<void> => {
-  const { number, agency, cpf, email, name, password, zipcode } = createUser;
-  const bank_id = await searchBank(number, agency);
-
   const result = await prisma.user.findMany({
     select: {
       accounts: true,
     },
     where: {
-      OR: [{ email }, { cpf }],
+      OR: [{ cpf, accounts: { some: { bank_id: bank.id } } }, { email }],
     },
   });
-  const exist = result.some((obj) => {
-    return obj.accounts[0].bank_id === bank_id;
-  });
 
-  if (exist) {
+  if (result.length > 0) {
     throw new ApiError(userErrorMessages.userAlreadyExist, 409);
   }
 
@@ -63,7 +54,7 @@ export const createAccount = async (
 
   await prisma.account.create({
     data: {
-      bank_id,
+      bank_id: bank.id,
       user_id: user.id,
     },
   });

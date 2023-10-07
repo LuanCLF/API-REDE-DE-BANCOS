@@ -20,12 +20,12 @@ export const registerValidation = validation((getSchema) => ({
       number: yup
         .string()
         .required()
-        .min(3)
+        .min(4)
         .matches(/^[0-9]+$/),
       agency: yup
         .string()
         .required()
-        .min(3)
+        .min(4)
         .matches(/^[0-9]+$/),
       password: yup.string().required().min(5),
       zipcode: yup
