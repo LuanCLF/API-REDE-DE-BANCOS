@@ -30,6 +30,7 @@ export const Update = async (id: number, updateUserDto: UpdateUserDto) => {
         cpf,
       },
     });
+    console.log('result cpf', result);
     if (result !== 0) {
       throw new ApiError(genericErrorMessages.unauthorized, 409);
     }
@@ -40,6 +41,8 @@ export const Update = async (id: number, updateUserDto: UpdateUserDto) => {
         email,
       },
     });
+    console.log('result email', result);
+
     if (result !== 0) {
       throw new ApiError(genericErrorMessages.unauthorized, 409);
     }
