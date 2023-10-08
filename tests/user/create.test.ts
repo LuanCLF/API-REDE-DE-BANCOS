@@ -1,10 +1,10 @@
 import { routesServer } from '../jest.setup';
 
 describe('create account in a bank', () => {
-  it('try create accounts but failed because already exist in this bank', async () => {
+  it('try create accounts but failed because user already exist in this bank', async () => {
     const user = await routesServer.post('/user').send({
-      number: '123',
-      agency: '123',
+      number: '1234',
+      agency: '1234',
       name: 'Luan',
       cpf: '03012320351',
       email: 'clfluan06@gmail.com',

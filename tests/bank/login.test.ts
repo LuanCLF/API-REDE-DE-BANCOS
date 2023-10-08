@@ -27,8 +27,8 @@ describe('login bank', () => {
       .post('/bank/login')
       .set('Content-Type', 'application/json')
       .send({
-        number: '123',
-        agency: '123',
+        number: '1234',
+        agency: '1234',
         password: 'senhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
       });
 
@@ -40,8 +40,8 @@ describe('login bank', () => {
       .post('/bank/login')
       .set('Content-Type', 'application/json')
       .send({
-        number: '123',
-        agency: '123',
+        number: '1234',
+        agency: '1234',
         password: 'senha',
       });
 

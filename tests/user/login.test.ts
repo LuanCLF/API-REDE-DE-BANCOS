@@ -13,9 +13,9 @@ describe('try login', () => {
   });
   it('try login but failed because password incorrect', async () => {
     const user = await routesServer.post('/user/login').send({
-      number: '123',
-      agency: '123',
-      cpf: '03012320351',
+      number: '1234',
+      agency: '1234',
+      cpf: '03012320321',
       password: 'senahahhahaah',
     });
 
@@ -23,9 +23,9 @@ describe('try login', () => {
   });
   it('try login but failed because user not exist in this bank', async () => {
     const user = await routesServer.post('/user/login').send({
-      number: '123',
-      agency: '123',
-      cpf: '03012345752',
+      number: '1234',
+      agency: '1234',
+      cpf: '03012300002',
       password: 'senha',
     });
 
@@ -33,9 +33,9 @@ describe('try login', () => {
   });
   it('Try to login and get', async () => {
     const user = await routesServer.post('/user/login').send({
-      number: '123',
-      agency: '123',
-      cpf: '03012320351',
+      number: '1234',
+      agency: '1234',
+      cpf: '03012320321',
       password: 'senha',
     });
 

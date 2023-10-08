@@ -4,8 +4,8 @@ describe('delete my bank', () => {
   let token = '';
   beforeAll(async () => {
     const response = await routesServer.post('/bank/login').send({
-      number: '123',
-      agency: '123',
+      number: '1234',
+      agency: '1234',
       password: 'senha',
     });
 
