@@ -11,5 +11,6 @@ routesUser.use('/user', midUserLogin);
 routesUser.patch('/user', user.updateSomeValidation, user.update);
 routesUser.put('/user', user.updateAllValidation, user.update);
 routesUser.delete('/user', user.deleteValidation, user.deleteUser);
+routesUser.get('/user', user.myAccount);
 
 export { routesUser };

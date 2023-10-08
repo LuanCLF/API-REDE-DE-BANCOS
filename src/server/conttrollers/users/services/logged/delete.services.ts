@@ -7,7 +7,6 @@ import {
 } from '../../../shared/others/messages/messages';
 
 export const Delete = async (userID: number, password: string) => {
-  console.log(userID);
   const user = await prisma.user.findUnique({
     select: {
       password: true,

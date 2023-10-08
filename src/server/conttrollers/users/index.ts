@@ -6,6 +6,7 @@ import {
   update,
 } from './controllers/logged/update';
 import { deleteValidation, deleteUser } from './controllers/logged/delete';
+import { myAccount } from './controllers/logged/myAccount';
 
 export const user = {
   createValidation,
@@ -17,4 +18,5 @@ export const user = {
   update,
   deleteValidation,
   deleteUser,
+  myAccount,
 };
