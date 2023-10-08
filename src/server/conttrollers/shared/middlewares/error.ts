@@ -17,10 +17,10 @@ export const errorHandling = (
   next: NextFunction
 ) => {
   const code = error.statusCode || 500;
-  console.log(error);
+
   const message = error.statusCode
     ? error.message
     : genericErrorMessages.intern;
-  console.log(message);
+
   return res.status(code).json({ message });
 };
