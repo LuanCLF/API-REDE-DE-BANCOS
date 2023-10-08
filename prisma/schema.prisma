@@ -41,7 +41,7 @@ model User {
   name         String
   cpf          String
   phone_number  String?
-  email        String   
+  email        String   @unique
   password     String
   balance      BigInt   
   zipcode    String

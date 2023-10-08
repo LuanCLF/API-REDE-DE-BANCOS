@@ -9,7 +9,7 @@ describe('update bank', () => {
       password: 'senha',
     });
 
-    token = response.body.message;
+    token = response.body.token;
   });
 
   it('get my bank but Im not authenticate', async () => {

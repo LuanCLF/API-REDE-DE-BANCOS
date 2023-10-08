@@ -9,7 +9,7 @@ describe('delete my bank', () => {
       password: 'senha',
     });
 
-    token = response.body.message;
+    token = response.body.token;
   });
 
   it('tried to delete my bank but failed because Im unauthorized', async () => {
