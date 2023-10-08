@@ -24,3 +24,7 @@ export interface UpdateUserDto {
   password?: string;
   zipcode?: string;
 }
+
+export interface DeleteUserDto {
+  password: string;
+}
