@@ -12,7 +12,7 @@ describe('update user', () => {
 
     token = response.body.token;
   });
-  it('tried to update but failed because im not authenticate', async () => {
+  it('tried to update but failed because im not authenticated', async () => {
     const user = await routesServer.patch('/user').send({
       cpf: '03012320322',
       password: 'senha',
@@ -21,7 +21,7 @@ describe('update user', () => {
     });
     expect(user.statusCode).toEqual(401);
   });
-  it('tried to update but failed because cpf already exist in this bank', async () => {
+  it('tried to update but failed because the CPF already exists in this bank', async () => {
     const user = await routesServer
       .patch('/user')
       .set({ authorization: `Bearer ${token}` })
@@ -33,7 +33,7 @@ describe('update user', () => {
       });
     expect(user.statusCode).toEqual(409);
   });
-  it('tried to update but failed because email already exist', async () => {
+  it('tried to update but failed because email already exists', async () => {
     const user = await routesServer
       .patch('/user')
       .set({ authorization: `Bearer ${token}` })
@@ -45,7 +45,7 @@ describe('update user', () => {
       });
     expect(user.statusCode).toEqual(409);
   });
-  it('tried to update but failed because not send all necessary', async () => {
+  it('tried to update but failed because not all necessary information was sent', async () => {
     const user = await routesServer
       .put('/user')
       .set({ authorization: `Bearer ${token}` })

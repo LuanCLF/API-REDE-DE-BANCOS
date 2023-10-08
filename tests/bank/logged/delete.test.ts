@@ -12,13 +12,13 @@ describe('delete my bank', () => {
     token = response.body.token;
   });
 
-  it('tried to delete my bank but failed because Im unauthorized', async () => {
+  it('tried to delete my bank, but failed because im unauthorized', async () => {
     const deleteBank = await routesServer.delete('/bank').send();
 
     expect(deleteBank.statusCode).toEqual(401);
   });
 
-  it('tried to delete my bank but failed because my password is incorrect', async () => {
+  it('tried to delete my bank, but failed because im unauthorized', async () => {
     const deleteBank = await routesServer
       .delete('/bank')
       .set({ authorization: `Bearer ${token}` })

@@ -1,6 +1,6 @@
 import { routesServer } from '../../jest.setup';
 
-describe('update bank', () => {
+describe('get all accounts from my bank', () => {
   let token = '';
   beforeAll(async () => {
     const response = await routesServer.post('/bank/login').send({
@@ -12,7 +12,7 @@ describe('update bank', () => {
     token = response.body.token;
   });
 
-  it('get all accounts of my bank but Im not authenticate', async () => {
+  it('tried to get all accounts of my bank, but im not authenticated', async () => {
     const bank = await routesServer.get('/bank');
 
     expect(bank.statusCode).toEqual(401);

@@ -1,6 +1,6 @@
 import { routesServer } from '../../jest.setup';
 
-describe('update bank', () => {
+describe('bank update information', () => {
   let token = '';
   beforeAll(async () => {
     const response = await routesServer.post('/bank/login').send({
@@ -12,20 +12,20 @@ describe('update bank', () => {
     token = response.body.token;
   });
 
-  it('tried to update my data but failed because Im unauthorized', async () => {
+  it('tried to update my data but failed because im unauthorized', async () => {
     const update = await routesServer.put('/bank').send();
 
     expect(update.statusCode).toEqual(401);
   });
 
-  it('tried to update my data but failed because Im not send anything', async () => {
+  it('tried to update my data but failed because i didnt send anything', async () => {
     const update = await routesServer
       .put('/bank')
       .set({ authorization: `Bearer ${token}` });
 
     expect(update.statusCode).toEqual(400);
   });
-  it('tried to update my data but failed because zipcode is invalid', async () => {
+  it('tried to update my data but failed because the zip code is invalid', async () => {
     const update = await routesServer
       .put('/bank')
       .set({ authorization: `Bearer ${token}` })
