@@ -26,7 +26,7 @@ export const MyAccount = async (userID: number) => {
     const { accounts, ...rest } = user;
     const userFormated = {
       ...rest,
-      balance: Number(balanceString) / 100,
+      balance: Number(balanceString),
 
       created_at: dateFormat(user?.accounts[0].created_at || new Date()),
       updated_at: dateFormat(user?.accounts[0].updated_at || new Date()),

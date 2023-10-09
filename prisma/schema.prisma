@@ -43,7 +43,7 @@ model User {
   phone_number  String?
   email        String   @unique
   password     String
-  balance      BigInt   
+  balance      Float   
   zipcode    String
   address    Address @relation(fields: [zipcode], references: [zipcode])
   accounts Account[]

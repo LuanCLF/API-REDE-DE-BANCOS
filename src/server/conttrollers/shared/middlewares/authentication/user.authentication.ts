@@ -16,7 +16,6 @@ export const midUserLogin: RequestHandler = async (req, res, next) => {
   }
 
   const token = authorization.split(' ')[1];
-  console.log(authorization);
   let auth: string | jwt.JwtPayload = '';
 
   try {

@@ -13,6 +13,10 @@ const userErrorMessages = {
   userAlreadyExist: 'Usuário já está cadastrado',
   userLoginInvalid: 'Email ou senha incorretos',
 };
+const withdrawalErrorMessage = {
+  lessThanNecessary: 'O valor informado não está disponivel para saque',
+};
+
 const midleErrorMessages = {
   phoneInvalid: 'O número de celular deve ser composto só por números',
 };
@@ -32,4 +36,5 @@ export {
   midleErrorMessages,
   bankSucessMessage,
   userSucessMessage,
+  withdrawalErrorMessage,
 };
