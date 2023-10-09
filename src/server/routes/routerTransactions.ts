@@ -16,5 +16,10 @@ routesTransactions.post(
   transaction.validationValue,
   transaction.withdrawal
 );
+routesTransactions.post(
+  '/transaction/transfer',
+  transaction.tranferValidation,
+  transaction.transfer
+);
 
 export { routesTransactions };
