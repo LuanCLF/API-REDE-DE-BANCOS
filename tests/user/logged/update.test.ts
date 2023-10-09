@@ -6,15 +6,16 @@ describe('update user', () => {
     const response = await routesServer.post('/user/login').send({
       number: '1234',
       agency: '1234',
-      cpf: '03012320322',
+      cpf: '02302302332',
       password: 'senha',
     });
 
     token = response.body.token;
   });
+
   it('tried to update but failed because im not authenticated', async () => {
     const user = await routesServer.patch('/user').send({
-      cpf: '03012320322',
+      cpf: '02302302332',
       password: 'senha',
       name: 'marina',
       zipcode: '01001000',
@@ -26,7 +27,7 @@ describe('update user', () => {
       .patch('/user')
       .set({ authorization: `Bearer ${token}` })
       .send({
-        cpf: '03012320322',
+        cpf: '02302302332',
         password: 'senha',
         name: 'marina',
         zipcode: '01001000',
@@ -50,8 +51,6 @@ describe('update user', () => {
       .put('/user')
       .set({ authorization: `Bearer ${token}` })
       .send({
-        email: 'clfluan07@gmail.com',
-        password: 'senha',
         name: 'marina',
         zipcode: '01001000',
       });

@@ -5,8 +5,8 @@ describe('create an account at a bank', () => {
     const user = await routesServer.post('/user').send({
       number: '1234',
       agency: '1234',
-      name: 'Luan',
-      cpf: '03012320351',
+      name: 'Luancha',
+      cpf: '02302302332',
       email: 'clfluan06@gmail.com',
       password: 'senha',
       zipcode: '01001000',
@@ -18,7 +18,7 @@ describe('create an account at a bank', () => {
       number: '123222222222232',
       agency: '1233222222222222222222222',
       name: 'Luan',
-      cpf: '03012320351',
+      cpf: '02302302332',
       email: 'clfluan06@gmail.com',
       password: 'senha',
       zipcode: '01001000',
@@ -29,7 +29,7 @@ describe('create an account at a bank', () => {
     const user = await routesServer.post('/user').send({
       number: '123222222222232',
 
-      cpf: '03012320351',
+      cpf: '02302302332',
       password: 'senha',
       zipcode: '01001000',
     });

@@ -15,7 +15,7 @@ describe('account login', () => {
     const user = await routesServer.post('/user/login').send({
       number: '1234',
       agency: '1234',
-      cpf: '03012320321',
+      cpf: '03012320347',
       password: 'senahahhahaah',
     });
 
@@ -25,7 +25,7 @@ describe('account login', () => {
     const user = await routesServer.post('/user/login').send({
       number: '1234',
       agency: '1234',
-      cpf: '03012300002',
+      cpf: '00000000000',
       password: 'senha',
     });
 
@@ -35,7 +35,7 @@ describe('account login', () => {
     const user = await routesServer.post('/user/login').send({
       number: '1234',
       agency: '1234',
-      cpf: '03012320321',
+      cpf: '03012320347',
       password: 'senha',
     });
 

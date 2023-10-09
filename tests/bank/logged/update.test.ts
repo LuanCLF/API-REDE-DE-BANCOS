@@ -2,14 +2,30 @@ import { routesServer } from '../../jest.setup';
 
 describe('bank update information', () => {
   let token = '';
+
   beforeAll(async () => {
+    await routesServer.post('/bank').send({
+      name: 'anedeguemon',
+      number: '04040404',
+      agency: '04040404',
+      password: 'senha',
+      zipcode: '59800000',
+    });
+
     const response = await routesServer.post('/bank/login').send({
-      number: '1234',
-      agency: '1234',
+      number: '04040404',
+      agency: '04040404',
       password: 'senha',
     });
 
     token = response.body.token;
+  });
+
+  afterAll(async () => {
+    await routesServer
+      .delete('/bank')
+      .set({ authorization: `Bearer ${token}` })
+      .send({ password: 'senha' });
   });
 
   it('tried to update my data but failed because im unauthorized', async () => {
