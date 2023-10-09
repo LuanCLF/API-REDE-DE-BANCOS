@@ -12,6 +12,8 @@ export const updateAllValidation = validation((getSchema) => ({
       name: yup
         .string()
         .required()
+        .min(4)
+        .max(11)
         .matches(/^[a-zA-Z]+$/i),
       cpf: yup
         .string()
@@ -43,6 +45,8 @@ export const updateSomeValidation = validation((getSchema) => ({
       name: yup
         .string()
         .optional()
+        .min(4)
+        .max(11)
         .matches(/^[a-zA-Z]+$/i),
       cpf: yup
         .string()

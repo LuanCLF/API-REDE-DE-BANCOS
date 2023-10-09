@@ -1,6 +1,6 @@
 import { routesServer } from '../jest.setup';
 
-describe('login bank', () => {
+describe('bank login', () => {
   it('login failed due to invalid data', async () => {
     const login = await routesServer
       .post('/bank/login')
@@ -9,7 +9,7 @@ describe('login bank', () => {
     expect(login.statusCode).toEqual(400);
   });
 
-  it('login failed because bank not found', async () => {
+  it('login failed because bank was not found', async () => {
     const login = await routesServer
       .post('/bank/login')
       .set('Content-Type', 'application/json')
@@ -22,13 +22,13 @@ describe('login bank', () => {
 
     expect(login.statusCode).toEqual(404);
   });
-  it('login failed due to incorrect password', async () => {
+  it('login failed due to an incorrect password', async () => {
     const login = await routesServer
       .post('/bank/login')
       .set('Content-Type', 'application/json')
       .send({
-        number: '123',
-        agency: '123',
+        number: '1234',
+        agency: '1234',
         password: 'senhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
       });
 
@@ -40,8 +40,8 @@ describe('login bank', () => {
       .post('/bank/login')
       .set('Content-Type', 'application/json')
       .send({
-        number: '123',
-        agency: '123',
+        number: '1234',
+        agency: '1234',
         password: 'senha',
       });
 
