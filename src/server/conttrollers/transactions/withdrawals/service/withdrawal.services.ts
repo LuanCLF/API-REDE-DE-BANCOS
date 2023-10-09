@@ -55,7 +55,15 @@ export const Withdrawal = async (userID: number, value: number) => {
   });
 
   const { balance, accounts, ...rest } = user;
-  console.log(user.accounts);
+
+  await prisma.withdrawal.create({
+    data: {
+      account_number: accounts[0].number,
+      value,
+      date: new Date(),
+    },
+  });
+
   const userFormat = {
     account: { accountNumber: accounts[0].number, bank: accounts[0].bank },
     user: rest,
