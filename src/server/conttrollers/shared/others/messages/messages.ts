@@ -16,6 +16,12 @@ const userErrorMessages = {
 const withdrawalErrorMessage = {
   lessThanNecessary: 'O valor informado não está disponivel para saque',
 };
+const transferErrorMessage = {
+  lessThanNecessary: 'O valor informado não está disponivel para transferência',
+  sendSomething: `Envie ao menos uma informação do destinatário, o 'destinationUserID' ou 'destinationUserEmail'`,
+  recipientNotFound: 'Destinatário não encontrado',
+  sameUser: 'Não pode fazer transferência para si mesmo',
+};
 
 const midleErrorMessages = {
   phoneInvalid: 'O número de celular deve ser composto só por números',
@@ -37,4 +43,5 @@ export {
   bankSucessMessage,
   userSucessMessage,
   withdrawalErrorMessage,
+  transferErrorMessage,
 };

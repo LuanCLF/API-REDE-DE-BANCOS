@@ -75,7 +75,7 @@ model Deposit {
   id              Int      @id @default(autoincrement())
   date            DateTime @default(now())
   account_number  Int
-  value           BigInt
+  value           Float    
   account         Account  @relation(fields: [account_number], references: [number])
 
   @@map("deposits")
@@ -85,7 +85,7 @@ model Withdrawal {
   id              Int      @id @default(autoincrement())
   date            DateTime @default(now())
   account_number  Int
-  value           BigInt
+  value           Float
   account         Account  @relation(fields: [account_number], references: [number])
 
   @@map("withdrawals")
@@ -96,7 +96,7 @@ model Transfer {
   date                  DateTime @default(now())
   account_origin_number Int
   account_destiny_number Int
-  value                 BigInt
+  value                 Float
   origin               Account  @relation("origin", fields: [account_origin_number], references: [number])
   destiny              Account  @relation("destiny", fields: [account_destiny_number], references: [number])
 
