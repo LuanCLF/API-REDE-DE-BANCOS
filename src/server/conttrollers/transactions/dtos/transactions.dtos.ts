@@ -7,3 +7,7 @@ export interface TransferDto {
   destinationUserID?: number;
   destinationUserEmail?: string;
 }
+
+export interface ListDto {
+  page?: number;
+}

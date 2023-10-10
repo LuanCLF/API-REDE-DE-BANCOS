@@ -1,6 +1,7 @@
 import express from 'express';
 import { transaction } from '../conttrollers/transactions';
 import { midUserLogin } from '../conttrollers/shared/middlewares/authentication/user.authentication';
+import { listValidation } from '../conttrollers/transactions/utils/listValidation';
 
 const routesTransactions = express();
 
@@ -21,5 +22,11 @@ routesTransactions.post(
   transaction.tranferValidation,
   transaction.transfer
 );
+
+routesTransactions.use('/transaction', listValidation);
+
+routesTransactions.get('/transaction/deposit', transaction.listDeposits);
+routesTransactions.get('/transaction/withdrawal', transaction.listWithdrawals);
+routesTransactions.get('/transaction/transfer', transaction.listTransfers);
 
 export { routesTransactions };
