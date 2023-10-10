@@ -25,8 +25,8 @@ routesTransactions.post(
 
 routesTransactions.use('/transaction', listValidation);
 
-routesTransactions.get('/transaction/deposit', transaction.listDeposits);
-routesTransactions.get('/transaction/withdrawal', transaction.listWithdrawals);
-routesTransactions.get('/transaction/transfer', transaction.listTransfers);
+routesTransactions.get('/transaction/deposits', transaction.listDeposits);
+routesTransactions.get('/transaction/withdrawals', transaction.listWithdrawals);
+routesTransactions.get('/transaction/transfers', transaction.listTransfers);
 
 export { routesTransactions };
