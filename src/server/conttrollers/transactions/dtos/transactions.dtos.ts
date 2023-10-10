@@ -3,6 +3,11 @@ export interface DepositOrWithdrawalsDto {
 }
 
 export interface TransferDto {
-  destinationAccountNumber: number;
   value: number;
+  destinationUserID?: number;
+  destinationUserEmail?: string;
+}
+
+export interface ListDto {
+  page?: number;
 }

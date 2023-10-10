@@ -21,6 +21,18 @@ export const Withdrawal = async (userID: number, value: number) => {
       cpf: true,
       name: true,
       balance: true,
+      accounts: {
+        select: {
+          number: true,
+
+          bank: {
+            select: {
+              agency: true,
+              number: true,
+            },
+          },
+        },
+      },
     },
     where: {
       id: userID,
@@ -29,11 +41,34 @@ export const Withdrawal = async (userID: number, value: number) => {
       balance: {
         decrement: value,
       },
+      accounts: {
+        updateMany: {
+          data: {
+            updated_at: new Date(),
+          },
+          where: {
+            user_id: userID,
+          },
+        },
+      },
     },
   });
+
+  const { balance, accounts, ...rest } = user;
+
+  await prisma.withdrawal.create({
+    data: {
+      account_number: accounts[0].number,
+      value,
+      date: new Date(),
+    },
+  });
+
   const userFormat = {
-    ...user,
-    balance: Number(user.balance).toFixed(2),
+    account: { accountNumber: accounts[0].number, bank: accounts[0].bank },
+    user: rest,
+    previousBalance: Number(userBalance.balance).toFixed(2),
+    currentBalance: Number(user.balance).toFixed(2),
   };
 
   return userFormat;
