@@ -1,29 +1,20 @@
-import { prisma } from '../../../../database/prismaClient';
-import { passwordBankJWT } from '../../shared/jwt/passwords';
-import { ApiError } from '../../shared/middlewares/error';
-import { compareHashed } from '../../shared/others/code/hasher';
+import { passwordBankJWT } from '../../conttrollers/shared/jwt/passwords';
+import { ApiError } from '../../conttrollers/shared/middlewares/error';
+import { compareHashed } from '../../conttrollers/shared/others/code/hasher';
 import {
   bankErrorMessages,
   genericErrorMessages,
-} from '../../shared/others/messages/messages';
+} from '../../conttrollers/shared/others/messages/messages';
 import jwt from 'jsonwebtoken';
+import { BankRepository } from '../repositories/bank.repository';
 
 export const login = async (
   passwordToCompare: string,
   number: string,
   agency: string
 ): Promise<string> => {
-  const bank = await prisma.bank.findFirst({
-    select: {
-      id: true,
-      password: true,
-    },
-
-    where: {
-      number,
-      agency,
-    },
-  });
+  const bankRepository = new BankRepository();
+  const bank = await bankRepository.findWithNumberAndAgency(number, agency);
 
   if (!bank) {
     throw new ApiError(bankErrorMessages.bankNotFound, 404);

@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../../shared/middlewares/validation';
-import { UpdateBankDto } from '../../dtos/banks.dtos';
+import { UpdateBankDto } from '../../../../banks/dtos/banks.dtos';
 import { ApiError } from '../../../shared/middlewares/error';
 import { prisma } from '../../../../../database/prismaClient';
 import { validZipCode } from '../../../shared/others/code/validZipCode';

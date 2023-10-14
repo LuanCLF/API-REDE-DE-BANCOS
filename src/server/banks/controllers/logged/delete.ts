@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { validation } from '../../../shared/middlewares/validation';
+import { validation } from '../../../conttrollers/shared/middlewares/validation';
 import * as yup from 'yup';
 
 import { DeleteBankDto } from '../../dtos/banks.dtos';

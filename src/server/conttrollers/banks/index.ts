@@ -1,7 +1,13 @@
-import { getAllBanks } from './controllers/getAllBanks';
-import { deleteValidation, deleteBank } from './controllers/logged/delete';
-import { registerValidation, registerBank } from './controllers/register';
-import { loginValidation, loginBank } from './controllers/login';
+import { getAllBanks } from '../../banks/controllers/getAllBanks';
+import {
+  deleteValidation,
+  deleteBank,
+} from '../../banks/controllers/logged/delete';
+import {
+  registerValidation,
+  registerBank,
+} from '../../banks/controllers/register';
+import { loginValidation, loginBank } from '../../banks/controllers/login';
 import { getAccounts } from './controllers/logged/getAccounts';
 import {
   updateAllValidation,

@@ -1,10 +1,10 @@
-import { prisma } from '../../../../../database/prismaClient';
-import { ApiError } from '../../../shared/middlewares/error';
-import { compareHashed } from '../../../shared/others/code/hasher';
+import { prisma } from '../../../../database/prismaClient';
+import { ApiError } from '../../../conttrollers/shared/middlewares/error';
+import { compareHashed } from '../../../conttrollers/shared/others/code/hasher';
 import {
   bankErrorMessages,
   genericErrorMessages,
-} from '../../../shared/others/messages/messages';
+} from '../../../conttrollers/shared/others/messages/messages';
 
 export const Delete = async (
   id: number,

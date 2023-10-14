@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 
 import { CreateBankDto } from '../dtos/banks.dtos';
-import { validation } from '../../shared/middlewares/validation';
+import { validation } from '../../conttrollers/shared/middlewares/validation';
 
 import * as yup from 'yup';
-import { validZipCode } from '../../shared/others/code/validZipCode';
+
 import { Register } from '../services/register.services';
-import { hasher } from '../../shared/others/code/hasher';
 
 export const registerValidation = validation((getSchema) => ({
   body: getSchema<CreateBankDto>(
@@ -42,10 +41,6 @@ export const registerBank = async (
   req: Request<{}, {}, CreateBankDto>,
   res: Response
 ) => {
-  req.body.zipcode = await validZipCode(req.body.zipcode);
-
-  req.body.password = await hasher(req.body.password);
-
   const createBankDto: CreateBankDto = {
     ...req.body,
   };
