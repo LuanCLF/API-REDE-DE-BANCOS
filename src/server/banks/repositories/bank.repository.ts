@@ -52,11 +52,15 @@ class BankRepository {
         id,
       },
       select: {
+        name: true,
+        number: true,
+        agency: true,
+        created_at: true,
         accounts: true,
       },
     });
 
-    return bank?.accounts || [];
+    return bank;
   }
 
   async findWithNumberOrAgency(

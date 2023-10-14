@@ -8,7 +8,7 @@ import {
   registerBank,
 } from '../../banks/controllers/register';
 import { loginValidation, loginBank } from '../../banks/controllers/login';
-import { getAccounts } from './controllers/logged/getAccounts';
+import { getAccounts } from '../../banks/controllers/logged/getAccounts';
 import {
   updateAllValidation,
   updateSomeValidation,

@@ -12,7 +12,7 @@ export const Delete = async (
 ): Promise<void> => {
   const bankRepository = new BankRepository();
   const password = await bankRepository.getPassword(id);
-  const accounts = await bankRepository.getAccountsOfBank(id);
+  const bank = await bankRepository.getAccountsOfBank(id);
 
   if (!password) {
     throw new ApiError(bankErrorMessages.bankNotFound, 404);
@@ -23,7 +23,7 @@ export const Delete = async (
   if (!correctPassword) {
     throw new ApiError(genericErrorMessages.unauthorized, 401);
   }
-  if (accounts.length > 0) {
+  if (bank && bank.accounts.length > 0) {
     throw new ApiError(genericErrorMessages.unauthorized, 409);
   }
 
