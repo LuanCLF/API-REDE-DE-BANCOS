@@ -1,6 +1,7 @@
 import { prisma } from '../../../database/prismaClient';
-import { IBank } from '../../conttrollers/banks/entities/bank.entities';
+
 import { CreateBankDto } from '../dtos/banks.dtos';
+import { IBank } from '../entities/bank.entities';
 
 class BankRepository {
   async register(createBankDto: CreateBankDto): Promise<void> {
@@ -10,6 +11,54 @@ class BankRepository {
       },
     });
   }
+
+  async delete(id: number): Promise<void> {
+    await prisma.bank.delete({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async getAllBanks(): Promise<Array<IBank>> {
+    const banks = await prisma.bank.findMany({
+      select: {
+        number: true,
+        agency: true,
+        name: true,
+        created_at: true,
+        zipcode: true,
+      },
+    });
+    return banks;
+  }
+
+  async getPassword(id: number): Promise<string | undefined> {
+    const bank = await prisma.bank.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        password: true,
+      },
+    });
+
+    return bank?.password;
+  }
+
+  async getAccountsOfBank(id: number) {
+    const bank = await prisma.bank.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        accounts: true,
+      },
+    });
+
+    return bank?.accounts || [];
+  }
+
   async findWithNumberOrAgency(
     number: string,
     agency: string
@@ -31,6 +80,7 @@ class BankRepository {
 
     return bank;
   }
+
   async findWithNumberAndAgency(
     number: string,
     agency: string
@@ -48,19 +98,6 @@ class BankRepository {
     });
 
     return bank;
-  }
-
-  async getAllBanks(): Promise<Array<IBank>> {
-    const banks = await prisma.bank.findMany({
-      select: {
-        number: true,
-        agency: true,
-        name: true,
-        created_at: true,
-        zipcode: true,
-      },
-    });
-    return banks;
   }
 }
 

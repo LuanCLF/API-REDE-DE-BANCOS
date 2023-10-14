@@ -1,7 +1,7 @@
 import { prisma } from '../../../../../database/prismaClient';
+import { IBank } from '../../../../banks/entities/bank.entities';
 import { ApiError } from '../../../shared/middlewares/error';
 import { bankErrorMessages } from '../../../shared/others/messages/messages';
-import { IBank } from '../../entities/bank.entities';
 
 export const GetMyBank = async (id: number): Promise<IBank> => {
   const bank = await prisma.bank.findUnique({
