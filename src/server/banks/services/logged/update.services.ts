@@ -1,5 +1,5 @@
-import { prisma } from '../../../../../database/prismaClient';
-import { CreateBankDto } from '../../../../banks/dtos/banks.dtos';
+import { prisma } from '../../../../database/prismaClient';
+import { CreateBankDto } from '../../dtos/banks.dtos';
 
 export const Update = async (
   id: number,

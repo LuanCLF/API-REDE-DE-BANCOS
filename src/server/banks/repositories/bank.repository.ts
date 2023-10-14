@@ -63,6 +63,20 @@ class BankRepository {
     return bank;
   }
 
+  async findWithID(id: number): Promise<Partial<IBank> | null> {
+    const bank = await prisma.bank.findUnique({
+      where: { id },
+      select: {
+        name: true,
+        number: true,
+        agency: true,
+        zipcode: true,
+        created_at: true,
+      },
+    });
+    return bank;
+  }
+
   async findWithNumberOrAgency(
     number: string,
     agency: string
