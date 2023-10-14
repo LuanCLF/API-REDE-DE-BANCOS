@@ -20,6 +20,18 @@ class BankRepository {
     });
   }
 
+  async update(id: number, values: CreateBankDto): Promise<void> {
+    await prisma.bank.update({
+      where: {
+        id,
+      },
+      data: {
+        ...values,
+        updated_at: new Date(),
+      },
+    });
+  }
+
   async getAllBanks(): Promise<Array<IBank>> {
     const banks = await prisma.bank.findMany({
       select: {
@@ -52,15 +64,11 @@ class BankRepository {
         id,
       },
       select: {
-        name: true,
-        number: true,
-        agency: true,
-        created_at: true,
         accounts: true,
       },
     });
 
-    return bank;
+    return bank?.accounts;
   }
 
   async findWithID(id: number): Promise<Partial<IBank> | null> {

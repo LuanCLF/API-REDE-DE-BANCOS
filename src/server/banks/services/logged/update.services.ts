@@ -1,17 +1,10 @@
-import { prisma } from '../../../../database/prismaClient';
 import { CreateBankDto } from '../../dtos/banks.dtos';
+import { BankRepository } from '../../repositories/bank.repository';
 
 export const Update = async (
   id: number,
   values: CreateBankDto
 ): Promise<void> => {
-  await prisma.bank.update({
-    where: {
-      id,
-    },
-    data: {
-      ...values,
-      updated_at: new Date(),
-    },
-  });
+  const bankRepository = new BankRepository();
+  await bankRepository.update(id, values);
 };

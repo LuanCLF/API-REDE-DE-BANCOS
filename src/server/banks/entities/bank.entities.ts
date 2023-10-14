@@ -8,8 +8,3 @@ export interface IBank {
   updated_at?: string | Date;
   zipcode: string;
 }
-
-export interface IBankValidate {
-  id: number;
-  password: string;
-}
