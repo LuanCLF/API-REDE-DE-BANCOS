@@ -1,6 +1,6 @@
-import { dateFormat } from '../../conttrollers/shared/others/code/dateFormat';
+import { dateFormat } from '../../shared/others/code/dateFormat';
 import { IBank } from '../entities/bank.entities';
-import { BankRepository } from '../repositories/bank.repository';
+import { BankRepository } from '../repository/bank.repository';
 
 export const GetBanks = async (): Promise<Array<IBank>> => {
   const bankRepository = new BankRepository();

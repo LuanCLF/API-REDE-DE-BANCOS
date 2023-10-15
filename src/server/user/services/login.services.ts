@@ -1,4 +1,3 @@
-import { prisma } from '../../../../database/prismaClient';
 import { passwordUserJWT } from '../../shared/jwt/passwords';
 import { ApiError } from '../../shared/middlewares/error';
 import { compareHashed } from '../../shared/others/code/hasher';
@@ -7,6 +6,7 @@ import {
   userErrorMessages,
 } from '../../shared/others/messages/messages';
 import jwt from 'jsonwebtoken';
+import { UserRepository } from '../repository/user.repository';
 
 export const Login = async (
   number: string,
@@ -14,29 +14,13 @@ export const Login = async (
   cpf: string,
   password: string
 ): Promise<string> => {
-  const bank = await prisma.account.findMany({
-    select: {
-      user: {
-        select: {
-          id: true,
-          password: true,
-        },
-      },
-    },
-    where: {
-      user: {
-        cpf,
-      },
-      bank: {
-        number,
-        agency,
-      },
-    },
-  });
-  if (bank.length < 1) {
+  const userRepository = new UserRepository();
+  const user = await userRepository.findUserForLogin(cpf, number, agency);
+
+  if (!user) {
     throw new ApiError(userErrorMessages.userNotFound, 404);
   }
-  const { password: passwordHashed, id } = bank[0].user;
+  const { password: passwordHashed, id } = user;
 
   const correct = await compareHashed(password, passwordHashed);
 

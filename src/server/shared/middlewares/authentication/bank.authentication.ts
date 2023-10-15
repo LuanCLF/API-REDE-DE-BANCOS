@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { passwordBankJWT } from '../../jwt/passwords';
 import jwt from 'jsonwebtoken';
 import { ApiError } from '../error';
-import { prisma } from '../../../../../database/prismaClient';
+import { prisma } from '../../../../database/prismaClient';
 import {
   bankErrorMessages,
   genericErrorMessages,

@@ -110,11 +110,10 @@ class BankRepository {
   async findWithNumberAndAgency(
     number: string,
     agency: string
-  ): Promise<{ id: number; password: string } | null> {
+  ): Promise<{ id: number } | null> {
     const bank = await prisma.bank.findFirst({
       select: {
         id: true,
-        password: true,
       },
 
       where: {

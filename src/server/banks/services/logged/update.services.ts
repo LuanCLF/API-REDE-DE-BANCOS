@@ -1,5 +1,5 @@
 import { CreateBankDto } from '../../dtos/banks.dtos';
-import { BankRepository } from '../../repositories/bank.repository';
+import { BankRepository } from '../../repository/bank.repository';
 
 export const Update = async (
   id: number,

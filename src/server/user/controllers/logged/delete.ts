@@ -21,5 +21,6 @@ export const deleteUser = async (
   const { password } = req.body;
 
   await Delete(Number(userID), password);
+
   res.status(204).json();
 };

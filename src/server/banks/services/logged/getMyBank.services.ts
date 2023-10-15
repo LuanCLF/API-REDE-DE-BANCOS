@@ -1,8 +1,8 @@
 import { IBank } from '../../entities/bank.entities';
-import { ApiError } from '../../../conttrollers/shared/middlewares/error';
-import { bankErrorMessages } from '../../../conttrollers/shared/others/messages/messages';
-import { BankRepository } from '../../repositories/bank.repository';
-import { dateFormat } from '../../../conttrollers/shared/others/code/dateFormat';
+import { ApiError } from '../../../shared/middlewares/error';
+import { bankErrorMessages } from '../../../shared/others/messages/messages';
+import { BankRepository } from '../../repository/bank.repository';
+import { dateFormat } from '../../../shared/others/code/dateFormat';
 
 export const GetMyBank = async (id: number): Promise<Partial<IBank>> => {
   const bankRepository = new BankRepository();

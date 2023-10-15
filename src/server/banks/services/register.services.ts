@@ -1,10 +1,10 @@
-import { ApiError } from '../../conttrollers/shared/middlewares/error';
-import { genericErrorMessages } from '../../conttrollers/shared/others/messages/messages';
+import { ApiError } from '../../shared/middlewares/error';
+import { genericErrorMessages } from '../../shared/others/messages/messages';
 import { CreateBankDto } from '../dtos/banks.dtos';
-import { validZipCode } from '../../conttrollers/shared/others/code/validZipCode';
-import { hasher } from '../../conttrollers/shared/others/code/hasher';
+import { validZipCode } from '../../shared/others/code/validZipCode';
+import { hasher } from '../../shared/others/code/hasher';
 
-import { BankRepository } from '../repositories/bank.repository';
+import { BankRepository } from '../repository/bank.repository';
 
 export const Register = async (createBankDto: CreateBankDto): Promise<void> => {
   let { number, agency, password, zipcode } = createBankDto;

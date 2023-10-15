@@ -1,4 +1,4 @@
-import { prisma } from '../../../../../database/prismaClient';
+import { prisma } from '../../../../database/prismaClient';
 import { ApiError } from '../../../shared/middlewares/error';
 import { compareHashed } from '../../../shared/others/code/hasher';
 import {

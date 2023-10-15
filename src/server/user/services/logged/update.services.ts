@@ -1,4 +1,4 @@
-import { prisma } from '../../../../../database/prismaClient';
+import { prisma } from '../../../../database/prismaClient';
 import { ApiError } from '../../../shared/middlewares/error';
 import { genericErrorMessages } from '../../../shared/others/messages/messages';
 import { UpdateUserDto } from '../../dtos/users.dtos';

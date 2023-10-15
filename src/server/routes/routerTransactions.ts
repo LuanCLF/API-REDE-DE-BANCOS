@@ -1,6 +1,6 @@
 import express from 'express';
 import { transaction } from '../conttrollers/transactions';
-import { midUserLogin } from '../conttrollers/shared/middlewares/authentication/user.authentication';
+import { midUserLogin } from '../shared/middlewares/authentication/user.authentication';
 import { listValidation } from '../conttrollers/transactions/utils/listValidation';
 
 const routesTransactions = express();

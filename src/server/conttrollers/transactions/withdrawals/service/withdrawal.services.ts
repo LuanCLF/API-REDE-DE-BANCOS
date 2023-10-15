@@ -1,6 +1,6 @@
 import { prisma } from '../../../../../database/prismaClient';
-import { ApiError } from '../../../shared/middlewares/error';
-import { withdrawalErrorMessage } from '../../../shared/others/messages/messages';
+import { ApiError } from '../../../../shared/middlewares/error';
+import { withdrawalErrorMessage } from '../../../../shared/others/messages/messages';
 
 export const Withdrawal = async (userID: number, value: number) => {
   const userBalance = await prisma.user.findUnique({

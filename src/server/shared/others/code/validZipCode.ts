@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ApiError } from '../../middlewares/error';
 import { genericErrorMessages } from '../messages/messages';
-import { prisma } from '../../../../../database/prismaClient';
+import { prisma } from '../../../../database/prismaClient';
 
 export interface Izipcode {
   cep: string;

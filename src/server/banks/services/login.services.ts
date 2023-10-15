@@ -1,12 +1,12 @@
-import { passwordBankJWT } from '../../conttrollers/shared/jwt/passwords';
-import { ApiError } from '../../conttrollers/shared/middlewares/error';
-import { compareHashed } from '../../conttrollers/shared/others/code/hasher';
+import { passwordBankJWT } from '../../shared/jwt/passwords';
+import { ApiError } from '../../shared/middlewares/error';
+import { compareHashed } from '../../shared/others/code/hasher';
 import {
   bankErrorMessages,
   genericErrorMessages,
-} from '../../conttrollers/shared/others/messages/messages';
+} from '../../shared/others/messages/messages';
 import jwt from 'jsonwebtoken';
-import { BankRepository } from '../repositories/bank.repository';
+import { BankRepository } from '../repository/bank.repository';
 
 export const login = async (
   passwordToCompare: string,
@@ -14,13 +14,14 @@ export const login = async (
   agency: string
 ): Promise<string> => {
   const bankRepository = new BankRepository();
-  const bank = await bankRepository.findWithNumberAndAgency(number, agency);
 
+  const bank = await bankRepository.findWithNumberAndAgency(number, agency);
   if (!bank) {
     throw new ApiError(bankErrorMessages.bankNotFound, 404);
   }
+  const { id } = bank;
 
-  const { password, id } = bank;
+  const password = (await bankRepository.getPassword(id)) || '';
 
   const correctPassword: boolean = await compareHashed(
     passwordToCompare,

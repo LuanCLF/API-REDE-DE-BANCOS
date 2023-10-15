@@ -1,7 +1,7 @@
-import { ApiError } from '../../../conttrollers/shared/middlewares/error';
-import { dateFormat } from '../../../conttrollers/shared/others/code/dateFormat';
-import { bankErrorMessages } from '../../../conttrollers/shared/others/messages/messages';
-import { BankRepository } from '../../repositories/bank.repository';
+import { ApiError } from '../../../shared/middlewares/error';
+import { dateFormat } from '../../../shared/others/code/dateFormat';
+import { bankErrorMessages } from '../../../shared/others/messages/messages';
+import { BankRepository } from '../../repository/bank.repository';
 
 export const GetAllAccounts = async (id: number) => {
   const bankRepository = new BankRepository();

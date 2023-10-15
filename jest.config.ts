@@ -13,7 +13,7 @@ const config: Config = {
 
   setupFilesAfterEnv: ['./tests/jest.setup.ts'],
 
-  testMatch: ['<rootDir>/tests/bank/**/*.test.ts'],
+  testMatch: ['<rootDir>/tests/user/**/*.test.ts'],
 
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',

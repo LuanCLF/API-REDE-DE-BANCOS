@@ -1,10 +1,10 @@
-import { ApiError } from '../../../conttrollers/shared/middlewares/error';
-import { compareHashed } from '../../../conttrollers/shared/others/code/hasher';
+import { ApiError } from '../../../shared/middlewares/error';
+import { compareHashed } from '../../../shared/others/code/hasher';
 import {
   bankErrorMessages,
   genericErrorMessages,
-} from '../../../conttrollers/shared/others/messages/messages';
-import { BankRepository } from '../../repositories/bank.repository';
+} from '../../../shared/others/messages/messages';
+import { BankRepository } from '../../repository/bank.repository';
 
 export const Delete = async (
   id: number,

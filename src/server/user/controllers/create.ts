@@ -53,10 +53,10 @@ export const create = async (
   req: Request<{}, {}, CreateUserDto>,
   res: Response
 ) => {
-  req.body.zipcode = await validZipCode(req.body.zipcode);
-  req.body.password = await hasher(req.body.password);
+  const { number, agency, cpf, email, name, password, zipcode } = req.body;
+  const createUser = { number, agency, cpf, email, name, password, zipcode };
 
-  await CreateAccount(req.body);
+  await CreateAccount(createUser);
 
   res.status(201).json();
 };

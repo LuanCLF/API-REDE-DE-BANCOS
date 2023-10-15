@@ -1,4 +1,4 @@
-import { prisma } from '../../../../../database/prismaClient';
+import { prisma } from '../../../../database/prismaClient';
 import { dateFormat } from '../../../shared/others/code/dateFormat';
 
 export const MyAccount = async (userID: number) => {

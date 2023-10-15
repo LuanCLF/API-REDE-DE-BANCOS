@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 import { CreateBankDto } from '../dtos/banks.dtos';
-import { validation } from '../../conttrollers/shared/middlewares/validation';
+import { validation } from '../../shared/middlewares/validation';
 
 import * as yup from 'yup';
 
