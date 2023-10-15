@@ -6,13 +6,14 @@ import { BankRepository } from '../../repository/bank.repository';
 export const GetAllAccounts = async (id: number) => {
   const bankRepository = new BankRepository();
 
-  const accounts = await bankRepository.getAccountsOfBank(id);
+  const bankAccounts = await bankRepository.getAccountsOfBank(id);
   const bank = await bankRepository.findWithID(id);
-  if (!bank || !accounts) {
+  if (!bank || !bankAccounts) {
     throw new ApiError(bankErrorMessages.bankNotFound, 404);
   }
 
-  if (accounts.length > 0) {
+  const accounts = bankAccounts ? bankAccounts.accounts : false;
+  if (accounts && accounts.length > 0) {
     accounts.map((object) => {
       const { updated_at, number, created_at, ...rest } = object;
 

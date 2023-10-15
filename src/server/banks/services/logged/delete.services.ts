@@ -12,17 +12,22 @@ export const Delete = async (
 ): Promise<void> => {
   const bankRepository = new BankRepository();
   const password = await bankRepository.getPassword(id);
-  const accounts = await bankRepository.getAccountsOfBank(id);
 
   if (!password) {
     throw new ApiError(bankErrorMessages.bankNotFound, 404);
   }
 
-  const correctPassword = await compareHashed(passwordToCompare, password);
+  const correctPassword = await compareHashed(
+    passwordToCompare,
+    String(password)
+  );
 
   if (!correctPassword) {
     throw new ApiError(genericErrorMessages.unauthorized, 401);
   }
+
+  const bank = await bankRepository.getAccountsOfBank(id);
+  const accounts = bank ? bank.accounts : false;
   if (accounts && accounts.length > 0) {
     throw new ApiError(genericErrorMessages.unauthorized, 409);
   }

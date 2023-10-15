@@ -21,11 +21,11 @@ export const login = async (
   }
   const { id } = bank;
 
-  const password = (await bankRepository.getPassword(id)) || '';
+  const password = await bankRepository.getPassword(id);
 
   const correctPassword: boolean = await compareHashed(
     passwordToCompare,
-    password
+    String(password)
   );
 
   if (!correctPassword) {

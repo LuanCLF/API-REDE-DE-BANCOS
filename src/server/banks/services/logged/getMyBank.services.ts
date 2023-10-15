@@ -4,7 +4,7 @@ import { bankErrorMessages } from '../../../shared/others/messages/messages';
 import { BankRepository } from '../../repository/bank.repository';
 import { dateFormat } from '../../../shared/others/code/dateFormat';
 
-export const GetMyBank = async (id: number): Promise<Partial<IBank>> => {
+export const GetMyBank = async (id: number): Promise<IBank> => {
   const bankRepository = new BankRepository();
   const bank = await bankRepository.findWithID(id);
   if (!bank) {

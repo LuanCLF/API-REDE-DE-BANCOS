@@ -1,7 +1,12 @@
 import { prisma } from '../../../database/prismaClient';
 
 import { CreateBankDto } from '../dtos/banks.dtos';
-import { IBank } from '../entities/bank.entities';
+import {
+  IBank,
+  IBankAccounts,
+  IBankID,
+  IBankPassword,
+} from '../entities/bank.entities';
 
 class BankRepository {
   async register(createBankDto: CreateBankDto): Promise<void> {
@@ -45,8 +50,8 @@ class BankRepository {
     return banks;
   }
 
-  async getPassword(id: number): Promise<string | undefined> {
-    const bank = await prisma.bank.findUnique({
+  async getPassword(id: number): Promise<IBankPassword | null> {
+    const password = await prisma.bank.findUnique({
       where: {
         id,
       },
@@ -55,10 +60,10 @@ class BankRepository {
       },
     });
 
-    return bank?.password;
+    return password;
   }
 
-  async getAccountsOfBank(id: number) {
+  async getAccountsOfBank(id: number): Promise<IBankAccounts | null> {
     const bank = await prisma.bank.findUnique({
       where: {
         id,
@@ -68,10 +73,10 @@ class BankRepository {
       },
     });
 
-    return bank?.accounts;
+    return bank;
   }
 
-  async findWithID(id: number): Promise<Partial<IBank> | null> {
+  async findWithID(id: number): Promise<IBank | null> {
     const bank = await prisma.bank.findUnique({
       where: { id },
       select: {
@@ -88,7 +93,7 @@ class BankRepository {
   async findWithNumberOrAgency(
     number: string,
     agency: string
-  ): Promise<{ id: number } | null> {
+  ): Promise<boolean> {
     const bank = await prisma.bank.findFirst({
       select: {
         id: true,
@@ -104,13 +109,13 @@ class BankRepository {
       },
     });
 
-    return bank;
+    return !!bank;
   }
 
   async findWithNumberAndAgency(
     number: string,
     agency: string
-  ): Promise<{ id: number } | null> {
+  ): Promise<IBankID | null> {
     const bank = await prisma.bank.findFirst({
       select: {
         id: true,
