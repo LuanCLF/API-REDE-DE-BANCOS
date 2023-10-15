@@ -1,4 +1,4 @@
-import { validation } from '../../../shared/middlewares/validation';
+import { validation } from '../../shared/middlewares/validation';
 import { DepositOrWithdrawalsDto } from '../dtos/transactions.dtos';
 import * as yup from 'yup';
 

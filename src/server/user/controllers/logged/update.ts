@@ -79,13 +79,6 @@ export const update = async (
   const { userID } = req.headers;
   let { cpf, email, name, password, phone_number, zipcode } = req.body;
 
-  if (password) {
-    password = await hasher(password);
-  }
-  if (zipcode) {
-    zipcode = await validZipCode(zipcode);
-  }
-
   const updateUser = { cpf, email, name, password, phone_number, zipcode };
   await Update(Number(userID), updateUser);
 

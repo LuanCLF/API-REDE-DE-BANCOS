@@ -1,67 +1,41 @@
-import { prisma } from '../../../../database/prismaClient';
 import { ApiError } from '../../../shared/middlewares/error';
+import { hasher } from '../../../shared/others/code/hasher';
+import { validZipCode } from '../../../shared/others/code/validZipCode';
 import { genericErrorMessages } from '../../../shared/others/messages/messages';
 import { UpdateUserDto } from '../../dtos/users.dtos';
+import { UserRepository } from '../../repository/user.repository';
 
-export const Update = async (id: number, updateUserDto: UpdateUserDto) => {
-  let { cpf, email } = updateUserDto;
+export const Update = async (userID: number, updateUserDto: UpdateUserDto) => {
+  let { cpf, email, password, zipcode } = updateUserDto;
 
-  const bank = await prisma.bank.findMany({
-    select: {
-      id: true,
-    },
-    where: {
-      accounts: {
-        some: {
-          user_id: id,
-        },
-      },
-    },
-  });
+  if (password) {
+    updateUserDto.password = await hasher(password);
+  }
+  if (zipcode) {
+    updateUserDto.zipcode = await validZipCode(zipcode);
+  }
 
-  if (cpf) {
-    const result = await prisma.user.count({
-      where: {
-        accounts: {
-          some: {
-            bank_id: bank[0].id,
-          },
-        },
-        cpf,
-      },
-    });
+  const userRepository = new UserRepository();
+  const bankID = await userRepository.findBankIdOfMyAccount(userID);
 
-    if (result !== 0) {
+  if (bankID && cpf) {
+    const result = await userRepository.checkIfUserAlreadyExistWithCpf(
+      cpf,
+      bankID
+    );
+
+    if (result) {
       throw new ApiError(genericErrorMessages.unauthorized, 409);
     }
   }
+
   if (email) {
-    const result = await prisma.user.count({
-      where: {
-        email,
-      },
-    });
+    const result = await userRepository.checkIfUserAlreadyExistWithEmail(email);
 
-    if (result !== 0) {
+    if (result) {
       throw new ApiError(genericErrorMessages.unauthorized, 409);
     }
   }
-  await prisma.user.update({
-    where: {
-      id,
-    },
-    data: {
-      ...updateUserDto,
-      accounts: {
-        updateMany: {
-          where: {
-            user_id: id,
-          },
-          data: {
-            updated_at: new Date(),
-          },
-        },
-      },
-    },
-  });
+
+  await userRepository.update(userID, updateUserDto);
 };

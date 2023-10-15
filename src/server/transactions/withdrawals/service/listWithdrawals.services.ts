@@ -1,5 +1,5 @@
-import { prisma } from '../../../../../database/prismaClient';
-import { dateFormat } from '../../../../shared/others/code/dateFormat';
+import { prisma } from '../../../../database/prismaClient';
+import { dateFormat } from '../../../shared/others/code/dateFormat';
 
 export const ListWithdrawals = async (userID: number, page: number) => {
   let withdrawalsArray = await prisma.account.findMany({

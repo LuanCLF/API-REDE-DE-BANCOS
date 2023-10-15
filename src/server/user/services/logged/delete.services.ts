@@ -1,25 +1,14 @@
-import { prisma } from '../../../../database/prismaClient';
 import { ApiError } from '../../../shared/middlewares/error';
 import { compareHashed } from '../../../shared/others/code/hasher';
 import {
   genericErrorMessages,
   userErrorMessages,
 } from '../../../shared/others/messages/messages';
+import { UserRepository } from '../../repository/user.repository';
 
 export const Delete = async (userID: number, password: string) => {
-  const user = await prisma.user.findUnique({
-    select: {
-      password: true,
-      accounts: {
-        select: {
-          number: true,
-        },
-      },
-    },
-    where: {
-      id: userID,
-    },
-  });
+  const userRepository = new UserRepository();
+  const user = await userRepository.findWithID(userID);
 
   if (!user) {
     throw new ApiError(userErrorMessages.userNotFound, 404);
@@ -30,14 +19,5 @@ export const Delete = async (userID: number, password: string) => {
     throw new ApiError(genericErrorMessages.unauthorized, 401);
   }
 
-  await prisma.account.delete({
-    where: {
-      number: user.accounts[0].number,
-    },
-  });
-  await prisma.user.delete({
-    where: {
-      id: userID,
-    },
-  });
+  await userRepository.delete(userID, user.accounts[0].number);
 };

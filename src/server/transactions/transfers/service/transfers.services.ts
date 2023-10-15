@@ -1,6 +1,6 @@
-import { prisma } from '../../../../../database/prismaClient';
-import { ApiError } from '../../../../shared/middlewares/error';
-import { transferErrorMessage } from '../../../../shared/others/messages/messages';
+import { prisma } from '../../../../database/prismaClient';
+import { ApiError } from '../../../shared/middlewares/error';
+import { transferErrorMessage } from '../../../shared/others/messages/messages';
 import { Deposit } from '../../deposits/service/deposit.services';
 import { Withdrawal } from '../../withdrawals/service/withdrawal.services';
 

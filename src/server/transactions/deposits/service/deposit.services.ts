@@ -1,4 +1,4 @@
-import { prisma } from '../../../../../database/prismaClient';
+import { prisma } from '../../../../database/prismaClient';
 
 export const Deposit = async (userID: number, value: number) => {
   const user = await prisma.user.update({

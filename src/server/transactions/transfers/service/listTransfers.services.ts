@@ -1,5 +1,5 @@
-import { prisma } from '../../../../../database/prismaClient';
-import { dateFormat } from '../../../../shared/others/code/dateFormat';
+import { prisma } from '../../../../database/prismaClient';
+import { dateFormat } from '../../../shared/others/code/dateFormat';
 
 const fromMe = async (userID: number, page: number) => {
   let mySelf = await prisma.account.findMany({

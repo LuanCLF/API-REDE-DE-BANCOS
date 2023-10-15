@@ -1,9 +1,9 @@
-import { validation } from '../../../../shared/middlewares/validation';
+import { validation } from '../../../shared/middlewares/validation';
 import * as yup from 'yup';
 import { TransferDto } from '../../dtos/transactions.dtos';
 import { RequestHandler } from 'express';
-import { ApiError } from '../../../../shared/middlewares/error';
-import { transferErrorMessage } from '../../../../shared/others/messages/messages';
+import { ApiError } from '../../../shared/middlewares/error';
+import { transferErrorMessage } from '../../../shared/others/messages/messages';
 import { Transfer } from '../service/transfers.services';
 
 export const tranferValidation = validation((getSchema) => ({
