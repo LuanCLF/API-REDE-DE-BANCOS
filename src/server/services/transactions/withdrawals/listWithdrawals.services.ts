@@ -1,23 +1,15 @@
-import { prisma } from '../../../database/prismaClient';
+import { WithdrawalRepository } from '../../../repositories/transation/withdrawals/withdrawal.repository';
 import { dateFormat } from '../../../shared/others/code/dateFormat';
 
 export const ListWithdrawals = async (userID: number, page: number) => {
-  let withdrawalsArray = await prisma.account.findMany({
-    where: {
-      user_id: userID,
-    },
-    select: {
-      withdrawals: {
-        skip: page * 10,
-        take: 10,
-        orderBy: {
-          id: 'desc',
-        },
-      },
-    },
-  });
+  const withdrawalRepository = new WithdrawalRepository();
 
-  const withdrawals = withdrawalsArray[0].withdrawals.map((withdrawal) => {
+  const { withdrawals } = await withdrawalRepository.listWithdrawals(
+    userID,
+    page
+  );
+
+  const withdrawalsFormated = withdrawals.map((withdrawal) => {
     const { date: dateWithdrawal, ...rest } = withdrawal;
 
     return {
@@ -26,5 +18,5 @@ export const ListWithdrawals = async (userID: number, page: number) => {
     };
   });
 
-  return { page, withdrawals };
+  return { page, withdrawalsFormated };
 };

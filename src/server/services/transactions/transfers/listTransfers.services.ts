@@ -1,28 +1,20 @@
 import { prisma } from '../../../database/prismaClient';
+import { TransferRepository } from '../../../repositories/transation/transfers/transfer.repository';
 import { dateFormat } from '../../../shared/others/code/dateFormat';
 
 const fromMe = async (userID: number, page: number) => {
-  let mySelf = await prisma.account.findMany({
-    where: {
-      user_id: userID,
-    },
-    select: {
-      transfersFrom: {
-        skip: page * 10,
-        take: 10,
-        orderBy: {
-          id: 'desc',
-        },
-      },
-    },
-  });
+  const transferRepository = new TransferRepository();
 
-  const transfers = mySelf[0].transfersFrom.map((transfers) => {
+  const { transfersFrom } = await transferRepository.getTransfersFromMe(
+    userID,
+    page
+  );
+
+  const transfers = transfersFrom.map((transfers) => {
     const { date: dateDeposit, ...rest } = transfers;
 
     return {
-      ...rest,
-      date: dateFormat(dateDeposit),
+      fromMe: { ...rest, date: dateFormat(new Date(dateDeposit)) },
     };
   });
 
@@ -30,27 +22,15 @@ const fromMe = async (userID: number, page: number) => {
 };
 
 const fromOut = async (userID: number, page: number) => {
-  let outPerson = await prisma.account.findMany({
-    where: {
-      user_id: userID,
-    },
-    select: {
-      transfersTo: {
-        skip: page * 10,
-        take: 10,
-        orderBy: {
-          id: 'desc',
-        },
-      },
-    },
-  });
+  const transferRepository = new TransferRepository();
 
-  const transfers = outPerson[0].transfersTo.map((transfers) => {
+  let { transfersTo } = await transferRepository.getTransfersToMe(userID, page);
+
+  const transfers = transfersTo.map((transfers) => {
     const { date: dateDeposit, ...rest } = transfers;
 
     return {
-      ...rest,
-      date: dateFormat(dateDeposit),
+      toMe: { ...rest, date: dateFormat(dateDeposit) },
     };
   });
 

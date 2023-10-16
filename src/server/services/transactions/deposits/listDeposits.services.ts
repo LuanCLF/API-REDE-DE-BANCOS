@@ -1,23 +1,12 @@
-import { prisma } from '../../../database/prismaClient';
+import { DepositRepository } from '../../../repositories/transation/deposits/deposit.repository';
 import { dateFormat } from '../../../shared/others/code/dateFormat';
 
 export const ListDeposits = async (userID: number, page: number) => {
-  let depositsArray = await prisma.account.findMany({
-    where: {
-      user_id: userID,
-    },
-    select: {
-      deposits: {
-        skip: page * 10,
-        take: 10,
-        orderBy: {
-          id: 'desc',
-        },
-      },
-    },
-  });
+  const depositRepository = new DepositRepository();
 
-  const deposits = depositsArray[0].deposits.map((deposit) => {
+  let { deposits } = await depositRepository.listDeposits(userID, page);
+
+  const depositsFormated = deposits.map((deposit) => {
     const { date: dateDeposit, ...rest } = deposit;
 
     return {
@@ -26,5 +15,5 @@ export const ListDeposits = async (userID: number, page: number) => {
     };
   });
 
-  return { page, deposits };
+  return { page, depositsFormated };
 };
