@@ -2,8 +2,9 @@ import { ApiError } from '../../../shared/middlewares/error';
 import { dateFormat } from '../../../shared/others/code/dateFormat';
 import { userErrorMessages } from '../../../shared/others/messages/messages';
 import { UserRepository } from '../../../repositories/users/user.repository';
+import { IAccountFormated } from '../../../entities/user/user.entities';
 
-export const MyAccount = async (userID: number) => {
+export const MyAccount = async (userID: number): Promise<IAccountFormated> => {
   const userRepositry = new UserRepository();
   const user = await userRepositry.myAccountInformation(userID);
 

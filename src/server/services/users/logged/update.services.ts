@@ -5,7 +5,10 @@ import { genericErrorMessages } from '../../../shared/others/messages/messages';
 import { UpdateUserDto } from '../../../dtos/users/users.dtos';
 import { UserRepository } from '../../../repositories/users/user.repository';
 
-export const Update = async (userID: number, updateUserDto: UpdateUserDto) => {
+export const Update = async (
+  userID: number,
+  updateUserDto: UpdateUserDto
+): Promise<void> => {
   let { cpf, email, password, zipcode } = updateUserDto;
 
   if (password) {

@@ -1,6 +1,11 @@
 import { prisma } from '../../database/prismaClient';
 import { CreateUserDto, UpdateUserDto } from '../../dtos/users/users.dtos';
-import { IAccountsInformation } from '../../entities/user/user.entities';
+import {
+  IAccount,
+  IAccountInformation,
+  IAccountLogin,
+  IAccountNumber,
+} from '../../entities/user/user.entities';
 
 class UserRepository {
   private async deleteAccount(accountNumber: number): Promise<void> {
@@ -63,7 +68,7 @@ class UserRepository {
 
   async myAccountInformation(
     userID: number
-  ): Promise<IAccountsInformation | null> {
+  ): Promise<IAccountInformation | null> {
     const user = await prisma.user.findUnique({
       where: {
         id: userID,
@@ -101,7 +106,11 @@ class UserRepository {
     return bankID?.bank_id;
   }
 
-  async findAccount(cpf: string, email: string, bankID: number) {
+  async findAccounts(
+    cpf: string,
+    email: string,
+    bankID: number
+  ): Promise<IAccount | null> {
     const result = await prisma.user.findFirst({
       select: {
         accounts: true,
@@ -111,14 +120,14 @@ class UserRepository {
       },
     });
 
-    return result?.accounts;
+    return result;
   }
 
   async findUserForLogin(
     cpf: string,
     number: string,
     agency: string
-  ): Promise<{ id: number; password: string } | undefined> {
+  ): Promise<IAccountLogin | undefined> {
     const bank = await prisma.account.findFirst({
       select: {
         user: {
@@ -143,7 +152,7 @@ class UserRepository {
 
   async findWithID(
     userID: number
-  ): Promise<{ password: string; accounts: Array<{ number: number }> } | null> {
+  ): Promise<{ password: string; accounts: Array<IAccountNumber> } | null> {
     const user = await prisma.user.findUnique({
       select: {
         password: true,

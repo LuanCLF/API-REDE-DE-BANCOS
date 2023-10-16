@@ -26,9 +26,9 @@ export const CreateAccount = async (
   }
 
   const userRepository = new UserRepository();
-  const result = await userRepository.findAccount(cpf, email, bank.id);
+  const result = await userRepository.findAccounts(cpf, email, bank.id);
 
-  if (result && result.length > 0) {
+  if (result && result.accounts.length > 0) {
     throw new ApiError(userErrorMessages.userAlreadyExist, 409);
   }
 

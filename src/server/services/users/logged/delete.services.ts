@@ -6,7 +6,10 @@ import {
 } from '../../../shared/others/messages/messages';
 import { UserRepository } from '../../../repositories/users/user.repository';
 
-export const Delete = async (userID: number, password: string) => {
+export const Delete = async (
+  userID: number,
+  password: string
+): Promise<void> => {
   const userRepository = new UserRepository();
   const user = await userRepository.findWithID(userID);
 
