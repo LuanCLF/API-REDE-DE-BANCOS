@@ -1,5 +1,5 @@
 import express from 'express';
-import { user } from '../user';
+import { user } from '../controller/users';
 import { midUserLogin } from '../shared/middlewares/authentication/user.authentication';
 
 const routesUser = express();
