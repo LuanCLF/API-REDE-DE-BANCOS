@@ -1,7 +1,7 @@
 import express from 'express';
-import { transaction } from '../conttrollers/transactions';
-import { midUserLogin } from '../conttrollers/shared/middlewares/authentication/user.authentication';
-import { listValidation } from '../conttrollers/transactions/utils/listValidation';
+import { transaction } from '../controller/transactions';
+import { midUserLogin } from '../shared/middlewares/authentication/user.authentication';
+import { listValidation } from '../controller/transactions/utils/listValidation';
 
 const routesTransactions = express();
 
@@ -25,8 +25,8 @@ routesTransactions.post(
 
 routesTransactions.use('/transaction', listValidation);
 
-routesTransactions.get('/transaction/deposit', transaction.listDeposits);
-routesTransactions.get('/transaction/withdrawal', transaction.listWithdrawals);
-routesTransactions.get('/transaction/transfer', transaction.listTransfers);
+routesTransactions.get('/transaction/deposits', transaction.listDeposits);
+routesTransactions.get('/transaction/withdrawals', transaction.listWithdrawals);
+routesTransactions.get('/transaction/transfers', transaction.listTransfers);
 
 export { routesTransactions };
