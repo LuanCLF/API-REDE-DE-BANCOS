@@ -23,7 +23,7 @@ export const Delete = async (
     throw new ApiError(genericErrorMessages.unauthorized, 401);
   }
 
-  const bank = await bankRepository.getAccountsOfBank(id);
+  const bank = await bankRepository.getAccountsOfBank(id, 0);
   const accounts = bank ? bank.accounts : false;
   if (accounts && accounts.length > 0) {
     throw new ApiError(genericErrorMessages.unauthorized, 409);

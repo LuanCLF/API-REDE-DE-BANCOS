@@ -1,4 +1,3 @@
-import { prisma } from '../../../database/prismaClient';
 import { TransferRepository } from '../../../repositories/transation/transfers/transfer.repository';
 import { dateFormat } from '../../../shared/others/code/dateFormat';
 

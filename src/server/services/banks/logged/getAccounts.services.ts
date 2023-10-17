@@ -3,10 +3,10 @@ import { dateFormat } from '../../../shared/others/code/dateFormat';
 import { bankErrorMessages } from '../../../shared/others/messages/messages';
 import { BankRepository } from '../../../repositories/banks/bank.repository';
 
-export const GetAllAccounts = async (id: number) => {
+export const GetAllAccounts = async (id: number, page: number) => {
   const bankRepository = new BankRepository();
-
-  const bankAccounts = await bankRepository.getAccountsOfBank(id);
+  console.log(page);
+  const bankAccounts = await bankRepository.getAccountsOfBank(id, page);
   const bank = await bankRepository.findWithID(id);
   if (!bank || !bankAccounts) {
     throw new ApiError(bankErrorMessages.bankNotFound, 404);

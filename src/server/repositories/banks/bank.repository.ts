@@ -36,7 +36,7 @@ class BankRepository {
     });
   }
 
-  async getAllBanks(): Promise<Array<IBank>> {
+  async getAllBanks(page: number): Promise<Array<IBank>> {
     const banks = await prisma.bank.findMany({
       select: {
         number: true,
@@ -44,6 +44,11 @@ class BankRepository {
         name: true,
         created_at: true,
         zipcode: true,
+      },
+      skip: page * 10,
+      take: 10,
+      orderBy: {
+        id: 'asc',
       },
     });
     return banks;
@@ -62,13 +67,22 @@ class BankRepository {
     return bank?.password;
   }
 
-  async getAccountsOfBank(id: number): Promise<IBankAccounts | null> {
+  async getAccountsOfBank(
+    id: number,
+    page: number
+  ): Promise<IBankAccounts | null> {
     const bank = await prisma.bank.findUnique({
       where: {
         id,
       },
       select: {
-        accounts: true,
+        accounts: {
+          skip: page * 10,
+          take: 10,
+          orderBy: {
+            user_id: 'asc',
+          },
+        },
       },
     });
 
