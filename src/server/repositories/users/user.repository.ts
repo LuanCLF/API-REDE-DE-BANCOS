@@ -5,6 +5,7 @@ import {
   IAccountInformation,
   IAccountLogin,
   IAccountNumber,
+  IAcountCreate,
 } from '../../entities/user/user.entities';
 
 class UserRepository {
@@ -26,7 +27,7 @@ class UserRepository {
     });
   }
 
-  async create(createUser: CreateUserDto, bankID: number): Promise<void> {
+  async create(createUser: IAcountCreate, bankID: number): Promise<void> {
     const user = await prisma.user.create({
       data: {
         ...createUser,

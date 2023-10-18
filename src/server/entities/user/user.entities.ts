@@ -1,3 +1,12 @@
+export interface IAcountCreate {
+  name: string;
+  cpf: string;
+  phone_number?: string;
+  email: string;
+  password: string;
+  zipcode: string;
+}
+
 export interface IAccountInformation {
   cpf: string;
   email: string;

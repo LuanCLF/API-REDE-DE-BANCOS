@@ -9,11 +9,22 @@ import {
 
 import { CreateUserDto } from '../../dtos/users/users.dtos';
 import { UserRepository } from '../../repositories/users/user.repository';
+import { IAcountCreate } from '../../entities/user/user.entities';
 
 export const CreateAccount = async (
-  createUser: CreateUserDto
+  createUserDto: CreateUserDto
 ): Promise<void> => {
-  const { number, agency, cpf, email, password, zipcode } = createUser;
+  const { number, agency, cpf, email, password, zipcode, name, phone_number } =
+    createUserDto;
+
+  const createUser: IAcountCreate = {
+    cpf,
+    email,
+    password,
+    zipcode,
+    name,
+    phone_number,
+  };
 
   createUser.zipcode = await validZipCode(zipcode);
   createUser.password = await hasher(password);
