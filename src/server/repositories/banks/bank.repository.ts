@@ -1,4 +1,4 @@
-import { prisma } from '../../database/prismaClient';
+import { prisma } from '../../../database/prisma';
 
 import { CreateBankDto, UpdateBankDto } from '../../dtos/banks/banks.dtos';
 import {

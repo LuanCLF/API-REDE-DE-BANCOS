@@ -1,4 +1,4 @@
-import { prisma } from '../../database/prismaClient';
+import { prisma } from '../../../database/prisma';
 import { CreateUserDto, UpdateUserDto } from '../../dtos/users/users.dtos';
 import {
   IAccount,

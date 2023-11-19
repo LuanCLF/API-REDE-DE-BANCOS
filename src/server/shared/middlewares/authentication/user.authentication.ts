@@ -6,7 +6,7 @@ import {
 } from '../../others/messages/messages';
 import jwt from 'jsonwebtoken';
 import { passwordUserJWT } from '../../jwt/passwords';
-import { prisma } from '../../../database/prismaClient';
+import { prisma } from '../../../../database/prisma';
 
 export const midUserLogin: RequestHandler = async (req, res, next) => {
   const { authorization } = req.headers;

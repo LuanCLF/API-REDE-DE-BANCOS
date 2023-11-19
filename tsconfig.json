@@ -11,5 +11,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "exclude": ["./jest.config.ts", "node_modules", "./tests", "/build"]
+  "exclude": ["vitest.config.unit.ts", "./node_modules", "./tests", "./build"]
 }

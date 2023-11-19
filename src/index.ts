@@ -1,7 +1,7 @@
 require('dotenv').config();
 
-import { allRoutes } from './server/server';
+import server from './server/server';
 
 const port = process.env.PORT_SERVER || 10000;
 
-allRoutes.listen(port, () => console.log(`Running in localhost:${port}`));
+server.listen(port, () => console.log(`Running in localhost:${port}`));

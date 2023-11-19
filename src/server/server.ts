@@ -8,10 +8,10 @@ import { errorHandling } from './shared/middlewares/error';
 import { routesUser } from './routes/routerUser';
 import { routesTransactions } from './routes/routerTransactions';
 
-const allRoutes = express();
+const server = express();
 
-allRoutes.use(express.json());
-allRoutes.use(routesBank, routesUser, routesTransactions);
+server.use(express.json());
+server.use(routesBank, routesUser, routesTransactions);
 
-allRoutes.use(errorHandling);
-export { allRoutes };
+server.use(errorHandling);
+export default server;
